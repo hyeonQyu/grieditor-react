@@ -17,7 +17,7 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": "./src",
     "paths": {
-      "@components/*": ["components/*"],
+      "@components/*": ["lib/components/*"],
       "@pages/*": ["pages/*"]
     },
     "outDir": "./dist",
