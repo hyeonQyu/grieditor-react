@@ -1,1 +1,1 @@
-export * from './grideditor';
+export * from './grieditor';
