@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/hyeonQyu/grieditor-react#readme",
   "dependencies": {
+    "@emotion/react": "^11.10.5",
     "path": "^0.12.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
