@@ -1,9 +1,15 @@
 import React from 'react';
+import { Grieditor } from '@components/grieditor';
+import { Global } from '@emotion/react';
+import { RESET_STYLE } from '@styles/reset';
 
-const App = () => (
-  <>
-    <h1>grieditor-react</h1>
-  </>
-);
+function App() {
+  return (
+    <>
+      <Global styles={[RESET_STYLE]} />
+      <Grieditor />
+    </>
+  );
+}
 
 export default App;
