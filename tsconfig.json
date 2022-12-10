@@ -21,5 +21,6 @@
       "@pages/*": ["pages/*"]
     },
     "outDir": "./dist",
-  }
+  },
+  "include": ["src/**/*"]
 }

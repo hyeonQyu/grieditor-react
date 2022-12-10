@@ -1,3 +1,5 @@
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+
 module.exports = {
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
@@ -9,6 +11,10 @@ module.exports = {
         use: ['babel-loader', 'ts-loader'],
       },
       {
+        test: /\.js$/,
+        use: ['babel-loader'],
+      },
+      {
         test: /\.(png|jpe?g|gif)$/,
         use: [
           {
@@ -18,4 +24,5 @@ module.exports = {
       },
     ],
   },
+  plugins: [new CleanWebpackPlugin()],
 };
