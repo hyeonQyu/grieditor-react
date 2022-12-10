@@ -30,5 +30,10 @@ module.exports = {
       },
     ],
   },
-  plugins: [new CleanWebpackPlugin(), new TsconfigPathsPlugin()],
+  plugins: [
+    new CleanWebpackPlugin({
+      dangerouslyAllowCleanPatternsOutsideProject: true,
+    }),
+    new TsconfigPathsPlugin(),
+  ],
 };
