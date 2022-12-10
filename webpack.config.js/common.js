@@ -2,12 +2,19 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const { TsconfigPathsPlugin } = require('tsconfig-paths-webpack-plugin');
 const path = require('path');
 
+const getSrcPath = (subPath) => {
+  return path.resolve(__dirname, `../src/${subPath}`);
+};
+
 module.exports = {
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
     alias: {
-      '@components': path.resolve(__dirname, '../src/lib/components'),
-      '@pages': path.resolve(__dirname, '../src/pages'),
+      '@components': getSrcPath('lib/components'),
+      '@constants': getSrcPath('lib/constants'),
+      '@hooks': getSrcPath('lib/hooks'),
+      '@pages': getSrcPath('pages'),
+      '@styles': getSrcPath('styles'),
     },
   },
   module: {

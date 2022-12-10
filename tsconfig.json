@@ -19,7 +19,10 @@
     "baseUrl": "./src",
     "paths": {
       "@components/*": ["lib/components/*"],
-      "@pages/*": ["pages/*"]
+      "@constants/*": ["lib/constants/*"],
+      "@hooks/*": ["lib/hooks/*"],
+      "@pages/*": ["pages/*"],
+      "@styles/*": ["styles/*"]
     },
     "outDir": "./dist",
   },
