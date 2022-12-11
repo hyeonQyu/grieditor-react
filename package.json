@@ -1,7 +1,7 @@
 {
-  "name": "grieditor-react",
+  "name": "tableditor-react",
   "version": "0.0.1",
-  "description": "Grid editor component for react",
+  "description": "Table editor component for react",
   "private": "false",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hyeonQyu/grieditor-react.git"
+    "url": "git+https://github.com/hyeonQyu/tableditor-react.git"
   },
   "keywords": [],
   "author": {
@@ -25,9 +25,9 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/hyeonQyu/grieditor-react/issues"
+    "url": "https://github.com/hyeonQyu/tableditor-react/issues"
   },
-  "homepage": "https://github.com/hyeonQyu/grieditor-react#readme",
+  "homepage": "https://github.com/hyeonQyu/tableditor-react#readme",
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "path": "^0.12.7",

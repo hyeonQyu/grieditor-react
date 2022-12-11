@@ -1,10 +1,10 @@
-import { GrieditorProps } from '@components/grieditor';
+import { TableditorProps } from '@components/tableditor';
 import { useState } from 'react';
-import { CellData } from '@components/grieditor/constants';
+import { CellData } from '@components/tableditor/constants';
 
-export interface IUseGrieditorParams extends GrieditorProps {}
+export interface IUseTableditorParams extends TableditorProps {}
 
-export interface IUseGrieditor {
+export interface IUseTableditor {
   cells: CellData[][];
 }
 
@@ -18,7 +18,7 @@ const defaultCell: CellData = {
   },
 };
 
-export function useGrieditor(params: IUseGrieditorParams): IUseGrieditor {
+export function useTableditor(params: IUseTableditorParams): IUseTableditor {
   const {
     cells: initialCells = [
       [{ ...defaultCell }, { ...defaultCell }],

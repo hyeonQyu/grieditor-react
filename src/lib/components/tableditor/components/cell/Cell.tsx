@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { CellData } from '@components/grieditor/constants';
+import { CellData } from '@components/tableditor/constants';
 import { css } from '@emotion/react';
 
 export interface CellProps {

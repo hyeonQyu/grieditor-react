@@ -1,16 +1,16 @@
 export interface CellData {
   content: string;
   width: number;
-  backgroundColor: GrieditorColor;
+  backgroundColor: TableditorColor;
   font: Font;
 }
 
 export interface Font {
-  color: GrieditorColor;
+  color: TableditorColor;
   style: FontStyle;
 }
 
-export type GrieditorColor =
+export type TableditorColor =
   | 'black'
   | 'white'
   | 'gray_dark'
@@ -35,7 +35,7 @@ export type GrieditorColor =
 export type FontStyle = 'default' | 'bold' | 'italic' | 'underline' | 'strikethrough';
 
 export type ColorMap = {
-  [key in GrieditorColor]: string;
+  [key in TableditorColor]: string;
 };
 
 export const COLOR_MAP: ColorMap = {

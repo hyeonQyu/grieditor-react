@@ -1,16 +1,16 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { CellData } from '@components/grieditor/constants';
-import { useGrieditor } from '@components/grieditor/hooks/useGrieditor';
-import { Cell } from '@components/grieditor/components/Cell';
+import { CellData } from '@components/tableditor/constants';
+import { useTableditor } from '@components/tableditor/hooks/useTableditor';
+import { Cell } from '@components/tableditor/components/cell';
 
-export interface GrieditorProps {
+export interface TableditorProps {
   cells?: CellData[][];
 }
 
-export function Grieditor(props: GrieditorProps) {
+export function Tableditor(props: TableditorProps) {
   const {} = props;
-  const { cells } = useGrieditor(props);
+  const { cells } = useTableditor(props);
 
   return (
     <div
