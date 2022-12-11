@@ -1,12 +1,16 @@
 import { CellProps } from '@components/tableditor/components/cell';
-import { ChangeEventHandler, MutableRefObject, useCallback, useEffect, useRef } from 'react';
+import { ChangeEventHandler, FocusEventHandler, MutableRefObject, useCallback, useEffect, useRef, useState } from 'react';
 
 export interface IUseCellParams extends CellProps {}
 
 export interface IUseCell {
   ref: MutableRefObject<HTMLDivElement | null>;
-  handleHoverCell: () => void;
+  height: number;
+  focused: boolean;
+  handleHover: () => void;
   handleChangeContent: ChangeEventHandler<HTMLDivElement>;
+  handleFocus: FocusEventHandler<HTMLDivElement>;
+  handleBlur: FocusEventHandler<HTMLDivElement>;
 }
 
 export function useCell(params: IUseCellParams): IUseCell {
@@ -18,6 +22,8 @@ export function useCell(params: IUseCellParams): IUseCell {
     onChangeContent,
   } = params;
   const ref = useRef<HTMLDivElement>(null);
+  const [height, setHeight] = useState(0);
+  const [focused, setFocused] = useState(false);
 
   // Move cursor position
   useEffect(() => {
@@ -29,7 +35,11 @@ export function useCell(params: IUseCellParams): IUseCell {
     selection?.addRange(newRange);
   }, [content]);
 
-  const handleHoverCell = useCallback(() => {
+  useEffect(() => {
+    setHeight(ref.current?.clientHeight ?? 0);
+  }, [ref.current?.clientHeight]);
+
+  const handleHover = useCallback(() => {
     onHoverCell({ row, column });
   }, [row, column]);
 
@@ -40,9 +50,21 @@ export function useCell(params: IUseCellParams): IUseCell {
     [row, column],
   );
 
+  const handleFocus: FocusEventHandler<HTMLDivElement> = useCallback(() => {
+    setFocused(true);
+  }, []);
+
+  const handleBlur: FocusEventHandler<HTMLDivElement> = useCallback(() => {
+    setFocused(false);
+  }, []);
+
   return {
     ref,
-    handleHoverCell,
+    height,
+    focused,
+    handleHover,
     handleChangeContent,
+    handleFocus,
+    handleBlur,
   };
 }
