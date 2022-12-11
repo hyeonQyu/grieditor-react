@@ -23,7 +23,16 @@ export function Tableditor(props: TableditorProps) {
           {cells.map((row, rowIndex) => (
             <tr key={rowIndex}>
               {row.map((cell, columnIndex) => (
-                <Cell key={columnIndex} cell={cell} row={rowIndex} column={columnIndex} onHoverCell={onHoverCell} onChangeContent={onChangeContent} />
+                <td
+                  key={columnIndex}
+                  css={css`
+                    border: 1px solid #dcdcdc;
+                    position: relative;
+                    min-height: 32px;
+                  `}
+                >
+                  <Cell cell={cell} row={rowIndex} column={columnIndex} onHoverCell={onHoverCell} onChangeContent={onChangeContent} />
+                </td>
               ))}
             </tr>
           ))}

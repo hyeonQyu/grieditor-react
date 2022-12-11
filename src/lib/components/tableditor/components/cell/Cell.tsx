@@ -19,10 +19,11 @@ function Cell(props: CellProps) {
   const { ref, height, focused, handleHover, handleChangeContent, handleFocus, handleBlur } = useCell(props);
 
   return (
-    <td
-      css={css`
-        border: 1px solid #dcdcdc;
-      `}
+    <div
+      css={css``}
+      style={{
+        width,
+      }}
     >
       <div
         contentEditable
@@ -35,26 +36,29 @@ function Cell(props: CellProps) {
         css={css`
           padding: 8px;
           outline: none;
-          position: relative;
-          &:after {
-            content: '';
-            position: absolute;
-            top: -1px;
-            left: -1px;
-            width: ${width}px;
-            height: ${height}px;
-            border: ${focused ? '1px solid #00BBC7FF' : 'none'};
-          }
         `}
         style={{
-          width,
           backgroundColor,
           color: font.color,
         }}
       >
         {content}
       </div>
-    </td>
+
+      <div
+        css={css`
+          position: absolute;
+          top: 0;
+          left: 0;
+          border: ${focused ? '1px solid #00BBC7FF' : 'none'};
+          pointer-events: none;
+        `}
+        style={{
+          width,
+          height,
+        }}
+      />
+    </div>
   );
 }
 
