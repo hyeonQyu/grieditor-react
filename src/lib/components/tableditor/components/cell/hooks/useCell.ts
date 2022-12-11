@@ -19,6 +19,18 @@ export function useCell(params: IUseCellParams): IUseCell {
   const [focused, setFocused] = useState(false);
 
   useEffect(() => {
+    // Observe the height of cell
+    const observer = new ResizeObserver((entries) => {
+      if (entries.length > 0) {
+        const cell = entries[0];
+        setHeight(cell.target.clientHeight);
+      }
+    });
+
+    observer.observe(ref.current as Element);
+  }, []);
+
+  useEffect(() => {
     if (!focused) {
       onChangeContent({ row, column, content: ref.current?.innerText ?? '' });
       return;
@@ -32,10 +44,6 @@ export function useCell(params: IUseCellParams): IUseCell {
     selection?.removeAllRanges();
     selection?.addRange(newRange);
   }, [focused, onChangeContent, row, column]);
-
-  useEffect(() => {
-    setHeight(ref.current?.clientHeight ?? 0);
-  }, [ref.current?.clientHeight]);
 
   const handleHover = useCallback(() => {
     onHoverCell({ row, column });

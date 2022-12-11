@@ -20,7 +20,6 @@ function Cell(props: CellProps) {
 
   return (
     <div
-      css={css``}
       style={{
         width,
       }}
