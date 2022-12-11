@@ -9,9 +9,8 @@ export interface TableditorProps {
 }
 
 export function Tableditor(props: TableditorProps) {
-  const {} = props;
   const tableditor = useTableditor(props);
-  const { cells, onHoverCell } = tableditor;
+  const { cells, onHoverCell, onChangeContent } = tableditor;
 
   return (
     <div
@@ -30,7 +29,7 @@ export function Tableditor(props: TableditorProps) {
                     border: 1px solid #dcdcdc;
                   `}
                 >
-                  <Cell cell={cell} row={rowIndex} column={columnIndex} onHoverCell={onHoverCell} />
+                  <Cell cell={cell} row={rowIndex} column={columnIndex} onHoverCell={onHoverCell} onChangeContent={onChangeContent} />
                 </td>
               ))}
             </tr>

@@ -67,3 +67,5 @@ export interface RowColumn {
 }
 
 export type HoverCellEventHandler = (param: RowColumn) => void;
+
+export type ChangeContentEventHandler = (param: RowColumn & { content: string }) => void;
