@@ -16,7 +16,7 @@ function Cell(props: CellProps) {
   const {
     cell: { width, content, backgroundColor, font },
   } = props;
-  const { ref, height, focused, handleHover, handleChangeContent, handleFocus, handleBlur } = useCell(props);
+  const { ref, height, focused, handleHover, handleFocus, handleBlur } = useCell(props);
 
   return (
     <div
@@ -30,12 +30,12 @@ function Cell(props: CellProps) {
         suppressContentEditableWarning
         ref={ref}
         onMouseEnter={handleHover}
-        onInput={handleChangeContent}
         onFocus={handleFocus}
         onBlur={handleBlur}
         css={css`
           padding: 8px;
           outline: none;
+          line-height: 1.2;
         `}
         style={{
           backgroundColor,

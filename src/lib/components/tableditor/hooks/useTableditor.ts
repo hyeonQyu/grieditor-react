@@ -37,6 +37,11 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
 
   const onChangeContent: ChangeContentEventHandler = useCallback(({ row, column, content }) => {
     setCells((prev) => {
+      // Content not changed
+      if (prev[row][column].content === content) {
+        return prev;
+      }
+
       return prev.map((rows, rowIndex) => {
         return rows.map((cell, columnIndex) => {
           if (row === rowIndex && column === columnIndex) {

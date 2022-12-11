@@ -1,5 +1,5 @@
 import { CellProps } from '@components/tableditor/components/cell';
-import { ChangeEventHandler, FocusEventHandler, MutableRefObject, useCallback, useEffect, useRef, useState } from 'react';
+import { FocusEventHandler, MutableRefObject, useCallback, useEffect, useRef, useState } from 'react';
 
 export interface IUseCellParams extends CellProps {}
 
@@ -8,32 +8,30 @@ export interface IUseCell {
   height: number;
   focused: boolean;
   handleHover: () => void;
-  handleChangeContent: ChangeEventHandler<HTMLDivElement>;
   handleFocus: FocusEventHandler<HTMLDivElement>;
   handleBlur: FocusEventHandler<HTMLDivElement>;
 }
 
 export function useCell(params: IUseCellParams): IUseCell {
-  const {
-    cell: { content },
-    row,
-    column,
-    onHoverCell,
-    onChangeContent,
-  } = params;
+  const { row, column, onHoverCell, onChangeContent } = params;
   const ref = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(0);
   const [focused, setFocused] = useState(false);
 
-  // Move cursor position
   useEffect(() => {
+    if (!focused) {
+      onChangeContent({ row, column, content: ref.current?.innerText ?? '' });
+      return;
+    }
+
+    // Move cursor position
     const selection = window.getSelection();
     const newRange = document.createRange();
     newRange.selectNodeContents(ref?.current as Node);
     newRange.collapse(false);
     selection?.removeAllRanges();
     selection?.addRange(newRange);
-  }, [content]);
+  }, [focused, onChangeContent, row, column]);
 
   useEffect(() => {
     setHeight(ref.current?.clientHeight ?? 0);
@@ -42,13 +40,6 @@ export function useCell(params: IUseCellParams): IUseCell {
   const handleHover = useCallback(() => {
     onHoverCell({ row, column });
   }, [row, column]);
-
-  const handleChangeContent: ChangeEventHandler<HTMLDivElement> = useCallback(
-    (e) => {
-      onChangeContent({ row, column, content: e.target.innerText });
-    },
-    [row, column],
-  );
 
   const handleFocus: FocusEventHandler<HTMLDivElement> = useCallback(() => {
     setFocused(true);
@@ -63,7 +54,6 @@ export function useCell(params: IUseCellParams): IUseCell {
     height,
     focused,
     handleHover,
-    handleChangeContent,
     handleFocus,
     handleBlur,
   };
