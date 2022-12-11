@@ -1,21 +1,27 @@
 /** @jsxImportSource @emotion/react */
-import { CellData } from '@components/tableditor/constants';
+import { CellData, HoverCellEventHandler } from '@components/tableditor/constants';
 import { css } from '@emotion/react';
+import { useCell } from '@components/tableditor/components/cell/hooks/useCell';
+import React from 'react';
 
 export interface CellProps {
   cell: CellData;
   row: number;
   column: number;
+  onHoverCell: HoverCellEventHandler;
 }
 
-export function Cell(props: CellProps) {
+function Cell(props: CellProps) {
   const {
     cell: { width, content, backgroundColor, font },
   } = props;
+  const { handleHoverCell } = useCell(props);
 
   return (
     <div
       contentEditable
+      suppressContentEditableWarning
+      onMouseEnter={handleHoverCell}
       css={css`
         padding: 8px;
         outline: none;
@@ -30,3 +36,7 @@ export function Cell(props: CellProps) {
     </div>
   );
 }
+
+export const MemoCell = React.memo(Cell, (a, b) => {
+  return JSON.stringify(a) === JSON.stringify(b);
+});

@@ -60,3 +60,10 @@ export const COLOR_MAP: ColorMap = {
   red_dark: '#cb0000',
   red_light: '#ffc4c4',
 };
+
+export interface RowColumn {
+  row: number;
+  column: number;
+}
+
+export type HoverCellEventHandler = (param: RowColumn) => void;
