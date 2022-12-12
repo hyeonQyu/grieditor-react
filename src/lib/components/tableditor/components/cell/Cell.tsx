@@ -8,15 +8,18 @@ export interface CellProps {
   cell: CellData;
   row: number;
   column: number;
+  focused: boolean;
   onHoverCell: HoverCellEventHandler;
+  onFocusCell: HoverCellEventHandler;
   onChangeContent: ChangeContentEventHandler;
 }
 
 function Cell(props: CellProps) {
   const {
     cell: { width, content, backgroundColor, font },
+    focused,
   } = props;
-  const { ref, height, focused, handleHover, handleFocus, handleBlur } = useCell(props);
+  const { ref, height, handleHover, handleFocus } = useCell(props);
 
   return (
     <div
@@ -30,7 +33,6 @@ function Cell(props: CellProps) {
         ref={ref}
         onMouseEnter={handleHover}
         onFocus={handleFocus}
-        onBlur={handleBlur}
         css={css`
           padding: 8px;
           outline: none;

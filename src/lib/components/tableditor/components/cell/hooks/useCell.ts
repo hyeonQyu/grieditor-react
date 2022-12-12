@@ -6,17 +6,14 @@ export interface IUseCellParams extends CellProps {}
 export interface IUseCell {
   ref: MutableRefObject<HTMLDivElement | null>;
   height: number;
-  focused: boolean;
   handleHover: () => void;
   handleFocus: FocusEventHandler<HTMLDivElement>;
-  handleBlur: FocusEventHandler<HTMLDivElement>;
 }
 
 export function useCell(params: IUseCellParams): IUseCell {
-  const { row, column, onHoverCell, onChangeContent } = params;
+  const { row, column, focused, onHoverCell, onFocusCell, onChangeContent } = params;
   const ref = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(0);
-  const [focused, setFocused] = useState(false);
 
   useEffect(() => {
     // Observe the height of cell
@@ -50,19 +47,13 @@ export function useCell(params: IUseCellParams): IUseCell {
   }, [row, column]);
 
   const handleFocus: FocusEventHandler<HTMLDivElement> = useCallback(() => {
-    setFocused(true);
-  }, []);
-
-  const handleBlur: FocusEventHandler<HTMLDivElement> = useCallback(() => {
-    setFocused(false);
-  }, []);
+    onFocusCell({ row, column });
+  }, [row, column]);
 
   return {
     ref,
     height,
-    focused,
     handleHover,
     handleFocus,
-    handleBlur,
   };
 }
