@@ -21,6 +21,7 @@
       "@components/*": ["lib/components/*"],
       "@constants/*": ["lib/constants/*"],
       "@hooks/*": ["lib/hooks/*"],
+      "@utils/*": ["lib/utils/*"],
       "@pages/*": ["pages/*"],
       "@styles/*": ["styles/*"]
     },

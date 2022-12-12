@@ -1,5 +1,6 @@
 import { CellProps } from '@components/tableditor/components/cell';
 import { FocusEventHandler, KeyboardEventHandler, MutableRefObject, useCallback, useEffect, useRef, useState } from 'react';
+import { ContentEditableUtil } from '@utils/contentEditableUtil';
 
 export interface IUseCellParams extends CellProps {}
 
@@ -53,7 +54,6 @@ export function useCell(params: IUseCellParams): IUseCell {
 
   const handleKeyDown: KeyboardEventHandler<HTMLDivElement> = useCallback(
     (e) => {
-      // console.log(e.key);
       if (e.key === 'Enter') {
         e.preventDefault();
         onFocusCell({ row: row + 1, column });
@@ -61,19 +61,14 @@ export function useCell(params: IUseCellParams): IUseCell {
       }
 
       if (e.key === 'ArrowRight') {
-        const selection = window.getSelection();
-        const length = selection?.focusNode?.textContent?.length ?? 0;
-        const offset = selection?.focusOffset;
-        if (offset === length) {
+        if (ContentEditableUtil.getIsMovableToRight()) {
           onFocusCell({ row, column: column + 1 });
         }
         return;
       }
 
       if (e.key === 'ArrowLeft') {
-        const selection = window.getSelection();
-        const offset = selection?.focusOffset;
-        if (offset === 0) {
+        if (ContentEditableUtil.getIsMovableToLeft()) {
           onFocusCell({ row, column: column - 1 });
         }
         return;

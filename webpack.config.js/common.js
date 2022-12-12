@@ -13,6 +13,7 @@ module.exports = {
       '@components': getSrcPath('lib/components'),
       '@constants': getSrcPath('lib/constants'),
       '@hooks': getSrcPath('lib/hooks'),
+      '@utils': getSrcPath('lib/utils'),
       '@pages': getSrcPath('pages'),
       '@styles': getSrcPath('styles'),
     },
