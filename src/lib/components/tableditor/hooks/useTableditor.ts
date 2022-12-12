@@ -45,9 +45,38 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     setRowColumnHovered(rowColumn);
   }, []);
 
-  const onFocusCell: HoverCellEventHandler = useCallback((rowColumn) => {
-    setRowColumnFocused(rowColumn);
-  }, []);
+  const onFocusCell: HoverCellEventHandler = useCallback(
+    (rowColumn) => {
+      if (rowColumn) {
+        const rowCount = cells.length;
+        if (rowCount <= rowColumn.row || rowColumn.row < 0) {
+          // Row limitation
+          return;
+        }
+
+        const columnCount = cells[rowColumn.row].length;
+        if (columnCount <= rowColumn.column) {
+          // To next row
+          onFocusCell({
+            row: rowColumn.row + 1,
+            column: 0,
+          });
+          return;
+        }
+        if (rowColumn.column < 0) {
+          // To previous row
+          onFocusCell({
+            row: rowColumn.row - 1,
+            column: (cells[rowColumn.row - 1]?.length ?? 1) - 1,
+          });
+          return;
+        }
+      }
+
+      setRowColumnFocused(rowColumn);
+    },
+    [cells],
+  );
 
   const onChangeContent: ChangeContentEventHandler = useCallback(({ row, column, content }) => {
     setCells((prev) => {

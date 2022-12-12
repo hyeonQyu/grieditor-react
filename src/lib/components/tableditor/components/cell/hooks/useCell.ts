@@ -1,5 +1,5 @@
 import { CellProps } from '@components/tableditor/components/cell';
-import { FocusEventHandler, MutableRefObject, useCallback, useEffect, useRef, useState } from 'react';
+import { FocusEventHandler, KeyboardEventHandler, MutableRefObject, useCallback, useEffect, useRef, useState } from 'react';
 
 export interface IUseCellParams extends CellProps {}
 
@@ -8,6 +8,7 @@ export interface IUseCell {
   height: number;
   handleHover: () => void;
   handleFocus: FocusEventHandler<HTMLDivElement>;
+  handleKeyDown: KeyboardEventHandler<HTMLDivElement>;
 }
 
 export function useCell(params: IUseCellParams): IUseCell {
@@ -50,10 +51,52 @@ export function useCell(params: IUseCellParams): IUseCell {
     onFocusCell({ row, column });
   }, [row, column]);
 
+  const handleKeyDown: KeyboardEventHandler<HTMLDivElement> = useCallback(
+    (e) => {
+      // console.log(e.key);
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        onFocusCell({ row: row + 1, column });
+        return;
+      }
+
+      if (e.key === 'ArrowRight') {
+        const selection = window.getSelection();
+        const length = selection?.focusNode?.textContent?.length ?? 0;
+        const offset = selection?.focusOffset;
+        if (offset === length) {
+          onFocusCell({ row, column: column + 1 });
+        }
+        return;
+      }
+
+      if (e.key === 'ArrowLeft') {
+        const selection = window.getSelection();
+        const offset = selection?.focusOffset;
+        if (offset === 0) {
+          onFocusCell({ row, column: column - 1 });
+        }
+        return;
+      }
+
+      if (e.key === 'ArrowUp') {
+        onFocusCell({ row: row - 1, column });
+        return;
+      }
+
+      if (e.key === 'ArrowDown') {
+        onFocusCell({ row: row + 1, column });
+        return;
+      }
+    },
+    [row, column],
+  );
+
   return {
     ref,
     height,
     handleHover,
     handleFocus,
+    handleKeyDown,
   };
 }

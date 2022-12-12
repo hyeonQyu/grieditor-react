@@ -19,7 +19,7 @@ function Cell(props: CellProps) {
     cell: { width, content, backgroundColor, font },
     focused,
   } = props;
-  const { ref, height, handleHover, handleFocus } = useCell(props);
+  const { ref, height, handleHover, handleFocus, handleKeyDown } = useCell(props);
 
   return (
     <div
@@ -33,6 +33,7 @@ function Cell(props: CellProps) {
         ref={ref}
         onMouseEnter={handleHover}
         onFocus={handleFocus}
+        onKeyDown={handleKeyDown}
         css={css`
           padding: 8px;
           outline: none;
