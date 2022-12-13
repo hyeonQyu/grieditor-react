@@ -10,7 +10,7 @@ export interface TableditorProps {
 
 export function Tableditor(props: TableditorProps) {
   const tableditor = useTableditor(props);
-  const { tableRef, cells, rowColumnHovered, rowColumnFocused, onHoverCell, onFocusCell, onChangeContent } = tableditor;
+  const { tableRef, cells, cellHoverEvent, cellFocusEvent, onHoverCell, onFocusCell, onChangeContent } = tableditor;
 
   return (
     <div
@@ -22,30 +22,26 @@ export function Tableditor(props: TableditorProps) {
         <tbody>
           {cells.map((row, rowIndex) => (
             <tr key={rowIndex}>
-              {row.map((cell, columnIndex) => {
-                const focused = rowColumnFocused?.row === rowIndex && rowColumnFocused?.column === columnIndex;
-
-                return (
-                  <td
-                    key={columnIndex}
-                    css={css`
-                      border: 1px solid #dcdcdc;
-                      position: relative;
-                      min-height: 32px;
-                    `}
-                  >
-                    <Cell
-                      cell={cell}
-                      row={rowIndex}
-                      column={columnIndex}
-                      focused={focused}
-                      onHoverCell={onHoverCell}
-                      onFocusCell={onFocusCell}
-                      onChangeContent={onChangeContent}
-                    />
-                  </td>
-                );
-              })}
+              {row.map((cell, columnIndex) => (
+                <td
+                  key={columnIndex}
+                  css={css`
+                    border: 1px solid #dcdcdc;
+                    position: relative;
+                    min-height: 32px;
+                  `}
+                >
+                  <Cell
+                    cell={cell}
+                    row={rowIndex}
+                    column={columnIndex}
+                    focusEvent={cellFocusEvent}
+                    onHoverCell={onHoverCell}
+                    onFocusCell={onFocusCell}
+                    onChangeContent={onChangeContent}
+                  />
+                </td>
+              ))}
             </tr>
           ))}
         </tbody>

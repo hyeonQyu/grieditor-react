@@ -6,6 +6,7 @@ export interface IUseCellParams extends CellProps {}
 
 export interface IUseCell {
   ref: MutableRefObject<HTMLDivElement | null>;
+  focused: boolean;
   height: number;
   handleHover: () => void;
   handleFocus: FocusEventHandler<HTMLDivElement>;
@@ -13,8 +14,9 @@ export interface IUseCell {
 }
 
 export function useCell(params: IUseCellParams): IUseCell {
-  const { row, column, focused, onHoverCell, onFocusCell, onChangeContent } = params;
+  const { row, column, focusEvent, onHoverCell, onFocusCell, onChangeContent } = params;
   const ref = useRef<HTMLDivElement>(null);
+  const focused = focusEvent?.rowColumn.row === row && focusEvent?.rowColumn.column === column;
   const [height, setHeight] = useState(0);
 
   useEffect(() => {
@@ -31,56 +33,71 @@ export function useCell(params: IUseCellParams): IUseCell {
 
   useEffect(() => {
     if (!focused) {
-      onChangeContent({ row, column, content: ref.current?.innerText ?? '' });
+      onChangeContent({ rowColumn: { row, column }, content: ref.current?.innerText ?? '' });
       return;
     }
 
     // Move cursor position
-    const selection = window.getSelection();
-    const newRange = document.createRange();
-    newRange.selectNodeContents(ref?.current as Node);
-    newRange.collapse(false);
-    selection?.removeAllRanges();
-    selection?.addRange(newRange);
-  }, [focused, onChangeContent, row, column]);
+    const selectionNode = (ref?.current?.firstChild ?? ref?.current) as Node;
+    const { directionTo } = focusEvent;
+    switch (directionTo) {
+      case 'left':
+      case 'up':
+      case 'down':
+        ContentEditableUtil.moveCaretToLast(selectionNode);
+        break;
+
+      case 'right':
+        ContentEditableUtil.moveCaretToFirst(selectionNode);
+        break;
+    }
+  }, [focused, focusEvent, onChangeContent, row, column]);
 
   const handleHover = useCallback(() => {
-    onHoverCell({ row, column });
+    onHoverCell({ rowColumn: { row, column } });
   }, [row, column]);
 
   const handleFocus: FocusEventHandler<HTMLDivElement> = useCallback(() => {
-    onFocusCell({ row, column });
+    onFocusCell({ rowColumn: { row, column } });
   }, [row, column]);
 
   const handleKeyDown: KeyboardEventHandler<HTMLDivElement> = useCallback(
     (e) => {
+      if (e.shiftKey && e.key === 'Enter') {
+        return;
+      }
+
       if (e.key === 'Enter') {
         e.preventDefault();
-        onFocusCell({ row: row + 1, column });
+        onFocusCell({ rowColumn: { row: row + 1, column }, directionTo: 'down' });
         return;
       }
 
       if (e.key === 'ArrowRight') {
         if (ContentEditableUtil.getIsMovableToRight()) {
-          onFocusCell({ row, column: column + 1 });
+          e.preventDefault();
+          onFocusCell({ rowColumn: { row, column: column + 1 }, directionTo: 'right' });
         }
         return;
       }
 
       if (e.key === 'ArrowLeft') {
         if (ContentEditableUtil.getIsMovableToLeft()) {
-          onFocusCell({ row, column: column - 1 });
+          e.preventDefault();
+          onFocusCell({ rowColumn: { row, column: column - 1 }, directionTo: 'left' });
         }
         return;
       }
 
       if (e.key === 'ArrowUp') {
-        onFocusCell({ row: row - 1, column });
+        e.preventDefault();
+        onFocusCell({ rowColumn: { row: row - 1, column }, directionTo: 'up' });
         return;
       }
 
       if (e.key === 'ArrowDown') {
-        onFocusCell({ row: row + 1, column });
+        e.preventDefault();
+        onFocusCell({ rowColumn: { row: row + 1, column }, directionTo: 'down' });
         return;
       }
     },
@@ -89,6 +106,7 @@ export function useCell(params: IUseCellParams): IUseCell {
 
   return {
     ref,
+    focused,
     height,
     handleHover,
     handleFocus,

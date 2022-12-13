@@ -66,6 +66,4 @@ export interface RowColumn {
   column: number;
 }
 
-export type HoverCellEventHandler = (param: RowColumn | null) => void;
-
-export type ChangeContentEventHandler = (param: RowColumn & { content: string }) => void;
+export * from './events';

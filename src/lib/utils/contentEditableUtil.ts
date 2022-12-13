@@ -17,4 +17,27 @@ export namespace ContentEditableUtil {
     const offset = selection?.focusOffset;
     return offset === 0;
   }
+
+  /**
+   * Move the caret to first offset of the node
+   * @param node
+   */
+  export function moveCaretToFirst(node: Node) {
+    const selection = window.getSelection();
+    selection?.setBaseAndExtent(node, 0, node, 0);
+  }
+
+  /**
+   * Move the caret to last offset of the node
+   * @param node
+   */
+  export function moveCaretToLast(node: Node) {
+    const selection = window.getSelection();
+    const newRange = document.createRange();
+    newRange.selectNodeContents(node);
+    newRange.collapse(false);
+    selection?.removeAllRanges();
+    selection?.addRange(newRange);
+    selection?.collapseToEnd();
+  }
 }

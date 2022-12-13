@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { CellData, ChangeContentEventHandler, HoverCellEventHandler } from '@components/tableditor/constants';
+import { CellData, CellChangeEventHandler, CellHoverEventHandler, CellFocusEventHandler, CellFocusEvent } from '@components/tableditor/constants';
 import { css } from '@emotion/react';
 import { useCell } from '@components/tableditor/components/cell/hooks/useCell';
 import React from 'react';
@@ -8,18 +8,17 @@ export interface CellProps {
   cell: CellData;
   row: number;
   column: number;
-  focused: boolean;
-  onHoverCell: HoverCellEventHandler;
-  onFocusCell: HoverCellEventHandler;
-  onChangeContent: ChangeContentEventHandler;
+  focusEvent: CellFocusEvent | undefined;
+  onHoverCell: CellHoverEventHandler;
+  onFocusCell: CellFocusEventHandler;
+  onChangeContent: CellChangeEventHandler;
 }
 
 function Cell(props: CellProps) {
   const {
     cell: { width, content, backgroundColor, font },
-    focused,
   } = props;
-  const { ref, height, handleHover, handleFocus, handleKeyDown } = useCell(props);
+  const { ref, focused, height, handleHover, handleFocus, handleKeyDown } = useCell(props);
 
   return (
     <div

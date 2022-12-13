@@ -1,6 +1,13 @@
 import { TableditorProps } from '@components/tableditor';
 import { MutableRefObject, useCallback, useState } from 'react';
-import { CellData, ChangeContentEventHandler, HoverCellEventHandler, RowColumn } from '@components/tableditor/constants';
+import {
+  CellData,
+  CellChangeEventHandler,
+  CellHoverEventHandler,
+  CellFocusEventHandler,
+  CellFocusEvent,
+  CellHoverEvent,
+} from '@components/tableditor/constants';
 import useClickOutside from '@hooks/useClickOutside';
 
 export interface IUseTableditorParams extends TableditorProps {}
@@ -8,11 +15,11 @@ export interface IUseTableditorParams extends TableditorProps {}
 export interface IUseTableditor {
   tableRef: MutableRefObject<HTMLTableElement | null>;
   cells: CellData[][];
-  rowColumnHovered: RowColumn | null;
-  rowColumnFocused: RowColumn | null;
-  onHoverCell: HoverCellEventHandler;
-  onFocusCell: HoverCellEventHandler;
-  onChangeContent: ChangeContentEventHandler;
+  cellHoverEvent: CellHoverEvent | undefined;
+  cellFocusEvent: CellFocusEvent | undefined;
+  onHoverCell: CellHoverEventHandler;
+  onFocusCell: CellHoverEventHandler;
+  onChangeContent: CellChangeEventHandler;
 }
 
 const defaultCell: CellData = {
@@ -34,20 +41,21 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
   } = params;
 
   const [cells, setCells] = useState<CellData[][]>(initialCells);
-  const [rowColumnHovered, setRowColumnHovered] = useState<RowColumn | null>(null);
-  const [rowColumnFocused, setRowColumnFocused] = useState<RowColumn | null>(null);
+  const [cellHoverEvent, setCellHoverEvent] = useState<CellHoverEvent>();
+  const [cellFocusEvent, setCellFocusEvent] = useState<CellFocusEvent>();
 
   const { ref: tableRef } = useClickOutside<HTMLTableElement>({
-    onClickOutside: () => onFocusCell(null),
+    onClickOutside: () => onFocusCell(),
   });
 
-  const onHoverCell: HoverCellEventHandler = useCallback((rowColumn) => {
-    setRowColumnHovered(rowColumn);
+  const onHoverCell: CellHoverEventHandler = useCallback((e) => {
+    setCellHoverEvent(e);
   }, []);
 
-  const onFocusCell: HoverCellEventHandler = useCallback(
-    (rowColumn) => {
-      if (rowColumn) {
+  const onFocusCell: CellFocusEventHandler = useCallback(
+    (e) => {
+      if (e) {
+        const { rowColumn } = e;
         const rowCount = cells.length;
         if (rowCount <= rowColumn.row || rowColumn.row < 0) {
           // Row limitation
@@ -58,27 +66,33 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
         if (columnCount <= rowColumn.column) {
           // To next row
           onFocusCell({
-            row: rowColumn.row + 1,
-            column: 0,
+            ...e,
+            rowColumn: {
+              row: rowColumn.row + 1,
+              column: 0,
+            },
           });
           return;
         }
         if (rowColumn.column < 0) {
           // To previous row
           onFocusCell({
-            row: rowColumn.row - 1,
-            column: (cells[rowColumn.row - 1]?.length ?? 1) - 1,
+            ...e,
+            rowColumn: {
+              row: rowColumn.row - 1,
+              column: (cells[rowColumn.row - 1]?.length ?? 1) - 1,
+            },
           });
           return;
         }
       }
 
-      setRowColumnFocused(rowColumn);
+      setCellFocusEvent(e);
     },
     [cells],
   );
 
-  const onChangeContent: ChangeContentEventHandler = useCallback(({ row, column, content }) => {
+  const onChangeContent: CellChangeEventHandler = useCallback(({ rowColumn: { row, column }, content }) => {
     setCells((prev) => {
       // Content not changed
       if (prev[row][column].content === content) {
@@ -102,8 +116,8 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
   return {
     tableRef,
     cells,
-    rowColumnHovered,
-    rowColumnFocused,
+    cellHoverEvent,
+    cellFocusEvent,
     onHoverCell,
     onFocusCell,
     onChangeContent,
