@@ -63,42 +63,38 @@ export function useCell(params: IUseCellParams): IUseCell {
 
   const handleKeyDown: KeyboardEventHandler<HTMLDivElement> = useCallback(
     (e) => {
-      if (e.shiftKey && e.key === 'Enter') {
-        return;
-      }
-
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        onFocusCell({ rowColumn: { row: row + 1, column }, directionTo: 'down' });
-        return;
-      }
-
-      if (e.key === 'ArrowRight') {
-        if (ContentEditableUtil.getIsMovableToRight()) {
+      switch (e.key) {
+        case 'Enter':
+          if (e.shiftKey) {
+            return;
+          }
           e.preventDefault();
-          onFocusCell({ rowColumn: { row, column: column + 1 }, directionTo: 'right' });
-        }
-        return;
-      }
+          onFocusCell({ rowColumn: { row: row + 1, column }, directionTo: 'down' });
+          return;
 
-      if (e.key === 'ArrowLeft') {
-        if (ContentEditableUtil.getIsMovableToLeft()) {
+        case 'ArrowRight':
+          if (ContentEditableUtil.getIsMovableToRight()) {
+            e.preventDefault();
+            onFocusCell({ rowColumn: { row, column: column + 1 }, directionTo: 'right' });
+          }
+          return;
+
+        case 'ArrowLeft':
+          if (ContentEditableUtil.getIsMovableToLeft()) {
+            e.preventDefault();
+            onFocusCell({ rowColumn: { row, column: column - 1 }, directionTo: 'left' });
+          }
+          return;
+
+        case 'ArrowUp':
           e.preventDefault();
-          onFocusCell({ rowColumn: { row, column: column - 1 }, directionTo: 'left' });
-        }
-        return;
-      }
+          onFocusCell({ rowColumn: { row: row - 1, column }, directionTo: 'up' });
+          return;
 
-      if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        onFocusCell({ rowColumn: { row: row - 1, column }, directionTo: 'up' });
-        return;
-      }
-
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        onFocusCell({ rowColumn: { row: row + 1, column }, directionTo: 'down' });
-        return;
+        case 'ArrowDown':
+          e.preventDefault();
+          onFocusCell({ rowColumn: { row: row + 1, column }, directionTo: 'down' });
+          return;
       }
     },
     [row, column],
