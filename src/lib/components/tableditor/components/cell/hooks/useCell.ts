@@ -41,14 +41,14 @@ export function useCell(params: IUseCellParams): IUseCell {
     const selectionNode = (ref?.current?.firstChild ?? ref?.current) as Node;
     const { directionTo } = focusEvent;
     switch (directionTo) {
+      case 'right':
+        ContentEditableUtil.moveCaretToFirst(selectionNode);
+        break;
+
       case 'left':
       case 'up':
       case 'down':
         ContentEditableUtil.moveCaretToLast(selectionNode);
-        break;
-
-      case 'right':
-        ContentEditableUtil.moveCaretToFirst(selectionNode);
         break;
     }
   }, [focused, focusEvent, onChangeContent, row, column]);

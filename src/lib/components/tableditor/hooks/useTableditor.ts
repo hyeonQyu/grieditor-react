@@ -52,14 +52,14 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     setCellHoverEvent(e);
   }, []);
 
-  const onFocusCell: CellFocusEventHandler = useCallback(
-    (e) => {
+  const onFocusCell: CellFocusEventHandler = useCallback((e) => {
+    setCells((cells) => {
       if (e) {
         const { rowColumn } = e;
         const rowCount = cells.length;
         if (rowCount <= rowColumn.row || rowColumn.row < 0) {
           // Row limitation
-          return;
+          return cells;
         }
 
         const columnCount = cells[rowColumn.row].length;
@@ -72,7 +72,7 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
               column: 0,
             },
           });
-          return;
+          return cells;
         }
         if (rowColumn.column < 0) {
           // To previous row
@@ -83,14 +83,14 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
               column: (cells[rowColumn.row - 1]?.length ?? 1) - 1,
             },
           });
-          return;
+          return cells;
         }
       }
 
       setCellFocusEvent(e);
-    },
-    [cells],
-  );
+      return cells;
+    });
+  }, []);
 
   const onChangeContent: CellChangeEventHandler = useCallback(({ rowColumn: { row, column }, content }) => {
     setCells((prev) => {

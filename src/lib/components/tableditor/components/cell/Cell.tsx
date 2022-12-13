@@ -3,6 +3,7 @@ import { CellData, CellChangeEventHandler, CellHoverEventHandler, CellFocusEvent
 import { css } from '@emotion/react';
 import { useCell } from '@components/tableditor/components/cell/hooks/useCell';
 import React from 'react';
+import _ from 'lodash';
 
 export interface CellProps {
   cell: CellData;
@@ -19,6 +20,7 @@ function Cell(props: CellProps) {
     cell: { width, content, backgroundColor, font },
   } = props;
   const { ref, focused, height, handleHover, handleFocus, handleKeyDown } = useCell(props);
+  console.log(props);
 
   return (
     <div
@@ -63,6 +65,4 @@ function Cell(props: CellProps) {
   );
 }
 
-export const MemoCell = React.memo(Cell, (a, b) => {
-  return JSON.stringify(a) === JSON.stringify(b);
-});
+export const MemoCell = React.memo(Cell, _.isEqual);
