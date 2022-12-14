@@ -66,8 +66,9 @@ function Cell(props: CellProps) {
           position: absolute;
           top: 0;
           left: 0;
-          border: ${focused ? `1px solid ${Color.HIGHLIGHT}` : 'none'};
+          border: ${focused ? `1px solid ${Color.HIGHLIGHT}` : 'transparent'};
           pointer-events: none;
+          transition: 0.2s;
         `}
         style={{
           width,
@@ -91,15 +92,14 @@ function Cell(props: CellProps) {
           cursor: col-resize;
         `}
       >
-        {resizerHovered && (
-          <div
-            css={css`
-              width: 3px;
-              height: calc(100% + 2px);
-              background-color: ${Color.HIGHLIGHT};
-            `}
-          />
-        )}
+        <div
+          css={css`
+            width: 3px;
+            height: calc(100% + 2px);
+            background-color: ${resizerHovered ? Color.HIGHLIGHT : 'transparent'};
+            transition: 0.2s;
+          `}
+        />
       </div>
     </div>
   );
