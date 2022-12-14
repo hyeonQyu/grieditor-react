@@ -11,10 +11,12 @@ export interface IUseCell {
   handleHover: () => void;
   handleFocus: FocusEventHandler<HTMLDivElement>;
   handleKeyDown: KeyboardEventHandler<HTMLDivElement>;
+  handleEnterResizer: () => void;
+  handleLeaveResizer: () => void;
 }
 
 export function useCell(params: IUseCellParams): IUseCell {
-  const { row, column, focusEvent, onHoverCell, onFocusCell, onChangeContent } = params;
+  const { row, column, focusEvent, onHoverCell, onFocusCell, onChangeContent, onHoverResizer } = params;
   const ref = useRef<HTMLDivElement>(null);
   const focused = focusEvent?.rowColumn.row === row && focusEvent?.rowColumn.column === column;
   const [height, setHeight] = useState(0);
@@ -55,11 +57,11 @@ export function useCell(params: IUseCellParams): IUseCell {
 
   const handleHover = useCallback(() => {
     onHoverCell({ rowColumn: { row, column } });
-  }, [row, column]);
+  }, [row, column, onHoverCell]);
 
   const handleFocus: FocusEventHandler<HTMLDivElement> = useCallback(() => {
     onFocusCell({ rowColumn: { row, column } });
-  }, [row, column]);
+  }, [row, column, onFocusCell]);
 
   const handleKeyDown: KeyboardEventHandler<HTMLDivElement> = useCallback(
     (e) => {
@@ -97,8 +99,16 @@ export function useCell(params: IUseCellParams): IUseCell {
           return;
       }
     },
-    [row, column],
+    [row, column, onFocusCell],
   );
+
+  const handleEnterResizer = useCallback(() => {
+    onHoverResizer({ rowColumn: { row, column } });
+  }, [row, column, onHoverResizer]);
+
+  const handleLeaveResizer = useCallback(() => {
+    onHoverResizer();
+  }, [row, column, onHoverResizer]);
 
   return {
     ref,
@@ -107,5 +117,7 @@ export function useCell(params: IUseCellParams): IUseCell {
     handleHover,
     handleFocus,
     handleKeyDown,
+    handleEnterResizer,
+    handleLeaveResizer,
   };
 }

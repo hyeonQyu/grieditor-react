@@ -1,25 +1,36 @@
 /** @jsxImportSource @emotion/react */
-import { CellData, CellChangeEventHandler, CellHoverEventHandler, CellFocusEventHandler, CellFocusEvent } from '@components/tableditor/constants';
+import {
+  CellData,
+  CellChangeEventHandler,
+  CellHoverEventHandler,
+  CellFocusEventHandler,
+  CellFocusEvent,
+  ResizerHoverEventHandler,
+} from '@components/tableditor/constants';
 import { css } from '@emotion/react';
 import { useCell } from '@components/tableditor/components/cell/hooks/useCell';
 import React from 'react';
 import _ from 'lodash';
+import { Color } from '@constants/index';
 
 export interface CellProps {
   cell: CellData;
   row: number;
   column: number;
   focusEvent: CellFocusEvent | undefined;
+  resizerHovered: boolean;
   onHoverCell: CellHoverEventHandler;
   onFocusCell: CellFocusEventHandler;
   onChangeContent: CellChangeEventHandler;
+  onHoverResizer: ResizerHoverEventHandler;
 }
 
 function Cell(props: CellProps) {
   const {
     cell: { width, content, backgroundColor, font },
+    resizerHovered,
   } = props;
-  const { ref, focused, height, handleHover, handleFocus, handleKeyDown } = useCell(props);
+  const { ref, focused, height, handleHover, handleFocus, handleKeyDown, handleEnterResizer, handleLeaveResizer } = useCell(props);
   console.log(props);
 
   return (
@@ -28,6 +39,7 @@ function Cell(props: CellProps) {
         width,
       }}
     >
+      {/*content*/}
       <div
         contentEditable
         suppressContentEditableWarning
@@ -48,12 +60,13 @@ function Cell(props: CellProps) {
         {content}
       </div>
 
+      {/*highlighting box*/}
       <div
         css={css`
           position: absolute;
           top: 0;
           left: 0;
-          border: ${focused ? '1px solid #00BBC7FF' : 'none'};
+          border: ${focused ? `1px solid ${Color.HIGHLIGHT}` : 'none'};
           pointer-events: none;
         `}
         style={{
@@ -61,6 +74,33 @@ function Cell(props: CellProps) {
           height,
         }}
       />
+
+      {/*resizer*/}
+      <div
+        onMouseEnter={handleEnterResizer}
+        onMouseLeave={handleLeaveResizer}
+        css={css`
+          position: absolute;
+          display: flex;
+          justify-content: center;
+          width: 8px;
+          height: ${height}px;
+          top: 0;
+          right: -4px;
+          z-index: 10;
+          cursor: col-resize;
+        `}
+      >
+        {resizerHovered && (
+          <div
+            css={css`
+              width: 3px;
+              height: calc(100% + 2px);
+              background-color: ${Color.HIGHLIGHT};
+            `}
+          />
+        )}
+      </div>
     </div>
   );
 }

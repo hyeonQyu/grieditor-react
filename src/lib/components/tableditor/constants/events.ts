@@ -19,3 +19,9 @@ export interface CellChangeEvent {
 }
 
 export type CellChangeEventHandler = (e: CellChangeEvent) => void;
+
+export interface ResizerHoverEvent {
+  rowColumn: RowColumn;
+}
+
+export type ResizerHoverEventHandler = (e?: ResizerHoverEvent) => void;

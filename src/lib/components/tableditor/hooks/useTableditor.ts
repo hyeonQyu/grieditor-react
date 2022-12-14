@@ -7,6 +7,8 @@ import {
   CellFocusEventHandler,
   CellFocusEvent,
   CellHoverEvent,
+  ResizerHoverEventHandler,
+  ResizerHoverEvent,
 } from '@components/tableditor/constants';
 import useClickOutside from '@hooks/useClickOutside';
 
@@ -17,9 +19,11 @@ export interface IUseTableditor {
   cells: CellData[][];
   cellHoverEvent: CellHoverEvent | undefined;
   cellFocusEvent: CellFocusEvent | undefined;
+  resizerHoverData: (ResizerHoverEvent & { columnCount: number }) | undefined;
   onHoverCell: CellHoverEventHandler;
   onFocusCell: CellHoverEventHandler;
   onChangeContent: CellChangeEventHandler;
+  onHoverResizer: ResizerHoverEventHandler;
 }
 
 const defaultCell: CellData = {
@@ -43,6 +47,7 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
   const [cells, setCells] = useState<CellData[][]>(initialCells);
   const [cellHoverEvent, setCellHoverEvent] = useState<CellHoverEvent>();
   const [cellFocusEvent, setCellFocusEvent] = useState<CellFocusEvent>();
+  const [resizerHoverData, setResizerHoverData] = useState<ResizerHoverEvent & { columnCount: number }>();
 
   const { ref: tableRef } = useClickOutside<HTMLTableElement>({
     onClickOutside: () => onFocusCell(),
@@ -113,13 +118,27 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     });
   }, []);
 
+  const onHoverResizer: ResizerHoverEventHandler = useCallback((e) => {
+    setCells((cells) => {
+      if (e) {
+        const { row } = e.rowColumn;
+        setResizerHoverData({ ...e, columnCount: cells[row].length });
+      } else {
+        setResizerHoverData(undefined);
+      }
+      return cells;
+    });
+  }, []);
+
   return {
     tableRef,
     cells,
     cellHoverEvent,
     cellFocusEvent,
+    resizerHoverData,
     onHoverCell,
     onFocusCell,
     onChangeContent,
+    onHoverResizer,
   };
 }
