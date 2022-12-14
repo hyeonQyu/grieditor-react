@@ -6,6 +6,8 @@ import {
   CellFocusEventHandler,
   CellFocusEvent,
   ResizerHoverEventHandler,
+  RESIZER_WIDTH,
+  ResizeEventHandler,
 } from '@components/tableditor/constants';
 import { css } from '@emotion/react';
 import { useCell } from '@components/tableditor/components/cell/hooks/useCell';
@@ -23,6 +25,8 @@ export interface CellProps {
   onFocusCell: CellFocusEventHandler;
   onChangeContent: CellChangeEventHandler;
   onHoverResizer: ResizerHoverEventHandler;
+  onResizeStart: ResizeEventHandler;
+  onResizeEnd: ResizeEventHandler;
 }
 
 function Cell(props: CellProps) {
@@ -30,13 +34,28 @@ function Cell(props: CellProps) {
     cell: { width, content, backgroundColor, font },
     resizerHovered,
   } = props;
-  const { ref, focused, height, handleHover, handleFocus, handleKeyDown, handleEnterResizer, handleLeaveResizer } = useCell(props);
-  console.log(props);
+  const {
+    ref,
+    resizerRef,
+    focused,
+    height,
+    handleHover,
+    handleFocus,
+    handleKeyDown,
+    handleEnterResizer,
+    handleLeaveResizer,
+    handleMouseDownResizer,
+    handleMouseUpResizer,
+    handlePreventDragResizer,
+    handleDragEndResizer,
+  } = useCell(props);
+  console.log(props.row, props.column);
 
   return (
     <div
       style={{
         width,
+        height: '100%',
       }}
     >
       {/*content*/}
@@ -51,6 +70,7 @@ function Cell(props: CellProps) {
           padding: 8px;
           outline: none;
           line-height: 1.2;
+          min-height: 100%;
         `}
         style={{
           backgroundColor,
@@ -66,9 +86,8 @@ function Cell(props: CellProps) {
           position: absolute;
           top: 0;
           left: 0;
-          border: ${focused ? `1px solid ${Color.HIGHLIGHT}` : 'transparent'};
+          border: ${focused ? `1px solid ${Color.HIGHLIGHT}` : 'none'};
           pointer-events: none;
-          transition: 0.2s;
         `}
         style={{
           width,
@@ -78,13 +97,19 @@ function Cell(props: CellProps) {
 
       {/*resizer*/}
       <div
+        ref={resizerRef}
         onMouseEnter={handleEnterResizer}
         onMouseLeave={handleLeaveResizer}
+        onMouseDown={handleMouseDownResizer}
+        onMouseUp={handleMouseUpResizer}
+        onDragStart={handlePreventDragResizer}
+        onDragCapture={handlePreventDragResizer}
+        onDragEnd={handleDragEndResizer}
         css={css`
           position: absolute;
           display: flex;
           justify-content: center;
-          width: 8px;
+          width: ${RESIZER_WIDTH}px;
           height: ${height}px;
           top: 0;
           right: -4px;

@@ -1,5 +1,5 @@
 import { TableditorProps } from '@components/tableditor';
-import { MutableRefObject, useCallback, useState } from 'react';
+import { MouseEventHandler, MutableRefObject, useCallback, useState } from 'react';
 import {
   CellData,
   CellChangeEventHandler,
@@ -9,6 +9,9 @@ import {
   CellHoverEvent,
   ResizerHoverEventHandler,
   ResizerHoverEvent,
+  ResizeEventHandler,
+  ResizeEvent,
+  CELL_MIN_WIDTH,
 } from '@components/tableditor/constants';
 import useClickOutside from '@hooks/useClickOutside';
 
@@ -20,10 +23,14 @@ export interface IUseTableditor {
   cellHoverEvent: CellHoverEvent | undefined;
   cellFocusEvent: CellFocusEvent | undefined;
   resizerHoverData: (ResizerHoverEvent & { columnCount: number }) | undefined;
+  handleMouseMove: MouseEventHandler<HTMLDivElement>;
+  handleMouseUp: MouseEventHandler<HTMLDivElement>;
   onHoverCell: CellHoverEventHandler;
   onFocusCell: CellHoverEventHandler;
   onChangeContent: CellChangeEventHandler;
   onHoverResizer: ResizerHoverEventHandler;
+  onResizeStart: ResizeEventHandler;
+  onResizeEnd: ResizeEventHandler;
 }
 
 const defaultCell: CellData = {
@@ -48,6 +55,7 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
   const [cellHoverEvent, setCellHoverEvent] = useState<CellHoverEvent>();
   const [cellFocusEvent, setCellFocusEvent] = useState<CellFocusEvent>();
   const [resizerHoverData, setResizerHoverData] = useState<ResizerHoverEvent & { columnCount: number }>();
+  const [resizeEvent, setResizeEvent] = useState<ResizeEvent>();
 
   const { ref: tableRef } = useClickOutside<HTMLTableElement>({
     onClickOutside: () => onFocusCell(),
@@ -130,15 +138,62 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     });
   }, []);
 
+  const onResizeStart: ResizeEventHandler = useCallback((e) => {
+    setResizeEvent(e);
+  }, []);
+
+  const onResizeEnd: ResizeEventHandler = useCallback(() => {
+    setResizeEvent(undefined);
+  }, []);
+
+  const onResize: ResizeEventHandler = useCallback((e) => {
+    if (!e) return;
+
+    const { column, pivotX, mouseX } = e;
+    if (pivotX === undefined || mouseX === undefined) return;
+
+    setCells((prev) => {
+      return prev.map((rows) =>
+        rows.map((cell, columnIndex) => {
+          if (columnIndex === column) {
+            const newWidth = mouseX - pivotX;
+            return {
+              ...cell,
+              width: Math.max(CELL_MIN_WIDTH, newWidth),
+            };
+          }
+          return cell;
+        }),
+      );
+    });
+  }, []);
+
+  const handleMouseMove: MouseEventHandler<HTMLDivElement> = useCallback(
+    (e) => {
+      e.preventDefault();
+      if (!resizeEvent) return;
+      onResize({ column: resizeEvent?.column, mouseX: e.clientX, pivotX: resizeEvent.pivotX });
+    },
+    [resizeEvent],
+  );
+
+  const handleMouseUp: MouseEventHandler<HTMLDivElement> = useCallback(() => {
+    onResizeEnd();
+  }, [onResizeEnd]);
+
   return {
     tableRef,
     cells,
     cellHoverEvent,
     cellFocusEvent,
     resizerHoverData,
+    handleMouseMove,
+    handleMouseUp,
     onHoverCell,
     onFocusCell,
     onChangeContent,
     onHoverResizer,
+    onResizeStart,
+    onResizeEnd,
   };
 }

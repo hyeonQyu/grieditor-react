@@ -11,10 +11,26 @@ export interface TableditorProps {
 
 export function Tableditor(props: TableditorProps) {
   const tableditor = useTableditor(props);
-  const { tableRef, cells, cellHoverEvent, cellFocusEvent, resizerHoverData, onHoverCell, onFocusCell, onChangeContent, onHoverResizer } = tableditor;
+  const {
+    tableRef,
+    cells,
+    cellHoverEvent,
+    cellFocusEvent,
+    resizerHoverData,
+    handleMouseMove,
+    handleMouseUp,
+    onHoverCell,
+    onFocusCell,
+    onChangeContent,
+    onHoverResizer,
+    onResizeStart,
+    onResizeEnd,
+  } = tableditor;
 
   return (
     <div
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
       css={css`
         overflow-x: auto;
       `}
@@ -26,6 +42,7 @@ export function Tableditor(props: TableditorProps) {
             return (
               <tr key={rowIndex}>
                 {row.map((cell, columnIndex) => {
+                  const { width } = cell;
                   const focused = cellFocusEvent?.rowColumn.row === rowIndex && cellFocusEvent?.rowColumn.column === columnIndex;
                   const resizerHovered = resizerHoverData?.rowColumn.column === columnIndex && resizerHoverData?.columnCount === columnCount;
 
@@ -37,6 +54,7 @@ export function Tableditor(props: TableditorProps) {
                         position: relative;
                         min-height: 32px;
                       `}
+                      style={{ width }}
                     >
                       <Cell
                         cell={cell}
@@ -48,6 +66,8 @@ export function Tableditor(props: TableditorProps) {
                         onFocusCell={onFocusCell}
                         onChangeContent={onChangeContent}
                         onHoverResizer={onHoverResizer}
+                        onResizeStart={onResizeStart}
+                        onResizeEnd={onResizeEnd}
                       />
                     </td>
                   );

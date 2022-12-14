@@ -1,42 +1,4 @@
-export interface CellData {
-  content: string;
-  width: number;
-  backgroundColor: TableditorColor;
-  font: Font;
-}
-
-export interface Font {
-  color: TableditorColor;
-  style: FontStyle;
-}
-
-export type TableditorColor =
-  | 'black'
-  | 'white'
-  | 'gray_dark'
-  | 'gray_light'
-  | 'brown_dark'
-  | 'brown_light'
-  | 'orange_dark'
-  | 'orange_light'
-  | 'yellow_dark'
-  | 'yellow_light'
-  | 'green_dark'
-  | 'green_light'
-  | 'blue_dark'
-  | 'blue_light'
-  | 'purple_dark'
-  | 'purple_light'
-  | 'pink_dark'
-  | 'pink_light'
-  | 'red_dark'
-  | 'red_light';
-
-export type FontStyle = 'default' | 'bold' | 'italic' | 'underline' | 'strikethrough';
-
-export type ColorMap = {
-  [key in TableditorColor]: string;
-};
+import { ColorMap } from '@components/tableditor/constants/types';
 
 export const COLOR_MAP: ColorMap = {
   black: '#1d1d1d',
@@ -61,9 +23,8 @@ export const COLOR_MAP: ColorMap = {
   red_light: '#ffc4c4',
 };
 
-export interface RowColumn {
-  row: number;
-  column: number;
-}
+export const RESIZER_WIDTH = 8;
+export const CELL_MIN_WIDTH = 24;
 
+export * from './types';
 export * from './events';

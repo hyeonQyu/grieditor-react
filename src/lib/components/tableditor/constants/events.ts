@@ -25,3 +25,11 @@ export interface ResizerHoverEvent {
 }
 
 export type ResizerHoverEventHandler = (e?: ResizerHoverEvent) => void;
+
+export interface ResizeEvent {
+  column: number;
+  pivotX?: number;
+  mouseX?: number;
+}
+
+export type ResizeEventHandler = (e?: ResizeEvent) => void;

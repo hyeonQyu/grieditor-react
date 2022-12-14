@@ -1,23 +1,39 @@
 import { CellProps } from '@components/tableditor/components/cell';
-import { FocusEventHandler, KeyboardEventHandler, MutableRefObject, useCallback, useEffect, useRef, useState } from 'react';
+import {
+  DragEventHandler,
+  FocusEventHandler,
+  KeyboardEventHandler,
+  MouseEventHandler,
+  MutableRefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { ContentEditableUtil } from '@utils/contentEditableUtil';
 
 export interface IUseCellParams extends CellProps {}
 
 export interface IUseCell {
   ref: MutableRefObject<HTMLDivElement | null>;
+  resizerRef: MutableRefObject<HTMLDivElement | null>;
   focused: boolean;
   height: number;
-  handleHover: () => void;
+  handleHover: MouseEventHandler<HTMLDivElement>;
   handleFocus: FocusEventHandler<HTMLDivElement>;
   handleKeyDown: KeyboardEventHandler<HTMLDivElement>;
-  handleEnterResizer: () => void;
-  handleLeaveResizer: () => void;
+  handleEnterResizer: MouseEventHandler<HTMLDivElement>;
+  handleLeaveResizer: MouseEventHandler<HTMLDivElement>;
+  handleMouseDownResizer: MouseEventHandler<HTMLDivElement>;
+  handleMouseUpResizer: MouseEventHandler<HTMLDivElement>;
+  handlePreventDragResizer: DragEventHandler<HTMLDivElement>;
+  handleDragEndResizer: DragEventHandler<HTMLDivElement>;
 }
 
 export function useCell(params: IUseCellParams): IUseCell {
-  const { row, column, focusEvent, onHoverCell, onFocusCell, onChangeContent, onHoverResizer } = params;
+  const { row, column, focusEvent, onHoverCell, onFocusCell, onChangeContent, onHoverResizer, onResizeStart, onResizeEnd } = params;
   const ref = useRef<HTMLDivElement>(null);
+  const resizerRef = useRef<HTMLDivElement>(null);
   const focused = focusEvent?.rowColumn.row === row && focusEvent?.rowColumn.column === column;
   const [height, setHeight] = useState(0);
 
@@ -55,7 +71,7 @@ export function useCell(params: IUseCellParams): IUseCell {
     }
   }, [focused, focusEvent, onChangeContent, row, column]);
 
-  const handleHover = useCallback(() => {
+  const handleHover: MouseEventHandler<HTMLDivElement> = useCallback(() => {
     onHoverCell({ rowColumn: { row, column } });
   }, [row, column, onHoverCell]);
 
@@ -102,16 +118,33 @@ export function useCell(params: IUseCellParams): IUseCell {
     [row, column, onFocusCell],
   );
 
-  const handleEnterResizer = useCallback(() => {
+  const handleEnterResizer: MouseEventHandler<HTMLDivElement> = useCallback(() => {
     onHoverResizer({ rowColumn: { row, column } });
   }, [row, column, onHoverResizer]);
 
-  const handleLeaveResizer = useCallback(() => {
+  const handleLeaveResizer: MouseEventHandler<HTMLDivElement> = useCallback(() => {
     onHoverResizer();
-  }, [row, column, onHoverResizer]);
+  }, [onHoverResizer]);
+
+  const handleMouseDownResizer: MouseEventHandler<HTMLDivElement> = useCallback(() => {
+    onResizeStart({ column, pivotX: ref.current?.getBoundingClientRect().x });
+  }, [onResizeStart, column]);
+
+  const handleMouseUpResizer: MouseEventHandler<HTMLDivElement> = useCallback(() => {
+    onResizeEnd();
+  }, [onResizeEnd]);
+
+  const handlePreventDragResizer: DragEventHandler<HTMLDivElement> = useCallback((e) => {
+    e.preventDefault();
+  }, []);
+
+  const handleDragEndResizer: DragEventHandler<HTMLDivElement> = useCallback(() => {
+    onResizeEnd();
+  }, [onResizeEnd]);
 
   return {
     ref,
+    resizerRef,
     focused,
     height,
     handleHover,
@@ -119,5 +152,9 @@ export function useCell(params: IUseCellParams): IUseCell {
     handleKeyDown,
     handleEnterResizer,
     handleLeaveResizer,
+    handleMouseDownResizer,
+    handleMouseUpResizer,
+    handlePreventDragResizer,
+    handleDragEndResizer,
   };
 }
