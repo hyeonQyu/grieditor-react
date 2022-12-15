@@ -79,6 +79,11 @@ function Cell(props: CellProps) {
             line-height: 1.2;
             min-height: 100%;
             height: 100%;
+            cursor: ${focused ? 'text' : 'default'};
+
+            :hover + div {
+              border: 1px solid ${Color.CYAN_0};
+            }
           `}
           style={{
             backgroundColor,
@@ -94,7 +99,7 @@ function Cell(props: CellProps) {
             position: absolute;
             top: 0;
             left: 0;
-            border: ${focused ? `1px solid ${Color.CYAN_3}` : 'none'};
+            border: ${focused ? `2px solid ${Color.CYAN_3} !important` : 'none'};
             pointer-events: none;
           `}
           style={{

@@ -34,6 +34,7 @@ export function Tableditor(props: TableditorProps) {
       css={css`
         overflow-x: auto;
         overflow-y: hidden;
+        padding: 8px 0 8px;
 
         &::-webkit-scrollbar {
           width: 8px;
