@@ -54,7 +54,7 @@ function Cell(props: CellProps) {
   return (
     <td
       css={css`
-        border: 1px solid ${Color.BORDER};
+        border: 1px solid ${Color.GRAY_1};
         position: relative;
       `}
       style={{ width, height }}
@@ -94,7 +94,7 @@ function Cell(props: CellProps) {
             position: absolute;
             top: 0;
             left: 0;
-            border: ${focused ? `1px solid ${Color.HIGHLIGHT}` : 'none'};
+            border: ${focused ? `1px solid ${Color.CYAN_3}` : 'none'};
             pointer-events: none;
           `}
           style={{
@@ -129,7 +129,7 @@ function Cell(props: CellProps) {
             css={css`
               width: 3px;
               height: calc(100% + 2px);
-              background-color: ${resizerHovered ? Color.HIGHLIGHT : 'transparent'};
+              background-color: ${resizerHovered ? Color.CYAN_3 : 'transparent'};
               transition: background-color 0.2s;
             `}
           />

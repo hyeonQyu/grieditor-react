@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import { CellData } from '@components/tableditor/constants';
 import { useTableditor } from '@components/tableditor/hooks/useTableditor';
 import { Cell } from '@components/tableditor/components/cell';
+import { Color } from '@constants/index';
 
 export interface TableditorProps {
   cells?: CellData[][];
@@ -33,6 +34,19 @@ export function Tableditor(props: TableditorProps) {
       css={css`
         overflow-x: auto;
         overflow-y: hidden;
+
+        &::-webkit-scrollbar {
+          width: 8px;
+          height: 8px;
+          background-color: ${Color.GRAY_0};
+        }
+        &::-webkit-scrollbar-thumb {
+          background-color: ${Color.GRAY_2};
+
+          &:hover {
+            background-color: ${Color.GRAY_3};
+          }
+        }
       `}
     >
       <table ref={tableRef}>

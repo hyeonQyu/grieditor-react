@@ -1,4 +1,19 @@
 export enum Color {
-  HIGHLIGHT = '#00BBC7',
-  BORDER = '#DCDCDC',
+  CYAN_0 = '#CBF6F5',
+  CYAN_1 = '#85EAE7',
+  CYAN_2 = '#62E4E0',
+  CYAN_3 = '#3FDED9',
+
+  WHITE = '#FFFFFF',
+  GRAY_0 = '#E9EBED',
+  GRAY_1 = '#DDE0E3',
+  GRAY_2 = '#C7CCD1',
+  GRAY_3 = '#B0B8BF',
+  GRAY_4 = '#9AA4AC',
+  GRAY_5 = '#84909A',
+  GRAY_6 = '#6E7C87',
+  GRAY_7 = '#5C6770',
+  GRAY_8 = '#49525A',
+  GRAY_9 = '#373E43',
+  BLACK = '#1f2426',
 }
