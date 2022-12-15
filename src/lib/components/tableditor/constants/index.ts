@@ -24,7 +24,7 @@ export const COLOR_MAP: ColorMap = {
 };
 
 export const RESIZER_WIDTH = 8;
-export const CELL_MIN_WIDTH = 24;
+export const CELL_MIN_WIDTH = 32;
 
 export * from './types';
 export * from './events';

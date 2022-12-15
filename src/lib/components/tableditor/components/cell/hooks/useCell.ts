@@ -11,11 +11,12 @@ import {
   useState,
 } from 'react';
 import { ContentEditableUtil } from '@utils/contentEditableUtil';
+import useElementResize from '@hooks/useElementResize';
 
 export interface IUseCellParams extends CellProps {}
 
 export interface IUseCell {
-  ref: MutableRefObject<HTMLDivElement | null>;
+  contentEditableRef: MutableRefObject<HTMLDivElement | null>;
   resizerRef: MutableRefObject<HTMLDivElement | null>;
   focused: boolean;
   height: number;
@@ -32,31 +33,24 @@ export interface IUseCell {
 
 export function useCell(params: IUseCellParams): IUseCell {
   const { row, column, focusEvent, onHoverCell, onFocusCell, onChangeContent, onHoverResizer, onResizeStart, onResizeEnd } = params;
-  const ref = useRef<HTMLDivElement>(null);
-  const resizerRef = useRef<HTMLDivElement>(null);
   const focused = focusEvent?.rowColumn.row === row && focusEvent?.rowColumn.column === column;
   const [height, setHeight] = useState(0);
 
-  useEffect(() => {
-    // Observe the height of cell
-    const observer = new ResizeObserver((entries) => {
-      if (entries.length > 0) {
-        const cell = entries[0];
-        setHeight(cell.target.clientHeight);
-      }
-    });
-
-    observer.observe(ref.current as Element);
-  }, []);
+  const { ref: contentEditableRef } = useElementResize<HTMLDivElement>({
+    onResize(cellElement) {
+      setHeight(cellElement.clientHeight);
+    },
+  });
+  const resizerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!focused) {
-      onChangeContent({ rowColumn: { row, column }, content: ref.current?.innerText ?? '' });
+      onChangeContent({ rowColumn: { row, column }, content: contentEditableRef.current?.innerText ?? '' });
       return;
     }
 
     // Move cursor position
-    const selectionNode = (ref?.current?.firstChild ?? ref?.current) as Node;
+    const selectionNode = (contentEditableRef?.current?.firstChild ?? contentEditableRef?.current) as Node;
     const { directionTo } = focusEvent;
     switch (directionTo) {
       case 'right':
@@ -127,7 +121,7 @@ export function useCell(params: IUseCellParams): IUseCell {
   }, [onHoverResizer]);
 
   const handleMouseDownResizer: MouseEventHandler<HTMLDivElement> = useCallback(() => {
-    onResizeStart({ column, pivotX: ref.current?.getBoundingClientRect().x });
+    onResizeStart({ column, pivotX: contentEditableRef.current?.getBoundingClientRect().x });
   }, [onResizeStart, column]);
 
   const handleMouseUpResizer: MouseEventHandler<HTMLDivElement> = useCallback(() => {
@@ -143,7 +137,7 @@ export function useCell(params: IUseCellParams): IUseCell {
   }, [onResizeEnd]);
 
   return {
-    ref,
+    contentEditableRef,
     resizerRef,
     focused,
     height,
