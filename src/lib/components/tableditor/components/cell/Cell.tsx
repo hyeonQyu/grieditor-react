@@ -49,7 +49,7 @@ function Cell(props: CellProps) {
     handlePreventDragResizer,
     handleDragEndResizer,
   } = useCell(props);
-  // console.log(props.row, props.column);
+  console.log(props.row, props.column);
 
   return (
     <td
@@ -130,7 +130,7 @@ function Cell(props: CellProps) {
               width: 3px;
               height: calc(100% + 2px);
               background-color: ${resizerHovered ? Color.HIGHLIGHT : 'transparent'};
-              transition: 0.2s;
+              transition: background-color 0.2s;
             `}
           />
         </div>

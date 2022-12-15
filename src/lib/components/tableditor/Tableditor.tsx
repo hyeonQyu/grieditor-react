@@ -32,6 +32,7 @@ export function Tableditor(props: TableditorProps) {
       onMouseUp={handleMouseUp}
       css={css`
         overflow-x: auto;
+        overflow-y: hidden;
       `}
     >
       <table ref={tableRef}>
