@@ -1,3 +1,5 @@
+import { Direction } from '@constants/types';
+
 export namespace ContentEditableUtil {
   /**
    * Check the caret is positioned at the far right of the cell
@@ -19,10 +21,29 @@ export namespace ContentEditableUtil {
   }
 
   /**
+   * Move the position of caret by direction
+   * @param node
+   * @param direction
+   */
+  export function moveCaret(node: Node, direction?: Direction) {
+    switch (direction) {
+      case 'right':
+        moveCaretToFirst(node);
+        break;
+
+      case 'left':
+      case 'up':
+      case 'down':
+        moveCaretToLast(node);
+        break;
+    }
+  }
+
+  /**
    * Move the caret to first offset of the node
    * @param node
    */
-  export function moveCaretToFirst(node: Node) {
+  function moveCaretToFirst(node: Node) {
     const selection = window.getSelection();
     selection?.setBaseAndExtent(node, 0, node, 0);
   }
@@ -31,7 +52,7 @@ export namespace ContentEditableUtil {
    * Move the caret to last offset of the node
    * @param node
    */
-  export function moveCaretToLast(node: Node) {
+  function moveCaretToLast(node: Node) {
     const selection = window.getSelection();
     const newRange = document.createRange();
     newRange.selectNodeContents(node);

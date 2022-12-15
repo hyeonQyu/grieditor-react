@@ -52,17 +52,7 @@ export function useCell(params: IUseCellParams): IUseCell {
     // Move cursor position
     const selectionNode = (contentEditableRef?.current?.firstChild ?? contentEditableRef?.current) as Node;
     const { directionTo } = focusEvent;
-    switch (directionTo) {
-      case 'right':
-        ContentEditableUtil.moveCaretToFirst(selectionNode);
-        break;
-
-      case 'left':
-      case 'up':
-      case 'down':
-        ContentEditableUtil.moveCaretToLast(selectionNode);
-        break;
-    }
+    ContentEditableUtil.moveCaret(selectionNode, directionTo);
   }, [focused, focusEvent, onChangeContent, row, column]);
 
   const handleHover: MouseEventHandler<HTMLDivElement> = useCallback(() => {
