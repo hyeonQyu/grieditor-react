@@ -38,7 +38,6 @@ function Cell(props: CellProps) {
     contentEditableRef,
     resizerRef,
     focused,
-    height,
     handleHover,
     handleFocus,
     handleKeyDown,
@@ -57,7 +56,7 @@ function Cell(props: CellProps) {
         border: 1px solid ${Color.GRAY_1};
         position: relative;
       `}
-      style={{ width, height }}
+      style={{ width }}
     >
       <div
         style={{
@@ -101,10 +100,10 @@ function Cell(props: CellProps) {
             left: 0;
             border: ${focused ? `2px solid ${Color.CYAN_3} !important` : 'none'};
             pointer-events: none;
+            height: 100%;
           `}
           style={{
             width,
-            height,
           }}
         />
 
@@ -123,7 +122,7 @@ function Cell(props: CellProps) {
             display: flex;
             justify-content: center;
             width: ${RESIZER_WIDTH}px;
-            height: ${height}px;
+            height: 100%;
             top: 0;
             right: -4px;
             z-index: 10;

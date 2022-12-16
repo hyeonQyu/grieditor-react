@@ -8,10 +8,8 @@ import {
   useCallback,
   useEffect,
   useRef,
-  useState,
 } from 'react';
 import { ContentEditableUtil } from '@utils/contentEditableUtil';
-import useElementResize from '@hooks/useElementResize';
 
 export interface IUseCellParams extends CellProps {}
 
@@ -19,7 +17,6 @@ export interface IUseCell {
   contentEditableRef: MutableRefObject<HTMLDivElement | null>;
   resizerRef: MutableRefObject<HTMLDivElement | null>;
   focused: boolean;
-  height: number;
   handleHover: MouseEventHandler<HTMLDivElement>;
   handleFocus: FocusEventHandler<HTMLDivElement>;
   handleKeyDown: KeyboardEventHandler<HTMLDivElement>;
@@ -34,13 +31,8 @@ export interface IUseCell {
 export function useCell(params: IUseCellParams): IUseCell {
   const { row, column, focusEvent, onHoverCell, onFocusCell, onChangeContent, onHoverResizer, onResizeStart, onResizeEnd } = params;
   const focused = focusEvent?.rowColumn.row === row && focusEvent?.rowColumn.column === column;
-  const [height, setHeight] = useState(0);
 
-  const { ref: contentEditableRef } = useElementResize<HTMLDivElement>({
-    onResize(cellElement) {
-      setHeight(cellElement.clientHeight);
-    },
-  });
+  const contentEditableRef = useRef<HTMLDivElement>(null);
   const resizerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -130,7 +122,6 @@ export function useCell(params: IUseCellParams): IUseCell {
     contentEditableRef,
     resizerRef,
     focused,
-    height,
     handleHover,
     handleFocus,
     handleKeyDown,
