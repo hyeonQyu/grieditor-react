@@ -17,9 +17,10 @@ export interface IUseCell {
   contentEditableRef: MutableRefObject<HTMLDivElement | null>;
   resizerRef: MutableRefObject<HTMLDivElement | null>;
   focused: boolean;
-  handleHover: MouseEventHandler<HTMLDivElement>;
-  handleFocus: FocusEventHandler<HTMLDivElement>;
-  handleKeyDown: KeyboardEventHandler<HTMLDivElement>;
+  handleHoverTableData: MouseEventHandler<HTMLTableDataCellElement>;
+  handleClickTableData: MouseEventHandler<HTMLTableDataCellElement>;
+  handleFocusContentEditable: FocusEventHandler<HTMLDivElement>;
+  handleKeyDownContentEditable: KeyboardEventHandler<HTMLDivElement>;
   handleEnterResizer: MouseEventHandler<HTMLDivElement>;
   handleLeaveResizer: MouseEventHandler<HTMLDivElement>;
   handleMouseDownResizer: MouseEventHandler<HTMLDivElement>;
@@ -29,7 +30,7 @@ export interface IUseCell {
 }
 
 export function useCell(params: IUseCellParams): IUseCell {
-  const { row, column, focusEvent, onHoverCell, onFocusCell, onChangeContent, onHoverResizer, onResizeStart, onResizeEnd } = params;
+  const { row, column, focusEvent, isResizing, onHoverCell, onFocusCell, onChangeContent, onHoverResizer, onResizeStart, onResizeEnd } = params;
   const focused = focusEvent?.rowColumn.row === row && focusEvent?.rowColumn.column === column;
 
   const contentEditableRef = useRef<HTMLDivElement>(null);
@@ -47,15 +48,21 @@ export function useCell(params: IUseCellParams): IUseCell {
     ContentEditableUtil.moveCaret(selectionNode, directionTo);
   }, [focused, focusEvent, onChangeContent, row, column]);
 
-  const handleHover: MouseEventHandler<HTMLDivElement> = useCallback(() => {
+  const handleHoverTableData: MouseEventHandler<HTMLTableDataCellElement> = useCallback(() => {
     onHoverCell({ rowColumn: { row, column } });
   }, [row, column, onHoverCell]);
 
-  const handleFocus: FocusEventHandler<HTMLDivElement> = useCallback(() => {
+  const handleClickTableData: MouseEventHandler<HTMLTableDataCellElement> = useCallback(() => {
+    if (!isResizing) {
+      contentEditableRef.current?.focus();
+    }
+  }, [isResizing]);
+
+  const handleFocusContentEditable: FocusEventHandler<HTMLDivElement> = useCallback(() => {
     onFocusCell({ rowColumn: { row, column } });
   }, [row, column, onFocusCell]);
 
-  const handleKeyDown: KeyboardEventHandler<HTMLDivElement> = useCallback(
+  const handleKeyDownContentEditable: KeyboardEventHandler<HTMLDivElement> = useCallback(
     (e) => {
       switch (e.key) {
         case 'Enter':
@@ -122,9 +129,10 @@ export function useCell(params: IUseCellParams): IUseCell {
     contentEditableRef,
     resizerRef,
     focused,
-    handleHover,
-    handleFocus,
-    handleKeyDown,
+    handleHoverTableData,
+    handleClickTableData,
+    handleFocusContentEditable,
+    handleKeyDownContentEditable,
     handleEnterResizer,
     handleLeaveResizer,
     handleMouseDownResizer,

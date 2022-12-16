@@ -16,6 +16,7 @@ export function Tableditor(props: TableditorProps) {
     cells,
     cellHoverEvent,
     cellFocusEvent,
+    resizeEvent,
     resizerHoverData,
     handleMouseMove,
     handleMouseUp,
@@ -59,6 +60,7 @@ export function Tableditor(props: TableditorProps) {
                 {row.map((cell, columnIndex) => {
                   const focused = cellFocusEvent?.rowColumn.row === rowIndex && cellFocusEvent?.rowColumn.column === columnIndex;
                   const resizerHovered = resizerHoverData?.rowColumn.column === columnIndex && resizerHoverData?.columnCount === columnCount;
+                  const isResizing = resizeEvent?.column === columnIndex;
 
                   return (
                     <Cell
@@ -68,6 +70,7 @@ export function Tableditor(props: TableditorProps) {
                       column={columnIndex}
                       focusEvent={focused ? cellFocusEvent : undefined}
                       resizerHovered={resizerHovered}
+                      isResizing={isResizing}
                       onHoverCell={onHoverCell}
                       onFocusCell={onFocusCell}
                       onChangeContent={onChangeContent}

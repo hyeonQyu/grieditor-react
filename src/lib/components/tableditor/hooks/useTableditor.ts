@@ -22,6 +22,7 @@ export interface IUseTableditor {
   cells: CellData[][];
   cellHoverEvent: CellHoverEvent | undefined;
   cellFocusEvent: CellFocusEvent | undefined;
+  resizeEvent: ResizeEvent | undefined;
   resizerHoverData: (ResizerHoverEvent & { columnCount: number }) | undefined;
   handleMouseMove: MouseEventHandler<HTMLDivElement>;
   handleMouseUp: MouseEventHandler<HTMLDivElement>;
@@ -143,7 +144,9 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
   }, []);
 
   const onResizeEnd: ResizeEventHandler = useCallback(() => {
-    setResizeEvent(undefined);
+    setTimeout(() => {
+      setResizeEvent(undefined);
+    }, 0);
   }, []);
 
   const onResize: ResizeEventHandler = useCallback((e) => {
@@ -170,8 +173,8 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
 
   const handleMouseMove: MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
-      e.preventDefault();
       if (!resizeEvent) return;
+      e.preventDefault();
       onResize({ column: resizeEvent?.column, mouseX: e.clientX, pivotX: resizeEvent.pivotX });
     },
     [resizeEvent],
@@ -186,6 +189,7 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     cells,
     cellHoverEvent,
     cellFocusEvent,
+    resizeEvent,
     resizerHoverData,
     handleMouseMove,
     handleMouseUp,

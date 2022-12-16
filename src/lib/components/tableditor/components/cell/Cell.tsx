@@ -21,6 +21,7 @@ export interface CellProps {
   column: number;
   focusEvent: CellFocusEvent | undefined;
   resizerHovered: boolean;
+  isResizing: boolean;
   onHoverCell: CellHoverEventHandler;
   onFocusCell: CellFocusEventHandler;
   onChangeContent: CellChangeEventHandler;
@@ -38,9 +39,10 @@ function Cell(props: CellProps) {
     contentEditableRef,
     resizerRef,
     focused,
-    handleHover,
-    handleFocus,
-    handleKeyDown,
+    handleHoverTableData,
+    handleClickTableData,
+    handleFocusContentEditable,
+    handleKeyDownContentEditable,
     handleEnterResizer,
     handleLeaveResizer,
     handleMouseDownResizer,
@@ -52,9 +54,16 @@ function Cell(props: CellProps) {
 
   return (
     <td
+      onMouseEnter={handleHoverTableData}
+      onClick={handleClickTableData}
       css={css`
         border: 1px solid ${Color.GRAY_1};
         position: relative;
+        cursor: ${focused ? 'text' : 'default'};
+
+        :hover .highlighting {
+          border: 1px solid ${Color.CYAN_0};
+        }
       `}
       style={{ width }}
     >
@@ -69,20 +78,14 @@ function Cell(props: CellProps) {
           contentEditable
           suppressContentEditableWarning
           ref={contentEditableRef}
-          onMouseEnter={handleHover}
-          onFocus={handleFocus}
-          onKeyDown={handleKeyDown}
+          onFocus={handleFocusContentEditable}
+          onKeyDown={handleKeyDownContentEditable}
           css={css`
             padding: 8px;
             outline: none;
             line-height: 1.2;
             min-height: 100%;
             height: 100%;
-            cursor: ${focused ? 'text' : 'default'};
-
-            :hover + div {
-              border: 1px solid ${Color.CYAN_0};
-            }
           `}
           style={{
             backgroundColor,
@@ -102,6 +105,7 @@ function Cell(props: CellProps) {
             pointer-events: none;
             height: 100%;
           `}
+          className={'highlighting'}
           style={{
             width,
           }}
