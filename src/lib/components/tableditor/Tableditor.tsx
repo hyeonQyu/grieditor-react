@@ -20,10 +20,10 @@ export function Tableditor(props: TableditorProps) {
     resizerHoverData,
     handleMouseMove,
     handleMouseUp,
-    onHoverCell,
-    onFocusCell,
-    onChangeContent,
-    onHoverResizer,
+    onCellHover,
+    onCellFocus,
+    onContentChange,
+    onResizerHover,
     onResizeStart,
     onResizeEnd,
   } = tableditor;
@@ -71,10 +71,10 @@ export function Tableditor(props: TableditorProps) {
                       focusEvent={focused ? cellFocusEvent : undefined}
                       resizerHovered={resizerHovered}
                       isResizing={isResizing}
-                      onHoverCell={onHoverCell}
-                      onFocusCell={onFocusCell}
-                      onChangeContent={onChangeContent}
-                      onHoverResizer={onHoverResizer}
+                      onCellHover={onCellHover}
+                      onCellFocus={onCellFocus}
+                      onContentChange={onContentChange}
+                      onResizerHover={onResizerHover}
                       onResizeStart={onResizeStart}
                       onResizeEnd={onResizeEnd}
                     />

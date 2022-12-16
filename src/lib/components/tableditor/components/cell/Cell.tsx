@@ -22,10 +22,10 @@ export interface CellProps {
   focusEvent: CellFocusEvent | undefined;
   resizerHovered: boolean;
   isResizing: boolean;
-  onHoverCell: CellHoverEventHandler;
-  onFocusCell: CellFocusEventHandler;
-  onChangeContent: CellChangeEventHandler;
-  onHoverResizer: ResizerHoverEventHandler;
+  onCellHover: CellHoverEventHandler;
+  onCellFocus: CellFocusEventHandler;
+  onContentChange: CellChangeEventHandler;
+  onResizerHover: ResizerHoverEventHandler;
   onResizeStart: ResizeEventHandler;
   onResizeEnd: ResizeEventHandler;
 }
@@ -39,23 +39,23 @@ function Cell(props: CellProps) {
     contentEditableRef,
     resizerRef,
     focused,
-    handleHoverTableData,
-    handleClickTableData,
-    handleFocusContentEditable,
-    handleKeyDownContentEditable,
-    handleEnterResizer,
-    handleLeaveResizer,
-    handleMouseDownResizer,
-    handleMouseUpResizer,
-    handlePreventDragResizer,
-    handleDragEndResizer,
+    handleTableDataHover,
+    handleTableDataClick,
+    handleContentEditableFocus,
+    handleContentEditableKeyDown,
+    handleResizerMouseEnter,
+    handleResizerMouseLeave,
+    handleResizerMouseDown,
+    handleResizerMouseUp,
+    handleResizerPreventDrag,
+    handleResizerDragEnd,
   } = useCell(props);
   console.log(props.row, props.column);
 
   return (
     <td
-      onMouseEnter={handleHoverTableData}
-      onClick={handleClickTableData}
+      onMouseEnter={handleTableDataHover}
+      onClick={handleTableDataClick}
       css={css`
         border: 1px solid ${Color.GRAY_1};
         position: relative;
@@ -78,8 +78,8 @@ function Cell(props: CellProps) {
           contentEditable
           suppressContentEditableWarning
           ref={contentEditableRef}
-          onFocus={handleFocusContentEditable}
-          onKeyDown={handleKeyDownContentEditable}
+          onFocus={handleContentEditableFocus}
+          onKeyDown={handleContentEditableKeyDown}
           css={css`
             padding: 8px;
             outline: none;
@@ -114,13 +114,13 @@ function Cell(props: CellProps) {
         {/*resizer*/}
         <div
           ref={resizerRef}
-          onMouseEnter={handleEnterResizer}
-          onMouseLeave={handleLeaveResizer}
-          onMouseDown={handleMouseDownResizer}
-          onMouseUp={handleMouseUpResizer}
-          onDragStart={handlePreventDragResizer}
-          onDragCapture={handlePreventDragResizer}
-          onDragEnd={handleDragEndResizer}
+          onMouseEnter={handleResizerMouseEnter}
+          onMouseLeave={handleResizerMouseLeave}
+          onMouseDown={handleResizerMouseDown}
+          onMouseUp={handleResizerMouseUp}
+          onDragStart={handleResizerPreventDrag}
+          onDragCapture={handleResizerPreventDrag}
+          onDragEnd={handleResizerDragEnd}
           css={css`
             position: absolute;
             display: flex;

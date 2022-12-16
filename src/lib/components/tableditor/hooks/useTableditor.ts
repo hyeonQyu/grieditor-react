@@ -26,10 +26,10 @@ export interface IUseTableditor {
   resizerHoverData: (ResizerHoverEvent & { columnCount: number }) | undefined;
   handleMouseMove: MouseEventHandler<HTMLDivElement>;
   handleMouseUp: MouseEventHandler<HTMLDivElement>;
-  onHoverCell: CellHoverEventHandler;
-  onFocusCell: CellHoverEventHandler;
-  onChangeContent: CellChangeEventHandler;
-  onHoverResizer: ResizerHoverEventHandler;
+  onCellHover: CellHoverEventHandler;
+  onCellFocus: CellHoverEventHandler;
+  onContentChange: CellChangeEventHandler;
+  onResizerHover: ResizerHoverEventHandler;
   onResizeStart: ResizeEventHandler;
   onResizeEnd: ResizeEventHandler;
 }
@@ -59,14 +59,14 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
   const [resizeEvent, setResizeEvent] = useState<ResizeEvent>();
 
   const { ref: tableRef } = useClickOutside<HTMLTableElement>({
-    onClickOutside: () => onFocusCell(),
+    onClickOutside: () => onCellFocus(),
   });
 
-  const onHoverCell: CellHoverEventHandler = useCallback((e) => {
+  const onCellHover: CellHoverEventHandler = useCallback((e) => {
     setCellHoverEvent(e);
   }, []);
 
-  const onFocusCell: CellFocusEventHandler = useCallback((e) => {
+  const onCellFocus: CellFocusEventHandler = useCallback((e) => {
     setCells((cells) => {
       if (e) {
         const { rowColumn } = e;
@@ -79,7 +79,7 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
         const columnCount = cells[rowColumn.row].length;
         if (columnCount <= rowColumn.column) {
           // To next row
-          onFocusCell({
+          onCellFocus({
             ...e,
             rowColumn: {
               row: rowColumn.row + 1,
@@ -90,7 +90,7 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
         }
         if (rowColumn.column < 0) {
           // To previous row
-          onFocusCell({
+          onCellFocus({
             ...e,
             rowColumn: {
               row: rowColumn.row - 1,
@@ -106,7 +106,7 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     });
   }, []);
 
-  const onChangeContent: CellChangeEventHandler = useCallback(({ rowColumn: { row, column }, content }) => {
+  const onContentChange: CellChangeEventHandler = useCallback(({ rowColumn: { row, column }, content }) => {
     setCells((prev) => {
       // Content not changed
       if (prev[row][column].content === content) {
@@ -127,7 +127,7 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     });
   }, []);
 
-  const onHoverResizer: ResizerHoverEventHandler = useCallback((e) => {
+  const onResizerHover: ResizerHoverEventHandler = useCallback((e) => {
     setCells((cells) => {
       if (e) {
         const { row } = e.rowColumn;
@@ -193,10 +193,10 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     resizerHoverData,
     handleMouseMove,
     handleMouseUp,
-    onHoverCell,
-    onFocusCell,
-    onChangeContent,
-    onHoverResizer,
+    onCellHover,
+    onCellFocus,
+    onContentChange,
+    onResizerHover,
     onResizeStart,
     onResizeEnd,
   };
