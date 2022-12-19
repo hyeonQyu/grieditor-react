@@ -12,6 +12,8 @@ import {
   ResizeEventHandler,
   ResizeEvent,
   CELL_MIN_WIDTH,
+  CellChangeEvent,
+  GetEventHandledCells,
 } from '@components/tableditor/constants';
 import useClickOutside from '@hooks/useClickOutside';
 
@@ -62,82 +64,123 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     onClickOutside: () => onCellFocus(),
   });
 
-  const onCellHover: CellHoverEventHandler = useCallback((e) => {
-    setCellHoverEvent(e);
-  }, []);
+  const getCellFocusEventHandledCells: GetEventHandledCells<CellFocusEvent | undefined> = useCallback(({ e, cells }) => {
+    if (e) {
+      const { rowColumn } = e;
+      const rowCount = cells.length;
+      if (rowCount <= rowColumn.row || rowColumn.row < 0) {
+        // Row limitation
+        return cells;
+      }
 
-  const onCellFocus: CellFocusEventHandler = useCallback((e) => {
-    setCells((cells) => {
-      if (e) {
-        const { rowColumn } = e;
-        const rowCount = cells.length;
-        if (rowCount <= rowColumn.row || rowColumn.row < 0) {
-          // Row limitation
-          return cells;
-        }
-
-        const columnCount = cells[rowColumn.row].length;
-        if (columnCount <= rowColumn.column) {
-          // To next row
-          onCellFocus({
+      const columnCount = cells[rowColumn.row].length;
+      if (columnCount <= rowColumn.column) {
+        // To next row
+        return getCellFocusEventHandledCells({
+          e: {
             ...e,
             rowColumn: {
               row: rowColumn.row + 1,
               column: 0,
             },
-          });
-          return cells;
-        }
-        if (rowColumn.column < 0) {
-          // To previous row
-          onCellFocus({
+          },
+          cells,
+        });
+      }
+      if (rowColumn.column < 0) {
+        // To previous row
+        return getCellFocusEventHandledCells({
+          e: {
             ...e,
             rowColumn: {
               row: rowColumn.row - 1,
               column: (cells[rowColumn.row - 1]?.length ?? 1) - 1,
             },
-          });
-          return cells;
-        }
+          },
+          cells,
+        });
       }
+    }
 
-      setCellFocusEvent(e);
-      return cells;
-    });
+    setCellFocusEvent(e);
+    return cells;
   }, []);
 
-  const onContentChange: CellChangeEventHandler = useCallback(({ rowColumn: { row, column }, content }) => {
-    setCells((prev) => {
-      // Content not changed
-      if (prev[row][column].content === content) {
-        return prev;
-      }
+  const getCellChangeEventHandledCells: GetEventHandledCells<CellChangeEvent> = useCallback(({ e, cells }) => {
+    const {
+      rowColumn: { row, column },
+      content,
+    } = e;
 
-      return prev.map((rows, rowIndex) => {
-        return rows.map((cell, columnIndex) => {
-          if (row === rowIndex && column === columnIndex) {
-            return {
-              ...cell,
-              content,
-            };
-          }
-          return cell;
-        });
+    // Content not changed
+    if (cells[row][column].content === content) {
+      return cells;
+    }
+
+    return cells.map((rows, rowIndex) => {
+      return rows.map((cell, columnIndex) => {
+        if (row === rowIndex && column === columnIndex) {
+          return {
+            ...cell,
+            content,
+          };
+        }
+        return cell;
       });
     });
   }, []);
 
-  const onResizerHover: ResizerHoverEventHandler = useCallback((e) => {
-    setCells((cells) => {
-      if (e) {
-        const { row } = e.rowColumn;
-        setResizerHoverData({ ...e, columnCount: cells[row].length });
-      } else {
-        setResizerHoverData(undefined);
-      }
-      return cells;
-    });
+  const getResizerHoverEventHandledCells: GetEventHandledCells<ResizerHoverEvent | undefined> = useCallback(({ e, cells }) => {
+    if (e) {
+      const { row } = e.rowColumn;
+      setResizerHoverData({ ...e, columnCount: cells[row].length });
+    } else {
+      setResizerHoverData(undefined);
+    }
+    return cells;
   }, []);
+
+  const getResizeEventHandledCells: GetEventHandledCells<ResizeEvent> = useCallback(({ e, cells }) => {
+    const { column, mouseX, pivotX } = e;
+
+    return cells.map((rows) =>
+      rows.map((cell, columnIndex) => {
+        if (columnIndex === column) {
+          const newWidth = mouseX! - pivotX!;
+          return {
+            ...cell,
+            width: Math.max(CELL_MIN_WIDTH, newWidth),
+          };
+        }
+        return cell;
+      }),
+    );
+  }, []);
+
+  const onCellHover: CellHoverEventHandler = useCallback((e) => {
+    setCellHoverEvent(e);
+  }, []);
+
+  const onCellFocus: CellFocusEventHandler = useCallback(
+    (e) => {
+      setCells((cells) => getCellFocusEventHandledCells({ e, cells }));
+    },
+    [getCellFocusEventHandledCells],
+  );
+
+  const onContentChange: CellChangeEventHandler = useCallback(
+    (e) => {
+      setCells((cells) => getCellChangeEventHandledCells({ e, cells }));
+    },
+    [getCellChangeEventHandledCells],
+  );
+
+  const onResizerHover: ResizerHoverEventHandler = useCallback(
+    (e) => {
+      setCells((cells) => getResizerHoverEventHandledCells({ e, cells }));
+    },
+    [getResizerHoverEventHandledCells],
+  );
 
   const onResizeStart: ResizeEventHandler = useCallback((e) => {
     setResizeEvent(e);
@@ -149,27 +192,17 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     }, 0);
   }, []);
 
-  const onResize: ResizeEventHandler = useCallback((e) => {
-    if (!e) return;
+  const onResize: ResizeEventHandler = useCallback(
+    (e) => {
+      if (!e) return;
 
-    const { column, pivotX, mouseX } = e;
-    if (pivotX === undefined || mouseX === undefined) return;
+      const { pivotX, mouseX } = e;
+      if (pivotX === undefined || mouseX === undefined) return;
 
-    setCells((prev) => {
-      return prev.map((rows) =>
-        rows.map((cell, columnIndex) => {
-          if (columnIndex === column) {
-            const newWidth = mouseX - pivotX;
-            return {
-              ...cell,
-              width: Math.max(CELL_MIN_WIDTH, newWidth),
-            };
-          }
-          return cell;
-        }),
-      );
-    });
-  }, []);
+      setCells((cells) => getResizeEventHandledCells({ e, cells }));
+    },
+    [getResizeEventHandledCells],
+  );
 
   const handleMouseMove: MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
