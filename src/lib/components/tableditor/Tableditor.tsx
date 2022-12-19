@@ -11,22 +11,7 @@ export interface TableditorProps {
 
 export function Tableditor(props: TableditorProps) {
   const tableditor = useTableditor(props);
-  const {
-    tableRef,
-    cells,
-    cellHoverEvent,
-    cellFocusEvent,
-    resizeEvent,
-    resizerHoverData,
-    handleMouseMove,
-    handleMouseUp,
-    onCellHover,
-    onCellFocus,
-    onContentChange,
-    onResizerHover,
-    onResizeStart,
-    onResizeEnd,
-  } = tableditor;
+  const { tableRef, cells, cellHoverEvent, cellFocusEvent, resizeEvent, resizerHoverData, handleMouseMove, handleMouseUp } = tableditor;
 
   return (
     <div
@@ -71,12 +56,7 @@ export function Tableditor(props: TableditorProps) {
                       focusEvent={focused ? cellFocusEvent : undefined}
                       resizerHovered={resizerHovered}
                       isResizing={isResizing}
-                      onCellHover={onCellHover}
-                      onCellFocus={onCellFocus}
-                      onContentChange={onContentChange}
-                      onResizerHover={onResizerHover}
-                      onResizeStart={onResizeStart}
-                      onResizeEnd={onResizeEnd}
+                      {...tableditor}
                     />
                   );
                 })}

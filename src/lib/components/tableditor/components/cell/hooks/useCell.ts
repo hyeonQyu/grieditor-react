@@ -30,7 +30,19 @@ export interface IUseCell {
 }
 
 export function useCell(params: IUseCellParams): IUseCell {
-  const { row, column, focusEvent, isResizing, onCellHover, onCellFocus, onContentChange, onResizerHover, onResizeStart, onResizeEnd } = params;
+  const {
+    row,
+    column,
+    focusEvent,
+    isResizing,
+    onCellHover,
+    onCellFocus,
+    onContentChange,
+    onResizerHover,
+    onResizeStart,
+    onResizeEnd,
+    onCellInsertNewline,
+  } = params;
   const focused = focusEvent?.rowColumn.row === row && focusEvent?.rowColumn.column === column;
 
   const contentEditableRef = useRef<HTMLDivElement>(null);
@@ -45,7 +57,9 @@ export function useCell(params: IUseCellParams): IUseCell {
     // Move cursor position
     const selectionNode = (contentEditableRef?.current?.firstChild ?? contentEditableRef?.current) as Node;
     const { caretPosition } = focusEvent;
-    ContentEditableUtil.moveCaret(selectionNode, caretPosition);
+    if (caretPosition) {
+      ContentEditableUtil.moveCaret(selectionNode, caretPosition);
+    }
   }, [focused, focusEvent, onContentChange, row, column]);
 
   const handleTableDataHover: MouseEventHandler<HTMLTableDataCellElement> = useCallback(() => {
@@ -69,6 +83,8 @@ export function useCell(params: IUseCellParams): IUseCell {
           e.preventDefault();
 
           if (e.shiftKey) {
+            const content = ContentEditableUtil.insertNewlineToContent(contentEditableRef.current?.innerText ?? '');
+            onContentChange({ rowColumn: { row, column }, content });
             return;
           }
 

@@ -10,6 +10,7 @@ import {
   CellChangeEvent,
   GetEventHandledCells,
   TableditorEventHandler,
+  CellInsertNewlineEvent,
 } from '@components/tableditor/constants';
 import useClickOutside from '@hooks/useClickOutside';
 
@@ -30,6 +31,7 @@ export interface IUseTableditor {
   onResizerHover: TableditorEventHandler<ResizerHoverEvent>;
   onResizeStart: TableditorEventHandler<ResizeEvent>;
   onResizeEnd: TableditorEventHandler<ResizeEvent>;
+  onCellInsertNewline: TableditorEventHandler<CellInsertNewlineEvent>;
 }
 
 const defaultCell: CellData = {
@@ -206,6 +208,10 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     [getResizeEventHandledCells],
   );
 
+  const onCellInsertNewline: TableditorEventHandler<CellInsertNewlineEvent> = useCallback((e) => {
+    setCells((cells) => getCellFocusEventHandledCells({ e, cells: getCellChangeEventHandledCells({ e, cells }) }));
+  }, []);
+
   const handleMouseMove: MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
       if (!resizeEvent) return;
@@ -234,5 +240,6 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     onResizerHover,
     onResizeStart,
     onResizeEnd,
+    onCellInsertNewline,
   };
 }

@@ -8,6 +8,7 @@ import {
   CellChangeEvent,
   ResizerHoverEvent,
   ResizeEvent,
+  CellInsertNewlineEvent,
 } from '@components/tableditor/constants';
 import { css } from '@emotion/react';
 import { useCell } from '@components/tableditor/components/cell/hooks/useCell';
@@ -28,6 +29,7 @@ export interface CellProps {
   onResizerHover: TableditorEventHandler<ResizerHoverEvent>;
   onResizeStart: TableditorEventHandler<ResizeEvent>;
   onResizeEnd: TableditorEventHandler<ResizeEvent>;
+  onCellInsertNewline: TableditorEventHandler<CellInsertNewlineEvent>;
 }
 
 function Cell(props: CellProps) {
@@ -60,6 +62,8 @@ function Cell(props: CellProps) {
         border: 1px solid ${Color.GRAY_1};
         position: relative;
         cursor: ${focused ? 'text' : 'default'};
+        white-space: pre-wrap;
+        word-break: break-word;
 
         :hover .highlighting {
           border: 1px solid ${Color.CYAN_0};

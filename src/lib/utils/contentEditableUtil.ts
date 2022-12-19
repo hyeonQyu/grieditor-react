@@ -1,4 +1,5 @@
 import { CaretPosition } from '@constants/types';
+import { StringUtil } from '@utils/stringUtil';
 
 export namespace ContentEditableUtil {
   /**
@@ -18,6 +19,11 @@ export namespace ContentEditableUtil {
     const selection = window.getSelection();
     const offset = selection?.focusOffset;
     return offset === 0;
+  }
+
+  export function insertNewlineToContent(content: string): string {
+    const offset = window.getSelection()?.focusOffset ?? 0;
+    return StringUtil.insertAt(content, '\n', offset);
   }
 
   /**
