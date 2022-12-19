@@ -60,7 +60,7 @@ export function Tableditor(props: TableditorProps) {
                 {row.map((cell, columnIndex) => {
                   const focused = cellFocusEvent?.rowColumn.row === rowIndex && cellFocusEvent?.rowColumn.column === columnIndex;
                   const resizerHovered = resizerHoverData?.rowColumn.column === columnIndex && resizerHoverData?.columnCount === columnCount;
-                  const isResizing = resizeEvent?.column === columnIndex;
+                  const isResizing = resizeEvent?.rowColumn.column === columnIndex;
 
                   return (
                     <Cell

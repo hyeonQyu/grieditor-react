@@ -1,13 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import {
   CellData,
-  CellChangeEventHandler,
-  CellHoverEventHandler,
-  CellFocusEventHandler,
   CellFocusEvent,
-  ResizerHoverEventHandler,
   RESIZER_WIDTH,
-  ResizeEventHandler,
+  TableditorEventHandler,
+  CellHoverEvent,
+  CellChangeEvent,
+  ResizerHoverEvent,
+  ResizeEvent,
 } from '@components/tableditor/constants';
 import { css } from '@emotion/react';
 import { useCell } from '@components/tableditor/components/cell/hooks/useCell';
@@ -22,12 +22,12 @@ export interface CellProps {
   focusEvent: CellFocusEvent | undefined;
   resizerHovered: boolean;
   isResizing: boolean;
-  onCellHover: CellHoverEventHandler;
-  onCellFocus: CellFocusEventHandler;
-  onContentChange: CellChangeEventHandler;
-  onResizerHover: ResizerHoverEventHandler;
-  onResizeStart: ResizeEventHandler;
-  onResizeEnd: ResizeEventHandler;
+  onCellHover: TableditorEventHandler<CellHoverEvent>;
+  onCellFocus: TableditorEventHandler<CellFocusEvent>;
+  onContentChange: TableditorEventHandler<CellChangeEvent>;
+  onResizerHover: TableditorEventHandler<ResizerHoverEvent>;
+  onResizeStart: TableditorEventHandler<ResizeEvent>;
+  onResizeEnd: TableditorEventHandler<ResizeEvent>;
 }
 
 function Cell(props: CellProps) {

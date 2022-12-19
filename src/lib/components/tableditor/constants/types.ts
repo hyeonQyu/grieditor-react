@@ -43,4 +43,4 @@ export interface RowColumn {
   column: number;
 }
 
-export type GetEventHandledCells<T> = (param: { e: T; cells: CellData[][] }) => CellData[][];
+export type GetEventHandledCells<E> = (param: { e?: E; cells: CellData[][] }) => CellData[][];

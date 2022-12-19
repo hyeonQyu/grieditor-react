@@ -2,18 +2,14 @@ import { TableditorProps } from '@components/tableditor';
 import { MouseEventHandler, MutableRefObject, useCallback, useState } from 'react';
 import {
   CellData,
-  CellChangeEventHandler,
-  CellHoverEventHandler,
-  CellFocusEventHandler,
   CellFocusEvent,
   CellHoverEvent,
-  ResizerHoverEventHandler,
   ResizerHoverEvent,
-  ResizeEventHandler,
   ResizeEvent,
   CELL_MIN_WIDTH,
   CellChangeEvent,
   GetEventHandledCells,
+  TableditorEventHandler,
 } from '@components/tableditor/constants';
 import useClickOutside from '@hooks/useClickOutside';
 
@@ -28,12 +24,12 @@ export interface IUseTableditor {
   resizerHoverData: (ResizerHoverEvent & { columnCount: number }) | undefined;
   handleMouseMove: MouseEventHandler<HTMLDivElement>;
   handleMouseUp: MouseEventHandler<HTMLDivElement>;
-  onCellHover: CellHoverEventHandler;
-  onCellFocus: CellHoverEventHandler;
-  onContentChange: CellChangeEventHandler;
-  onResizerHover: ResizerHoverEventHandler;
-  onResizeStart: ResizeEventHandler;
-  onResizeEnd: ResizeEventHandler;
+  onCellHover: TableditorEventHandler<CellHoverEvent>;
+  onCellFocus: TableditorEventHandler<CellFocusEvent>;
+  onContentChange: TableditorEventHandler<CellChangeEvent>;
+  onResizerHover: TableditorEventHandler<ResizerHoverEvent>;
+  onResizeStart: TableditorEventHandler<ResizeEvent>;
+  onResizeEnd: TableditorEventHandler<ResizeEvent>;
 }
 
 const defaultCell: CellData = {
@@ -64,7 +60,7 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     onClickOutside: () => onCellFocus(),
   });
 
-  const getCellFocusEventHandledCells: GetEventHandledCells<CellFocusEvent | undefined> = useCallback(({ e, cells }) => {
+  const getCellFocusEventHandledCells: GetEventHandledCells<CellFocusEvent> = useCallback(({ e, cells }) => {
     if (e) {
       const { rowColumn } = e;
       const rowCount = cells.length;
@@ -107,6 +103,8 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
   }, []);
 
   const getCellChangeEventHandledCells: GetEventHandledCells<CellChangeEvent> = useCallback(({ e, cells }) => {
+    if (!e) return cells;
+
     const {
       rowColumn: { row, column },
       content,
@@ -130,7 +128,7 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     });
   }, []);
 
-  const getResizerHoverEventHandledCells: GetEventHandledCells<ResizerHoverEvent | undefined> = useCallback(({ e, cells }) => {
+  const getResizerHoverEventHandledCells: GetEventHandledCells<ResizerHoverEvent> = useCallback(({ e, cells }) => {
     if (e) {
       const { row } = e.rowColumn;
       setResizerHoverData({ ...e, columnCount: cells[row].length });
@@ -141,7 +139,11 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
   }, []);
 
   const getResizeEventHandledCells: GetEventHandledCells<ResizeEvent> = useCallback(({ e, cells }) => {
-    const { column, mouseX, pivotX } = e;
+    const {
+      rowColumn: { column },
+      mouseX,
+      pivotX,
+    } = e!;
 
     return cells.map((rows) =>
       rows.map((cell, columnIndex) => {
@@ -157,42 +159,42 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     );
   }, []);
 
-  const onCellHover: CellHoverEventHandler = useCallback((e) => {
+  const onCellHover: TableditorEventHandler<CellHoverEvent> = useCallback((e) => {
     setCellHoverEvent(e);
   }, []);
 
-  const onCellFocus: CellFocusEventHandler = useCallback(
+  const onCellFocus: TableditorEventHandler<CellFocusEvent> = useCallback(
     (e) => {
       setCells((cells) => getCellFocusEventHandledCells({ e, cells }));
     },
     [getCellFocusEventHandledCells],
   );
 
-  const onContentChange: CellChangeEventHandler = useCallback(
+  const onContentChange: TableditorEventHandler<CellChangeEvent> = useCallback(
     (e) => {
       setCells((cells) => getCellChangeEventHandledCells({ e, cells }));
     },
     [getCellChangeEventHandledCells],
   );
 
-  const onResizerHover: ResizerHoverEventHandler = useCallback(
+  const onResizerHover: TableditorEventHandler<ResizerHoverEvent> = useCallback(
     (e) => {
       setCells((cells) => getResizerHoverEventHandledCells({ e, cells }));
     },
     [getResizerHoverEventHandledCells],
   );
 
-  const onResizeStart: ResizeEventHandler = useCallback((e) => {
+  const onResizeStart: TableditorEventHandler<ResizeEvent> = useCallback((e) => {
     setResizeEvent(e);
   }, []);
 
-  const onResizeEnd: ResizeEventHandler = useCallback(() => {
+  const onResizeEnd: TableditorEventHandler<ResizeEvent> = useCallback(() => {
     setTimeout(() => {
       setResizeEvent(undefined);
     }, 0);
   }, []);
 
-  const onResize: ResizeEventHandler = useCallback(
+  const onResize: TableditorEventHandler<ResizeEvent> = useCallback(
     (e) => {
       if (!e) return;
 
@@ -208,7 +210,7 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     (e) => {
       if (!resizeEvent) return;
       e.preventDefault();
-      onResize({ column: resizeEvent?.column, mouseX: e.clientX, pivotX: resizeEvent.pivotX });
+      onResize({ rowColumn: resizeEvent.rowColumn, mouseX: e.clientX, pivotX: resizeEvent.pivotX });
     },
     [resizeEvent],
   );

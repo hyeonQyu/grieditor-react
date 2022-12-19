@@ -1,36 +1,32 @@
 import { RowColumn } from '@components/tableditor/constants/index';
 import { CaretPosition } from '@constants/types';
 
-export interface CellHoverEvent {
-  rowColumn: RowColumn;
-}
+export type TableditorEvent =
+  | {
+      rowColumn: RowColumn;
+    }
+  | undefined;
 
-export type CellHoverEventHandler = (e?: CellHoverEvent) => void;
+export type CellHoverEvent = {} & TableditorEvent;
 
-export interface CellFocusEvent {
-  rowColumn: RowColumn;
+export type CellFocusEvent = {
   caretPosition?: CaretPosition;
-}
+} & TableditorEvent;
 
-export type CellFocusEventHandler = (e?: CellFocusEvent) => void;
-
-export interface CellChangeEvent {
-  rowColumn: RowColumn;
+export type CellChangeEvent = {
   content: string;
-}
+} & TableditorEvent;
 
-export type CellChangeEventHandler = (e: CellChangeEvent) => void;
+export type ResizerHoverEvent = {} & TableditorEvent;
 
-export interface ResizerHoverEvent {
-  rowColumn: RowColumn;
-}
-
-export type ResizerHoverEventHandler = (e?: ResizerHoverEvent) => void;
-
-export interface ResizeEvent {
-  column: number;
+export type ResizeEvent = {
   pivotX?: number;
   mouseX?: number;
-}
+} & TableditorEvent;
 
-export type ResizeEventHandler = (e?: ResizeEvent) => void;
+export type CellInsertNewlineEvent = {
+  content: string;
+  caretPosition: CaretPosition;
+} & TableditorEvent;
+
+export type TableditorEventHandler<E extends TableditorEvent> = (e?: E) => void;

@@ -66,10 +66,12 @@ export function useCell(params: IUseCellParams): IUseCell {
     (e) => {
       switch (e.key) {
         case 'Enter':
+          e.preventDefault();
+
           if (e.shiftKey) {
             return;
           }
-          e.preventDefault();
+
           onCellFocus({ rowColumn: { row: row + 1, column }, caretPosition: 'tail' });
           return;
 
@@ -110,8 +112,8 @@ export function useCell(params: IUseCellParams): IUseCell {
   }, [onResizerHover]);
 
   const handleResizerMouseDown: MouseEventHandler<HTMLDivElement> = useCallback(() => {
-    onResizeStart({ column, pivotX: contentEditableRef.current?.getBoundingClientRect().x });
-  }, [onResizeStart, column]);
+    onResizeStart({ rowColumn: { row, column }, pivotX: contentEditableRef.current?.getBoundingClientRect().x });
+  }, [onResizeStart, row, column]);
 
   const handleResizerMouseUp: MouseEventHandler<HTMLDivElement> = useCallback(() => {
     onResizeEnd();
