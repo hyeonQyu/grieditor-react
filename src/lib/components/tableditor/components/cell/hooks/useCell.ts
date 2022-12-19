@@ -44,8 +44,8 @@ export function useCell(params: IUseCellParams): IUseCell {
 
     // Move cursor position
     const selectionNode = (contentEditableRef?.current?.firstChild ?? contentEditableRef?.current) as Node;
-    const { directionTo } = focusEvent;
-    ContentEditableUtil.moveCaret(selectionNode, directionTo);
+    const { caretPosition } = focusEvent;
+    ContentEditableUtil.moveCaret(selectionNode, caretPosition);
   }, [focused, focusEvent, onContentChange, row, column]);
 
   const handleTableDataHover: MouseEventHandler<HTMLTableDataCellElement> = useCallback(() => {
@@ -70,31 +70,31 @@ export function useCell(params: IUseCellParams): IUseCell {
             return;
           }
           e.preventDefault();
-          onCellFocus({ rowColumn: { row: row + 1, column }, directionTo: 'down' });
+          onCellFocus({ rowColumn: { row: row + 1, column }, caretPosition: 'tail' });
           return;
 
         case 'ArrowRight':
           if (ContentEditableUtil.getIsMovableToRight()) {
             e.preventDefault();
-            onCellFocus({ rowColumn: { row, column: column + 1 }, directionTo: 'right' });
+            onCellFocus({ rowColumn: { row, column: column + 1 }, caretPosition: 'head' });
           }
           return;
 
         case 'ArrowLeft':
           if (ContentEditableUtil.getIsMovableToLeft()) {
             e.preventDefault();
-            onCellFocus({ rowColumn: { row, column: column - 1 }, directionTo: 'left' });
+            onCellFocus({ rowColumn: { row, column: column - 1 }, caretPosition: 'tail' });
           }
           return;
 
         case 'ArrowUp':
           e.preventDefault();
-          onCellFocus({ rowColumn: { row: row - 1, column }, directionTo: 'up' });
+          onCellFocus({ rowColumn: { row: row - 1, column }, caretPosition: 'tail' });
           return;
 
         case 'ArrowDown':
           e.preventDefault();
-          onCellFocus({ rowColumn: { row: row + 1, column }, directionTo: 'down' });
+          onCellFocus({ rowColumn: { row: row + 1, column }, caretPosition: 'tail' });
           return;
       }
     },

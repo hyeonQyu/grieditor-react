@@ -1,4 +1,4 @@
-import { Direction } from '@constants/types';
+import { CaretPosition } from '@constants/types';
 
 export namespace ContentEditableUtil {
   /**
@@ -25,16 +25,14 @@ export namespace ContentEditableUtil {
    * @param node
    * @param direction
    */
-  export function moveCaret(node: Node, direction?: Direction) {
+  export function moveCaret(node: Node, direction?: CaretPosition) {
     switch (direction) {
-      case 'right':
-        moveCaretToFirst(node);
+      case 'head':
+        moveCaretToHead(node);
         break;
 
-      case 'left':
-      case 'up':
-      case 'down':
-        moveCaretToLast(node);
+      case 'tail':
+        moveCaretToTail(node);
         break;
     }
   }
@@ -43,7 +41,7 @@ export namespace ContentEditableUtil {
    * Move the caret to first offset of the node
    * @param node
    */
-  function moveCaretToFirst(node: Node) {
+  function moveCaretToHead(node: Node) {
     const selection = window.getSelection();
     selection?.setBaseAndExtent(node, 0, node, 0);
   }
@@ -52,7 +50,7 @@ export namespace ContentEditableUtil {
    * Move the caret to last offset of the node
    * @param node
    */
-  function moveCaretToLast(node: Node) {
+  function moveCaretToTail(node: Node) {
     const selection = window.getSelection();
     const newRange = document.createRange();
     newRange.selectNodeContents(node);

@@ -1,5 +1,5 @@
 import { RowColumn } from '@components/tableditor/constants/index';
-import { Direction } from '@constants/types';
+import { CaretPosition } from '@constants/types';
 
 export interface CellHoverEvent {
   rowColumn: RowColumn;
@@ -9,7 +9,7 @@ export type CellHoverEventHandler = (e?: CellHoverEvent) => void;
 
 export interface CellFocusEvent {
   rowColumn: RowColumn;
-  directionTo?: Direction;
+  caretPosition?: CaretPosition;
 }
 
 export type CellFocusEventHandler = (e?: CellFocusEvent) => void;

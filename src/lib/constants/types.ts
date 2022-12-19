@@ -1,1 +1,1 @@
-export type Direction = 'right' | 'left' | 'up' | 'down';
+export type CaretPosition = 'head' | 'tail';
