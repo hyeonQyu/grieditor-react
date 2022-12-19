@@ -57,6 +57,7 @@ export function useCell(params: IUseCellParams): IUseCell {
     // Move cursor position
     const selectionNode = (contentEditableRef?.current?.firstChild ?? contentEditableRef?.current) as Node;
     const { caretPosition } = focusEvent;
+    console.log('offset', window.getSelection()?.focusOffset);
     if (caretPosition) {
       ContentEditableUtil.moveCaret(selectionNode, caretPosition);
     }
@@ -106,13 +107,17 @@ export function useCell(params: IUseCellParams): IUseCell {
           return;
 
         case 'ArrowUp':
-          e.preventDefault();
-          onCellFocus({ rowColumn: { row: row - 1, column }, caretPosition: 'tail' });
+          if (ContentEditableUtil.getIsMovableToUp()) {
+            e.preventDefault();
+            onCellFocus({ rowColumn: { row: row - 1, column }, caretPosition: 'tail' });
+          }
           return;
 
         case 'ArrowDown':
-          e.preventDefault();
-          onCellFocus({ rowColumn: { row: row + 1, column }, caretPosition: 'tail' });
+          if (ContentEditableUtil.getIsMovableToDown()) {
+            e.preventDefault();
+            onCellFocus({ rowColumn: { row: row + 1, column }, caretPosition: 'tail' });
+          }
           return;
       }
     },
