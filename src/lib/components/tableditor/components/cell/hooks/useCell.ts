@@ -57,7 +57,6 @@ export function useCell(params: IUseCellParams): IUseCell {
     // Move cursor position
     const selectionNode = (contentEditableRef?.current?.firstChild ?? contentEditableRef?.current) as Node;
     const { caretPosition } = focusEvent;
-    console.log('offset', window.getSelection()?.focusOffset);
     if (caretPosition) {
       ContentEditableUtil.moveCaret(selectionNode, caretPosition);
     }
