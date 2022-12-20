@@ -92,6 +92,8 @@ export function useCell(params: IUseCellParams): IUseCell {
           return;
 
         case 'ArrowRight':
+          if (e.shiftKey) return;
+
           if (ContentEditableUtil.getIsMovableToRight()) {
             e.preventDefault();
             onCellFocus({ rowColumn: { row, column: column + 1 }, caretPosition: 'head' });
@@ -99,6 +101,8 @@ export function useCell(params: IUseCellParams): IUseCell {
           return;
 
         case 'ArrowLeft':
+          if (e.shiftKey) return;
+
           if (ContentEditableUtil.getIsMovableToLeft()) {
             e.preventDefault();
             onCellFocus({ rowColumn: { row, column: column - 1 }, caretPosition: 'tail' });
@@ -106,6 +110,8 @@ export function useCell(params: IUseCellParams): IUseCell {
           return;
 
         case 'ArrowUp':
+          if (e.shiftKey) return;
+
           if (ContentEditableUtil.getIsMovableToUp()) {
             e.preventDefault();
             onCellFocus({ rowColumn: { row: row - 1, column }, caretPosition: 'tail' });
@@ -113,6 +119,8 @@ export function useCell(params: IUseCellParams): IUseCell {
           return;
 
         case 'ArrowDown':
+          if (e.shiftKey) return;
+
           if (ContentEditableUtil.getIsMovableToDown()) {
             e.preventDefault();
             onCellFocus({ rowColumn: { row: row + 1, column }, caretPosition: 'tail' });
