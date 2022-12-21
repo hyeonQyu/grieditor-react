@@ -1,5 +1,5 @@
 import { TableditorProps } from '@components/tableditor';
-import { MouseEventHandler, MutableRefObject, useCallback, useState } from 'react';
+import { MouseEventHandler, MutableRefObject, useCallback, useRef, useState } from 'react';
 import {
   CellData,
   CellFocusEvent,
@@ -18,6 +18,7 @@ export interface IUseTableditorParams extends TableditorProps {}
 
 export interface IUseTableditor {
   tableRef: MutableRefObject<HTMLTableElement | null>;
+  contentEditableRefs: MutableRefObject<HTMLDivElement | null>[][];
   cells: CellData[][];
   cellHoverEvent: CellHoverEvent | undefined;
   cellFocusEvent: CellFocusEvent | undefined;
@@ -61,6 +62,12 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
   const { ref: tableRef } = useClickOutside<HTMLTableElement>({
     onClickOutside: () => onCellFocus(),
   });
+
+  const createContentEditableRefs = () => {
+    return cells.map((row) => row.map(() => useRef<HTMLDivElement>(null)));
+  };
+
+  const contentEditableRefs = createContentEditableRefs();
 
   const getCellFocusEventHandledCells: GetEventHandledCells<CellFocusEvent> = useCallback(({ e, cells }) => {
     if (e) {
@@ -227,6 +234,7 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
 
   return {
     tableRef,
+    contentEditableRefs,
     cells,
     cellHoverEvent,
     cellFocusEvent,

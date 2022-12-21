@@ -12,12 +12,13 @@ import {
 } from '@components/tableditor/constants';
 import { css } from '@emotion/react';
 import { useCell } from '@components/tableditor/components/cell/hooks/useCell';
-import React from 'react';
+import React, { MutableRefObject } from 'react';
 import _ from 'lodash';
 import { Color } from '@constants/index';
 
 export interface CellProps {
   cell: CellData;
+  contentEditableRef: MutableRefObject<HTMLDivElement | null>;
   row: number;
   column: number;
   focusEvent: CellFocusEvent | undefined;
@@ -35,10 +36,10 @@ export interface CellProps {
 function Cell(props: CellProps) {
   const {
     cell: { width, content, backgroundColor, font },
+    contentEditableRef,
     resizerHovered,
   } = props;
   const {
-    contentEditableRef,
     resizerRef,
     focused,
     handleTableDataHover,

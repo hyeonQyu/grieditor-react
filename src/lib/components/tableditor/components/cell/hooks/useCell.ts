@@ -14,7 +14,6 @@ import { ContentEditableUtil } from '@utils/contentEditableUtil';
 export interface IUseCellParams extends CellProps {}
 
 export interface IUseCell {
-  contentEditableRef: MutableRefObject<HTMLDivElement | null>;
   resizerRef: MutableRefObject<HTMLDivElement | null>;
   focused: boolean;
   handleTableDataHover: MouseEventHandler<HTMLTableDataCellElement>;
@@ -31,6 +30,7 @@ export interface IUseCell {
 
 export function useCell(params: IUseCellParams): IUseCell {
   const {
+    contentEditableRef,
     row,
     column,
     focusEvent,
@@ -45,7 +45,6 @@ export function useCell(params: IUseCellParams): IUseCell {
   } = params;
   const focused = focusEvent?.rowColumn.row === row && focusEvent?.rowColumn.column === column;
 
-  const contentEditableRef = useRef<HTMLDivElement>(null);
   const resizerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -156,7 +155,6 @@ export function useCell(params: IUseCellParams): IUseCell {
   }, [onResizeEnd]);
 
   return {
-    contentEditableRef,
     resizerRef,
     focused,
     handleTableDataHover,
