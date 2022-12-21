@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import {
-  CellData,
   CellFocusEvent,
   RESIZER_WIDTH,
   TableditorEventHandler,
@@ -9,21 +8,19 @@ import {
   ResizerHoverEvent,
   ResizeEvent,
   CellInsertNewlineEvent,
+  RenderingCellData,
 } from '@components/tableditor/constants';
 import { css } from '@emotion/react';
 import { useCell } from '@components/tableditor/components/cell/hooks/useCell';
-import React, { MutableRefObject } from 'react';
+import React from 'react';
 import _ from 'lodash';
 import { Color } from '@constants/index';
 
 export interface CellProps {
-  cell: CellData;
-  contentEditableRef: MutableRefObject<HTMLDivElement | null>;
+  cell: RenderingCellData;
   row: number;
   column: number;
   focusEvent: CellFocusEvent | undefined;
-  resizerHovered: boolean;
-  isResizing: boolean;
   onCellHover: TableditorEventHandler<CellHoverEvent>;
   onCellFocus: TableditorEventHandler<CellFocusEvent>;
   onContentChange: TableditorEventHandler<CellChangeEvent>;
@@ -35,13 +32,10 @@ export interface CellProps {
 
 function Cell(props: CellProps) {
   const {
-    cell: { width, content, backgroundColor, font },
-    contentEditableRef,
-    resizerHovered,
+    cell: { width, content, backgroundColor, font, resizerHovered, contentEditableRef },
   } = props;
   const {
     resizerRef,
-    focused,
     handleTableDataHover,
     handleTableDataClick,
     handleContentEditableFocus,
@@ -62,7 +56,7 @@ function Cell(props: CellProps) {
       css={css`
         border: 1px solid ${Color.GRAY_1};
         position: relative;
-        cursor: ${focused ? 'text' : 'default'};
+
         white-space: pre-wrap;
         word-break: break-word;
 
@@ -91,6 +85,15 @@ function Cell(props: CellProps) {
             line-height: 1.2;
             min-height: 100%;
             height: 100%;
+            cursor: default;
+
+            :focus {
+              cursor: text;
+
+              + .highlighting {
+                border: 2px solid ${Color.CYAN_3} !important;
+              }
+            }
           `}
           style={{
             backgroundColor,
@@ -106,7 +109,6 @@ function Cell(props: CellProps) {
             position: absolute;
             top: 0;
             left: 0;
-            border: ${focused ? `2px solid ${Color.CYAN_3} !important` : 'none'};
             pointer-events: none;
             height: 100%;
           `}

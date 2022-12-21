@@ -15,7 +15,6 @@ export interface IUseCellParams extends CellProps {}
 
 export interface IUseCell {
   resizerRef: MutableRefObject<HTMLDivElement | null>;
-  focused: boolean;
   handleTableDataHover: MouseEventHandler<HTMLTableDataCellElement>;
   handleTableDataClick: MouseEventHandler<HTMLTableDataCellElement>;
   handleContentEditableFocus: FocusEventHandler<HTMLDivElement>;
@@ -30,11 +29,10 @@ export interface IUseCell {
 
 export function useCell(params: IUseCellParams): IUseCell {
   const {
-    contentEditableRef,
+    cell: { focused, isResizing, contentEditableRef },
     row,
     column,
     focusEvent,
-    isResizing,
     onCellHover,
     onCellFocus,
     onContentChange,
@@ -43,7 +41,6 @@ export function useCell(params: IUseCellParams): IUseCell {
     onResizeEnd,
     onCellInsertNewline,
   } = params;
-  const focused = focusEvent?.rowColumn.row === row && focusEvent?.rowColumn.column === column;
 
   const resizerRef = useRef<HTMLDivElement>(null);
 
@@ -55,10 +52,10 @@ export function useCell(params: IUseCellParams): IUseCell {
 
     // Move cursor position
     const selectionNode = (contentEditableRef?.current?.firstChild ?? contentEditableRef?.current) as Node;
-    const { caretPosition } = focusEvent;
-    if (caretPosition) {
-      ContentEditableUtil.moveCaret(selectionNode, caretPosition);
-    }
+    // const { caretPosition } = focusEvent!;
+    // if (caretPosition) {
+    //   ContentEditableUtil.moveCaret(selectionNode, caretPosition);
+    // }
   }, [focused, focusEvent, onContentChange, row, column]);
 
   const handleTableDataHover: MouseEventHandler<HTMLTableDataCellElement> = useCallback(() => {
@@ -156,7 +153,6 @@ export function useCell(params: IUseCellParams): IUseCell {
 
   return {
     resizerRef,
-    focused,
     handleTableDataHover,
     handleTableDataClick,
     handleContentEditableFocus,

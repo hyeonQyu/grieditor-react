@@ -1,8 +1,17 @@
+import { MutableRefObject } from 'react';
+
 export interface CellData {
   content: string;
   width: number;
   backgroundColor: TableditorColor;
   font: Font;
+}
+
+export interface RenderingCellData extends CellData {
+  focused: boolean;
+  resizerHovered: boolean;
+  isResizing: boolean;
+  contentEditableRef: MutableRefObject<HTMLDivElement | null>;
 }
 
 export interface Font {
@@ -43,4 +52,4 @@ export interface RowColumn {
   column: number;
 }
 
-export type GetEventHandledCells<E> = (param: { e?: E; cells: CellData[][] }) => CellData[][];
+export type GetEventHandledCells<E> = (param: { e?: E; cells: RenderingCellData[][] }) => RenderingCellData[][];

@@ -11,18 +11,7 @@ export interface TableditorProps {
 
 export function Tableditor(props: TableditorProps) {
   const tableditor = useTableditor(props);
-  const {
-    tableRef,
-    contentEditableRefs,
-    cells,
-    cellHoverEvent,
-    cellFocusEvent,
-    resizeEvent,
-    resizerHoverData,
-    handleMouseMove,
-    handleMouseUp,
-    ...rest
-  } = tableditor;
+  const { tableRef, cells, cellHoverEvent, resizeEvent, handleMouseMove, handleMouseUp, ...rest } = tableditor;
 
   return (
     <div
@@ -49,33 +38,13 @@ export function Tableditor(props: TableditorProps) {
     >
       <table ref={tableRef}>
         <tbody>
-          {cells.map((row, rowIndex) => {
-            const columnCount = row.length;
-            return (
-              <tr key={rowIndex}>
-                {row.map((cell, columnIndex) => {
-                  const focused = cellFocusEvent?.rowColumn.row === rowIndex && cellFocusEvent?.rowColumn.column === columnIndex;
-                  const resizerHovered = resizerHoverData?.rowColumn.column === columnIndex && resizerHoverData?.columnCount === columnCount;
-                  const isResizing = resizeEvent?.rowColumn.column === columnIndex;
-                  const contentEditableRef = contentEditableRefs[rowIndex][columnIndex];
-
-                  return (
-                    <Cell
-                      key={columnIndex}
-                      cell={cell}
-                      contentEditableRef={contentEditableRef}
-                      row={rowIndex}
-                      column={columnIndex}
-                      focusEvent={focused ? cellFocusEvent : undefined}
-                      resizerHovered={resizerHovered}
-                      isResizing={isResizing}
-                      {...rest}
-                    />
-                  );
-                })}
-              </tr>
-            );
-          })}
+          {cells.map((row, rowIndex) => (
+            <tr key={rowIndex}>
+              {row.map((cell, columnIndex) => {
+                return <Cell key={columnIndex} cell={cell} row={rowIndex} column={columnIndex} focusEvent={undefined} {...rest} />;
+              })}
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
