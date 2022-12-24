@@ -21,6 +21,7 @@ export function Tableditor(props: TableditorProps) {
         overflow-x: auto;
         overflow-y: hidden;
         padding: 8px 0 8px;
+        cursor: ${resizeEvent ? 'col-resize' : 'default'};
 
         &::-webkit-scrollbar {
           width: 8px;

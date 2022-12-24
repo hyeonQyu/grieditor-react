@@ -32,7 +32,7 @@ export interface CellProps {
 
 function Cell(props: CellProps) {
   const {
-    cell: { width, content, backgroundColor, font, resizerHovered, contentEditableRef },
+    cell: { width = 0, content, backgroundColor, font, resizerHovered, isResizing, contentEditableRef },
   } = props;
   const {
     resizerRef,
@@ -47,7 +47,7 @@ function Cell(props: CellProps) {
     handleResizerPreventDrag,
     handleResizerDragEnd,
   } = useCell(props);
-  console.log(props.row, props.column);
+  console.log(props.row, props.column, width);
 
   return (
     <td
@@ -56,7 +56,6 @@ function Cell(props: CellProps) {
       css={css`
         border: 1px solid ${Color.GRAY_1};
         position: relative;
-
         white-space: pre-wrap;
         word-break: break-word;
 
@@ -85,7 +84,7 @@ function Cell(props: CellProps) {
             line-height: 1.2;
             min-height: 100%;
             height: 100%;
-            cursor: default;
+            cursor: ${isResizing ? 'col-resize' : 'default'};
 
             :focus {
               cursor: text;

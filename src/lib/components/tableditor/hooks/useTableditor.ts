@@ -1,5 +1,5 @@
 import { TableditorProps } from '@components/tableditor';
-import { MouseEventHandler, MutableRefObject, useCallback, useRef, useState } from 'react';
+import { MouseEventHandler, MutableRefObject, useCallback, useEffect, useRef, useState } from 'react';
 import {
   CellData,
   CellFocusEvent,
@@ -180,16 +180,37 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
   }, []);
 
   const getResizeEventHandledCells: GetEventHandledCells<ResizeEvent> = useCallback(({ e, cells }) => {
+    if (!e) {
+      return cells.map((rows) => {
+        return rows.map((cell) => {
+          return {
+            ...cell,
+            isResizing: false,
+          };
+        });
+      });
+    }
+
     const {
       rowColumn: { column },
       mouseX,
       pivotX,
-    } = e!;
+    } = e;
 
     return cells.map((rows) =>
       rows.map((cell, columnIndex) => {
+        if (columnIndex === column + 1) {
+          return {
+            ...cell,
+            isResizing: true,
+          };
+        }
         if (columnIndex === column) {
           const newWidth = mouseX! - pivotX!;
+          if (isNaN(newWidth)) {
+            return cell;
+          }
+
           return {
             ...cell,
             width: Math.max(CELL_MIN_WIDTH, newWidth),
@@ -236,17 +257,9 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     }, 0);
   }, []);
 
-  const onResize: TableditorEventHandler<ResizeEvent> = useCallback(
-    (e) => {
-      if (!e) return;
-
-      const { pivotX, mouseX } = e;
-      if (pivotX === undefined || mouseX === undefined) return;
-
-      setCells((cells) => getResizeEventHandledCells({ e, cells }));
-    },
-    [getResizeEventHandledCells],
-  );
+  const onResize: TableditorEventHandler<ResizeEvent> = useCallback((e) => {
+    setResizeEvent(e);
+  }, []);
 
   const onCellInsertNewline: TableditorEventHandler<CellInsertNewlineEvent> = useCallback(
     (e) => {
@@ -261,12 +274,16 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
       e.preventDefault();
       onResize({ rowColumn: resizeEvent.rowColumn, mouseX: e.clientX, pivotX: resizeEvent.pivotX });
     },
-    [resizeEvent],
+    [resizeEvent, onResize],
   );
 
   const handleMouseUp: MouseEventHandler<HTMLDivElement> = useCallback(() => {
     onResizeEnd();
   }, [onResizeEnd]);
+
+  useEffect(() => {
+    setCells((cells) => getResizeEventHandledCells({ e: resizeEvent, cells }));
+  }, [resizeEvent, getResizeEventHandledCells]);
 
   return {
     tableRef,
