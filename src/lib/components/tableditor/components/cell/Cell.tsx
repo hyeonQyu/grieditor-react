@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import {
   CellFocusEvent,
-  RESIZER_WIDTH,
   TableditorEventHandler,
   CellHoverEvent,
   CellChangeEvent,
@@ -13,7 +12,7 @@ import { css } from '@emotion/react';
 import { useCell } from '@components/tableditor/components/cell/hooks/useCell';
 import React from 'react';
 import _ from 'lodash';
-import { Color } from '@constants/index';
+import { TableditorStyle } from '@components/tableditor/styles';
 
 export interface CellProps {
   cell: RenderingCellData;
@@ -48,21 +47,7 @@ function Cell(props: CellProps) {
   console.log(props.row, props.column, width);
 
   return (
-    <td
-      onMouseEnter={handleTableDataHover}
-      onClick={handleTableDataClick}
-      css={css`
-        border: 1px solid ${Color.GRAY_1};
-        position: relative;
-        white-space: pre-wrap;
-        word-break: break-word;
-
-        :hover .highlighting {
-          border: 1px solid ${Color.CYAN_0};
-        }
-      `}
-      style={{ width }}
-    >
+    <td onMouseEnter={handleTableDataHover} onClick={handleTableDataClick} css={TableditorStyle.tableData} style={{ width }}>
       <div
         style={{
           width,
@@ -76,22 +61,7 @@ function Cell(props: CellProps) {
           ref={contentEditableRef}
           onFocus={handleContentEditableFocus}
           onKeyDown={handleContentEditableKeyDown}
-          css={css`
-            padding: 8px;
-            outline: none;
-            line-height: 1.2;
-            min-height: 100%;
-            height: 100%;
-            cursor: ${isResizing ? 'col-resize' : 'default'};
-
-            :focus {
-              cursor: text;
-
-              + .highlighting {
-                border: 2px solid ${Color.CYAN_3} !important;
-              }
-            }
-          `}
+          css={TableditorStyle.content(isResizing)}
           style={{
             backgroundColor,
             color: font.color,
@@ -125,26 +95,9 @@ function Cell(props: CellProps) {
           onDragStart={handleResizerPreventDrag}
           onDragCapture={handleResizerPreventDrag}
           onDragEnd={handleResizerDragEnd}
-          css={css`
-            position: absolute;
-            display: flex;
-            justify-content: center;
-            width: ${RESIZER_WIDTH}px;
-            height: 100%;
-            top: 0;
-            right: -4px;
-            z-index: 10;
-            cursor: col-resize;
-          `}
+          css={TableditorStyle.resizerController}
         >
-          <div
-            css={css`
-              width: 3px;
-              height: calc(100% + 2px);
-              background-color: ${resizerHovered ? Color.CYAN_3 : 'transparent'};
-              transition: background-color 0.2s;
-            `}
-          />
+          <div css={TableditorStyle.resizer(resizerHovered)} />
         </div>
       </div>
     </td>
