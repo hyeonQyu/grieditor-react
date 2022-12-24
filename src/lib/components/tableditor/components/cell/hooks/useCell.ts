@@ -76,21 +76,18 @@ export function useCell(params: IUseCellParams): IUseCell {
     (e) => {
       switch (e.key) {
         case 'Enter':
-          e.preventDefault();
-
           if (e.shiftKey) {
-            const content = ContentEditableUtil.insertNewlineToContent(contentEditableRef.current?.innerText ?? '');
-            onContentChange({ rowColumn: { row, column }, content });
             return;
           }
 
+          e.preventDefault();
           onCellFocus({ rowColumn: { row: row + 1, column }, caretPosition: 'tail' });
           return;
 
         case 'ArrowRight':
           if (e.shiftKey) return;
 
-          if (ContentEditableUtil.getIsMovableToRight()) {
+          if (ContentEditableUtil.getIsMovableToRight(contentEditableRef.current!)) {
             e.preventDefault();
             onCellFocus({ rowColumn: { row, column: column + 1 }, caretPosition: 'head' });
           }
@@ -99,7 +96,7 @@ export function useCell(params: IUseCellParams): IUseCell {
         case 'ArrowLeft':
           if (e.shiftKey) return;
 
-          if (ContentEditableUtil.getIsMovableToLeft()) {
+          if (ContentEditableUtil.getIsMovableToLeft(contentEditableRef.current!)) {
             e.preventDefault();
             onCellFocus({ rowColumn: { row, column: column - 1 }, caretPosition: 'tail' });
           }
@@ -108,7 +105,7 @@ export function useCell(params: IUseCellParams): IUseCell {
         case 'ArrowUp':
           if (e.shiftKey) return;
 
-          if (ContentEditableUtil.getIsMovableToUp()) {
+          if (ContentEditableUtil.getIsMovableToUp(contentEditableRef.current!)) {
             e.preventDefault();
             onCellFocus({ rowColumn: { row: row - 1, column }, caretPosition: 'tail' });
           }
@@ -117,7 +114,7 @@ export function useCell(params: IUseCellParams): IUseCell {
         case 'ArrowDown':
           if (e.shiftKey) return;
 
-          if (ContentEditableUtil.getIsMovableToDown()) {
+          if (ContentEditableUtil.getIsMovableToDown(contentEditableRef.current!)) {
             e.preventDefault();
             onCellFocus({ rowColumn: { row: row + 1, column }, caretPosition: 'tail' });
           }
