@@ -10,10 +10,10 @@ import {
   CellChangeEvent,
   GetEventHandledCells,
   TableditorEventHandler,
-  CellInsertNewlineEvent,
   RenderingCellData,
 } from '@components/tableditor/constants';
 import useClickOutside from '@hooks/useClickOutside';
+import { TableditorUtil } from '@utils/tableditorUtil';
 
 export interface IUseTableditorParams extends TableditorProps {}
 
@@ -30,7 +30,6 @@ export interface IUseTableditor {
   onResizerHover: TableditorEventHandler<ResizerHoverEvent>;
   onResizeStart: TableditorEventHandler<ResizeEvent>;
   onResizeEnd: TableditorEventHandler<ResizeEvent>;
-  onCellInsertNewline: TableditorEventHandler<CellInsertNewlineEvent>;
 }
 
 const defaultCell: CellData = {
@@ -59,6 +58,7 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
           resizerHovered: false,
           isResizing: false,
           contentEditableRef: useRef(null),
+          caretOffset: 0,
           ...cell,
         };
       });
@@ -77,6 +77,7 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     if (e) {
       const {
         rowColumn: { row, column },
+        direction,
       } = e;
       const rowCount = cells.length;
       if (rowCount <= row || row < 0) {
@@ -116,9 +117,11 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
 
       return cells.map((cellRow, rowIndex) => {
         return cellRow.map((cell, columnIndex) => {
+          const focused = row === rowIndex && column === columnIndex;
           return {
             ...cell,
-            focused: row === rowIndex && column === columnIndex,
+            focused,
+            caretOffset: focused ? TableditorUtil.getCellCaretOffsetFromDirection(cell, direction) : cell.caretOffset,
           };
         });
       });
@@ -261,13 +264,6 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     setResizeEvent(e);
   }, []);
 
-  const onCellInsertNewline: TableditorEventHandler<CellInsertNewlineEvent> = useCallback(
-    (e) => {
-      setCells((cells) => getCellFocusEventHandledCells({ e, cells: getCellChangeEventHandledCells({ e, cells }) }));
-    },
-    [getCellFocusEventHandledCells, getCellChangeEventHandledCells],
-  );
-
   const handleMouseMove: MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
       if (!resizeEvent) return;
@@ -298,6 +294,5 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     onResizerHover,
     onResizeStart,
     onResizeEnd,
-    onCellInsertNewline,
   };
 }

@@ -1,5 +1,5 @@
 import { RowColumn } from '@components/tableditor/constants/index';
-import { CaretPosition } from '@constants/types';
+import { CaretPosition, Direction } from '@constants/types';
 
 export type TableditorEvent =
   | {
@@ -11,6 +11,7 @@ export type CellHoverEvent = {} & TableditorEvent;
 
 export type CellFocusEvent = {
   caretPosition?: CaretPosition;
+  direction?: Direction;
 } & TableditorEvent;
 
 export type CellChangeEvent = {
@@ -22,11 +23,6 @@ export type ResizerHoverEvent = {} & TableditorEvent;
 export type ResizeEvent = {
   pivotX?: number;
   mouseX?: number;
-} & TableditorEvent;
-
-export type CellInsertNewlineEvent = {
-  content: string;
-  caretPosition: CaretPosition;
 } & TableditorEvent;
 
 export type TableditorEventHandler<E extends TableditorEvent> = (e?: E) => void;

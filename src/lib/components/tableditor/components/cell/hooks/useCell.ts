@@ -29,7 +29,7 @@ export interface IUseCell {
 
 export function useCell(params: IUseCellParams): IUseCell {
   const {
-    cell: { focused, isResizing, contentEditableRef },
+    cell: { focused, isResizing, contentEditableRef, caretOffset },
     row,
     column,
     focusEvent,
@@ -39,7 +39,6 @@ export function useCell(params: IUseCellParams): IUseCell {
     onResizerHover,
     onResizeStart,
     onResizeEnd,
-    onCellInsertNewline,
   } = params;
 
   const resizerRef = useRef<HTMLDivElement>(null);
@@ -51,11 +50,8 @@ export function useCell(params: IUseCellParams): IUseCell {
     }
 
     // Move cursor position
-    const selectionNode = (contentEditableRef?.current?.firstChild ?? contentEditableRef?.current) as Node;
-    // const { caretPosition } = focusEvent!;
-    // if (caretPosition) {
-    //   ContentEditableUtil.moveCaret(selectionNode, caretPosition);
-    // }
+    const cellElement = contentEditableRef.current;
+    ContentEditableUtil.setCaretOffset((cellElement?.firstChild as HTMLElement) ?? cellElement, caretOffset);
   }, [focused, focusEvent, onContentChange, row, column]);
 
   const handleTableDataHover: MouseEventHandler<HTMLTableDataCellElement> = useCallback(() => {
@@ -81,7 +77,7 @@ export function useCell(params: IUseCellParams): IUseCell {
           }
 
           e.preventDefault();
-          onCellFocus({ rowColumn: { row: row + 1, column }, caretPosition: 'tail' });
+          onCellFocus({ rowColumn: { row: row + 1, column }, direction: 'down' });
           return;
 
         case 'ArrowRight':
@@ -89,7 +85,7 @@ export function useCell(params: IUseCellParams): IUseCell {
 
           if (ContentEditableUtil.getIsMovableToRight(contentEditableRef.current!)) {
             e.preventDefault();
-            onCellFocus({ rowColumn: { row, column: column + 1 }, caretPosition: 'head' });
+            onCellFocus({ rowColumn: { row, column: column + 1 }, direction: 'right' });
           }
           return;
 
@@ -98,7 +94,7 @@ export function useCell(params: IUseCellParams): IUseCell {
 
           if (ContentEditableUtil.getIsMovableToLeft(contentEditableRef.current!)) {
             e.preventDefault();
-            onCellFocus({ rowColumn: { row, column: column - 1 }, caretPosition: 'tail' });
+            onCellFocus({ rowColumn: { row, column: column - 1 }, direction: 'left' });
           }
           return;
 
@@ -107,7 +103,7 @@ export function useCell(params: IUseCellParams): IUseCell {
 
           if (ContentEditableUtil.getIsMovableToUp(contentEditableRef.current!)) {
             e.preventDefault();
-            onCellFocus({ rowColumn: { row: row - 1, column }, caretPosition: 'tail' });
+            onCellFocus({ rowColumn: { row: row - 1, column }, direction: 'up' });
           }
           return;
 
@@ -116,7 +112,7 @@ export function useCell(params: IUseCellParams): IUseCell {
 
           if (ContentEditableUtil.getIsMovableToDown(contentEditableRef.current!)) {
             e.preventDefault();
-            onCellFocus({ rowColumn: { row: row + 1, column }, caretPosition: 'tail' });
+            onCellFocus({ rowColumn: { row: row + 1, column }, direction: 'down' });
           }
           return;
       }

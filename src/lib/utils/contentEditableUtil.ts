@@ -1,5 +1,3 @@
-import { CaretPosition } from '@constants/types';
-
 export namespace ContentEditableUtil {
   /**
    * Check the caret is positioned at the far right of the cell
@@ -34,43 +32,19 @@ export namespace ContentEditableUtil {
   }
 
   /**
-   * Move the position of caret by direction
-   * @param node
-   * @param direction
+   * Set caret offset in element
+   * @param element
+   * @param offset
    */
-  export function moveCaret(node: Node, direction?: CaretPosition) {
-    switch (direction) {
-      case 'head':
-        moveCaretToHead(node);
-        break;
-
-      case 'tail':
-        moveCaretToTail(node);
-        break;
-    }
-  }
-
-  /**
-   * Move the caret to first offset of the node
-   * @param node
-   */
-  function moveCaretToHead(node: Node) {
+  export function setCaretOffset(element: HTMLElement, offset: number) {
     const selection = window.getSelection();
-    selection?.setBaseAndExtent(node, 0, node, 0);
-  }
+    const range = document.createRange();
 
-  /**
-   * Move the caret to last offset of the node
-   * @param node
-   */
-  function moveCaretToTail(node: Node) {
-    const selection = window.getSelection();
-    const newRange = document.createRange();
-    newRange.selectNodeContents(node);
-    newRange.collapse(false);
+    range.setStart(element, offset);
+    range.collapse(true);
+
     selection?.removeAllRanges();
-    selection?.addRange(newRange);
-    selection?.collapseToEnd();
+    selection?.addRange(range);
   }
 
   /**
@@ -114,7 +88,6 @@ export namespace ContentEditableUtil {
    */
   export function getIsCaretAtStart(element: HTMLElement) {
     if (element.ownerDocument.activeElement !== element) return false;
-    console.log(getCaretOffset(element), getTextLength(element));
     return getCaretOffset(element) === 0;
   }
 
@@ -124,7 +97,6 @@ export namespace ContentEditableUtil {
    */
   export function getIsCaretAtEnd(element: HTMLElement) {
     if (element.ownerDocument.activeElement !== element) return false;
-    console.log(getCaretOffset(element), getTextLength(element));
     return getCaretOffset(element) === getTextLength(element);
   }
 

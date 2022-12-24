@@ -12,6 +12,7 @@ export interface RenderingCellData extends CellData {
   resizerHovered: boolean;
   isResizing: boolean;
   contentEditableRef: MutableRefObject<HTMLDivElement | null>;
+  caretOffset: number;
 }
 
 export interface Font {

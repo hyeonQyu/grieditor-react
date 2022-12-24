@@ -7,7 +7,6 @@ import {
   CellChangeEvent,
   ResizerHoverEvent,
   ResizeEvent,
-  CellInsertNewlineEvent,
   RenderingCellData,
 } from '@components/tableditor/constants';
 import { css } from '@emotion/react';
@@ -27,7 +26,6 @@ export interface CellProps {
   onResizerHover: TableditorEventHandler<ResizerHoverEvent>;
   onResizeStart: TableditorEventHandler<ResizeEvent>;
   onResizeEnd: TableditorEventHandler<ResizeEvent>;
-  onCellInsertNewline: TableditorEventHandler<CellInsertNewlineEvent>;
 }
 
 function Cell(props: CellProps) {
