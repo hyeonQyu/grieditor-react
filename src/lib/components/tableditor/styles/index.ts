@@ -6,7 +6,7 @@ export namespace TableditorStyle {
   export const container = (resizeEvent?: ResizeEvent) => css`
     overflow-x: auto;
     overflow-y: hidden;
-    padding: 8px 0 8px;
+    padding: 8px 0;
     cursor: ${resizeEvent ? 'col-resize' : 'default'};
     position: relative;
 
