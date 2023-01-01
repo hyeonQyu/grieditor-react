@@ -11,11 +11,22 @@ export interface TableditorProps {
 
 export function Tableditor(props: TableditorProps) {
   const tableditor = useTableditor(props);
-  const { tableRef, cells, cellHoverEvent, resizeEvent, rowAddExtender, columnAddExtender, handleMouseMove, handleMouseUp, ...rest } = tableditor;
+  const {
+    tableRef,
+    cells,
+    cellHoverEvent,
+    resizeEvent,
+    rowAddExtender,
+    columnAddExtender,
+    handleMouseMove,
+    handleMouseUp,
+    handleTableMouseLeave,
+    ...rest
+  } = tableditor;
 
   return (
     <div onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} css={TableditorStyle.container(resizeEvent)}>
-      <table ref={tableRef}>
+      <table ref={tableRef} onMouseLeave={handleTableMouseLeave}>
         <tbody>
           {cells.map((row, rowIndex) => (
             <tr key={rowIndex}>
@@ -27,10 +38,8 @@ export function Tableditor(props: TableditorProps) {
         </tbody>
       </table>
 
-      <div>
-        <TableRowAddExtender rowAddExtender={rowAddExtender} columnAddExtender={columnAddExtender} />
-        <TableColumnAddExtender rowAddExtender={rowAddExtender} columnAddExtender={columnAddExtender} />
-      </div>
+      <TableRowAddExtender rowAddExtender={rowAddExtender} columnAddExtender={columnAddExtender} />
+      <TableColumnAddExtender rowAddExtender={rowAddExtender} columnAddExtender={columnAddExtender} />
     </div>
   );
 }

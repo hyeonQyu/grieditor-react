@@ -29,6 +29,7 @@ export interface IUseTableditor {
   columnAddExtender: TableExtender;
   handleMouseMove: MouseEventHandler<HTMLDivElement>;
   handleMouseUp: MouseEventHandler<HTMLDivElement>;
+  handleTableMouseLeave: MouseEventHandler<HTMLTableElement>;
   onCellHover: TableditorEventHandler<CellHoverEvent>;
   onCellFocus: TableditorEventHandler<CellFocusEvent>;
   onContentChange: TableditorEventHandler<CellChangeEvent>;
@@ -277,6 +278,10 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     onResizeEnd();
   }, [onResizeEnd]);
 
+  const handleTableMouseLeave: MouseEventHandler<HTMLTableElement> = useCallback(() => {
+    setCellHoverEvent(undefined);
+  }, []);
+
   useEffect(() => {
     setCells((cells) => getResizeEventHandledCells({ e: resizeEvent, cells }));
 
@@ -317,6 +322,7 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     columnAddExtender,
     handleMouseMove,
     handleMouseUp,
+    handleTableMouseLeave,
     onCellHover,
     onCellFocus,
     onContentChange,
