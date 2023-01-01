@@ -279,10 +279,15 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
 
   useEffect(() => {
     setCells((cells) => getResizeEventHandledCells({ e: resizeEvent, cells }));
+
+    if (resizeEvent) {
+      setRowAddExtender((prev) => ({ ...prev, visible: false }));
+      setColumnAddExtender((prev) => ({ ...prev, visible: false }));
+    }
   }, [resizeEvent, getResizeEventHandledCells]);
 
   useEffect(() => {
-    const { isLastRowHovered, isLastColumnHovered } = TableditorUtil.getLastRowColumnHovered(cells, cellHoverEvent);
+    const { rowAddExtenderVisible, columnAddExtenderVisible } = TableditorUtil.getTableExtenderVisible(cells, cellHoverEvent, resizeEvent);
 
     const { width, height } = tableRef.current?.getBoundingClientRect()!;
 
@@ -291,7 +296,7 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
         width,
         height: prev.size.height,
       },
-      visible: isLastRowHovered,
+      visible: rowAddExtenderVisible,
     }));
 
     setColumnAddExtender((prev) => ({
@@ -299,9 +304,9 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
         width: prev.size.width,
         height,
       },
-      visible: isLastColumnHovered,
+      visible: columnAddExtenderVisible,
     }));
-  }, [cells, cellHoverEvent]);
+  }, [cells, cellHoverEvent, resizeEvent]);
 
   return {
     tableRef,

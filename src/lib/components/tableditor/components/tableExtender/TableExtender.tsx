@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { TableExtender } from '@components/tableditor/defines';
 
 export interface TableExtenderProps {

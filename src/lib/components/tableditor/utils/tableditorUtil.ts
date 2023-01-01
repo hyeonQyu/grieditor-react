@@ -1,4 +1,4 @@
-import { CellData, CellHoverEvent, RenderingCellData } from '@components/tableditor/defines';
+import { CellData, CellHoverEvent, RenderingCellData, ResizeEvent } from '@components/tableditor/defines';
 import { Direction } from '@defines/types';
 import { useRef } from 'react';
 
@@ -38,28 +38,33 @@ export namespace TableditorUtil {
   }
 
   /**
-   * Return last row and column is hovered
+   * Return table extenders are visible
    * @param cells
-   * @param e
+   * @param cellHoverEvent
+   * @param resizeEvent
    */
-  export function getLastRowColumnHovered(cells: CellData[][], e?: CellHoverEvent): { isLastRowHovered: boolean; isLastColumnHovered: boolean } {
-    if (!e) {
+  export function getTableExtenderVisible(
+    cells: CellData[][],
+    cellHoverEvent?: CellHoverEvent,
+    resizeEvent?: ResizeEvent,
+  ): { rowAddExtenderVisible: boolean; columnAddExtenderVisible: boolean } {
+    if (!cellHoverEvent || resizeEvent) {
       return {
-        isLastRowHovered: false,
-        isLastColumnHovered: false,
+        rowAddExtenderVisible: false,
+        columnAddExtenderVisible: false,
       };
     }
 
     const {
       rowColumn: { row, column },
-    } = e;
+    } = cellHoverEvent;
 
     const isLastRowHovered = row === cells.length - 1;
     const isLastColumnHovered = column === cells[row].length - 1;
 
     return {
-      isLastRowHovered,
-      isLastColumnHovered,
+      rowAddExtenderVisible: isLastRowHovered,
+      columnAddExtenderVisible: isLastColumnHovered,
     };
   }
 }
