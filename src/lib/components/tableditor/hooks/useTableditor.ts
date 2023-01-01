@@ -1,5 +1,5 @@
 import { TableditorProps } from '@components/tableditor';
-import { MouseEventHandler, MutableRefObject, useCallback, useEffect, useRef, useState } from 'react';
+import { MouseEventHandler, MutableRefObject, useCallback, useEffect, useState } from 'react';
 import {
   CellData,
   CellFocusEvent,
@@ -13,7 +13,7 @@ import {
   RenderingCellData,
 } from '@components/tableditor/constants';
 import useClickOutside from '@hooks/useClickOutside';
-import { TableditorUtil } from '@utils/tableditorUtil';
+import { TableditorUtil } from '@components/tableditor/utils/tableditorUtil';
 
 export interface IUseTableditorParams extends TableditorProps {}
 
@@ -50,22 +50,7 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     ],
   } = params;
 
-  const cellsToInitialRenderingCells = (cells: CellData[][]): RenderingCellData[][] => {
-    return cells.map((row) => {
-      return row.map((cell) => {
-        return {
-          focused: false,
-          resizerHovered: false,
-          isResizing: false,
-          contentEditableRef: useRef(null),
-          caretOffset: 0,
-          ...cell,
-        };
-      });
-    });
-  };
-
-  const [cells, setCells] = useState<RenderingCellData[][]>(cellsToInitialRenderingCells(initialCells));
+  const [cells, setCells] = useState<RenderingCellData[][]>(TableditorUtil.cellsToInitialRenderingCells(initialCells));
   const [cellHoverEvent, setCellHoverEvent] = useState<CellHoverEvent>();
   const [resizeEvent, setResizeEvent] = useState<ResizeEvent>();
 
