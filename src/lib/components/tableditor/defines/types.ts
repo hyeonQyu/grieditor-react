@@ -1,4 +1,5 @@
 import { MutableRefObject } from 'react';
+import { RectSize } from '@defines/types';
 
 export interface CellData {
   content: string;
@@ -54,3 +55,8 @@ export interface RowColumn {
 }
 
 export type GetEventHandledCells<E> = (param: { e?: E; cells: RenderingCellData[][] }) => RenderingCellData[][];
+
+export interface TableExtender {
+  size: RectSize;
+  visible: boolean;
+}

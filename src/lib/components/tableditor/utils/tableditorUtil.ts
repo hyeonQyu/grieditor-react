@@ -1,5 +1,5 @@
-import { CellData, RenderingCellData } from '@components/tableditor/constants';
-import { Direction } from '@constants/types';
+import { CellData, CellHoverEvent, RenderingCellData } from '@components/tableditor/defines';
+import { Direction } from '@defines/types';
 import { useRef } from 'react';
 
 export namespace TableditorUtil {
@@ -35,5 +35,31 @@ export namespace TableditorUtil {
       default:
         return cell.caretOffset;
     }
+  }
+
+  /**
+   * Return last row and column is hovered
+   * @param cells
+   * @param e
+   */
+  export function getLastRowColumnHovered(cells: CellData[][], e?: CellHoverEvent): { isLastRowHovered: boolean; isLastColumnHovered: boolean } {
+    if (!e) {
+      return {
+        isLastRowHovered: false,
+        isLastColumnHovered: false,
+      };
+    }
+
+    const {
+      rowColumn: { row, column },
+    } = e;
+
+    const isLastRowHovered = row === cells.length - 1;
+    const isLastColumnHovered = column === cells[row].length - 1;
+
+    return {
+      isLastRowHovered,
+      isLastColumnHovered,
+    };
   }
 }

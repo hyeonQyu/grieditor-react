@@ -1,4 +1,4 @@
-import { ColorMap } from '@components/tableditor/constants/types';
+import { ColorMap, TableExtender } from '@components/tableditor/defines';
 
 export const COLOR_MAP: ColorMap = {
   black: '#1d1d1d',
@@ -23,8 +23,12 @@ export const COLOR_MAP: ColorMap = {
   red_light: '#ffc4c4',
 };
 
+export const DEFAULT_CELL_WIDTH = 120;
 export const RESIZER_WIDTH = 8;
 export const CELL_MIN_WIDTH = 32;
+export const MIN_TABLE_EXTENDER_SIZE = 24;
 
-export * from './types';
-export * from './events';
+export const DEFAULT_TABLE_EXTENDER: TableExtender = {
+  size: { width: MIN_TABLE_EXTENDER_SIZE, height: MIN_TABLE_EXTENDER_SIZE },
+  visible: false,
+};

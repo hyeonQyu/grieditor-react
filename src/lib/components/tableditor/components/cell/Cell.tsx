@@ -7,7 +7,7 @@ import {
   ResizerHoverEvent,
   ResizeEvent,
   RenderingCellData,
-} from '@components/tableditor/constants';
+} from '@components/tableditor/defines';
 import { css } from '@emotion/react';
 import { useCell } from '@components/tableditor/components/cell/hooks/useCell';
 import React from 'react';
@@ -25,6 +25,7 @@ export interface CellProps {
   onResizerHover: TableditorEventHandler<ResizerHoverEvent>;
   onResizeStart: TableditorEventHandler<ResizeEvent>;
   onResizeEnd: TableditorEventHandler<ResizeEvent>;
+  onCellKeyDown: TableditorEventHandler<undefined>;
 }
 
 function Cell(props: CellProps) {
@@ -47,7 +48,7 @@ function Cell(props: CellProps) {
   console.log(props.row, props.column, width);
 
   return (
-    <td onMouseEnter={handleTableDataHover} onClick={handleTableDataClick} css={TableditorStyle.tableData} style={{ width }}>
+    <td onMouseEnter={handleTableDataHover} onClick={handleTableDataClick} css={TableditorStyle.tableData()} style={{ width }}>
       <div
         style={{
           width,
@@ -95,7 +96,7 @@ function Cell(props: CellProps) {
           onDragStart={handleResizerPreventDrag}
           onDragCapture={handleResizerPreventDrag}
           onDragEnd={handleResizerDragEnd}
-          css={TableditorStyle.resizerController}
+          css={TableditorStyle.resizerController()}
         >
           <div css={TableditorStyle.resizer(resizerHovered)} />
         </div>

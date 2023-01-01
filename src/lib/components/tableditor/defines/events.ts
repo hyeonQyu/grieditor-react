@@ -1,5 +1,5 @@
-import { RowColumn } from '@components/tableditor/constants/index';
-import { CaretPosition, Direction } from '@constants/types';
+import { RowColumn } from '@components/tableditor/defines/index';
+import { CaretPosition, Direction } from '@defines/types';
 
 export type TableditorEvent =
   | {

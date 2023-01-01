@@ -1,12 +1,12 @@
-import { ResizeEvent, RESIZER_WIDTH } from '@components/tableditor/constants';
+import { MIN_TABLE_EXTENDER_SIZE, ResizeEvent, RESIZER_WIDTH } from '@components/tableditor/defines';
 import { css } from '@emotion/react';
-import { Color } from '@constants/index';
+import { Color } from '@defines/index';
 
 export namespace TableditorStyle {
   export const container = (resizeEvent?: ResizeEvent) => css`
     overflow-x: auto;
     overflow-y: hidden;
-    padding: 8px 0;
+    padding: 0 0 ${MIN_TABLE_EXTENDER_SIZE}px;
     cursor: ${resizeEvent ? 'col-resize' : 'default'};
     position: relative;
 
@@ -24,7 +24,7 @@ export namespace TableditorStyle {
     }
   `;
 
-  export const tableData = css`
+  export const tableData = () => css`
     border: 1px solid ${Color.GRAY_1};
     position: relative;
     white-space: pre-wrap;
@@ -52,7 +52,7 @@ export namespace TableditorStyle {
     }
   `;
 
-  export const resizerController = css`
+  export const resizerController = () => css`
     position: absolute;
     display: flex;
     justify-content: center;
@@ -69,5 +69,38 @@ export namespace TableditorStyle {
     height: calc(100% + 2px);
     background-color: ${resizerHovered ? Color.CYAN_3 : 'transparent'};
     transition: background-color 0.2s;
+  `;
+
+  export const extender = (visible: boolean) => css`
+    background-color: ${visible ? Color.GRAY_0 : 'transparent'};
+    color: ${visible ? Color.GRAY_6 : 'transparent'};
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+    position: absolute;
+
+    &:hover {
+      background-color: ${Color.GRAY_1};
+      color: ${Color.GRAY_6};
+    }
+
+    &:active {
+      background-color: ${Color.GRAY_2};
+      color: ${Color.GRAY_1};
+      transition: none;
+    }
+  `;
+
+  export const rowAddExtender = () => css`
+    height: 24px;
+    left: 0;
+  `;
+
+  export const columnAddExtender = () => css`
+    width: 24px;
+    top: 0;
   `;
 }

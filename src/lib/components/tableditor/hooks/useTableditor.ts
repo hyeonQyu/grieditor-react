@@ -11,7 +11,10 @@ import {
   GetEventHandledCells,
   TableditorEventHandler,
   RenderingCellData,
-} from '@components/tableditor/constants';
+  DEFAULT_CELL_WIDTH,
+  TableExtender,
+  DEFAULT_TABLE_EXTENDER,
+} from '@components/tableditor/defines';
 import useClickOutside from '@hooks/useClickOutside';
 import { TableditorUtil } from '@components/tableditor/utils/tableditorUtil';
 
@@ -22,6 +25,8 @@ export interface IUseTableditor {
   cells: RenderingCellData[][];
   cellHoverEvent: CellHoverEvent | undefined;
   resizeEvent: ResizeEvent | undefined;
+  rowAddExtender: TableExtender;
+  columnAddExtender: TableExtender;
   handleMouseMove: MouseEventHandler<HTMLDivElement>;
   handleMouseUp: MouseEventHandler<HTMLDivElement>;
   onCellHover: TableditorEventHandler<CellHoverEvent>;
@@ -30,10 +35,11 @@ export interface IUseTableditor {
   onResizerHover: TableditorEventHandler<ResizerHoverEvent>;
   onResizeStart: TableditorEventHandler<ResizeEvent>;
   onResizeEnd: TableditorEventHandler<ResizeEvent>;
+  onCellKeyDown: TableditorEventHandler<undefined>;
 }
 
 const defaultCell: CellData = {
-  width: 120,
+  width: DEFAULT_CELL_WIDTH,
   content: '',
   backgroundColor: 'white',
   font: {
@@ -51,8 +57,12 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
   } = params;
 
   const [cells, setCells] = useState<RenderingCellData[][]>(TableditorUtil.cellsToInitialRenderingCells(initialCells));
+
   const [cellHoverEvent, setCellHoverEvent] = useState<CellHoverEvent>();
   const [resizeEvent, setResizeEvent] = useState<ResizeEvent>();
+
+  const [rowAddExtender, setRowAddExtender] = useState<TableExtender>({ ...DEFAULT_TABLE_EXTENDER });
+  const [columnAddExtender, setColumnAddExtender] = useState<TableExtender>({ ...DEFAULT_TABLE_EXTENDER });
 
   const { ref: tableRef } = useClickOutside<HTMLTableElement>({
     onClickOutside: () => onCellFocus(),
@@ -249,6 +259,11 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     setResizeEvent(e);
   }, []);
 
+  const onCellKeyDown: TableditorEventHandler<undefined> = useCallback(() => {
+    setRowAddExtender((prev) => ({ ...prev, visible: false }));
+    setColumnAddExtender((prev) => ({ ...prev, visible: false }));
+  }, []);
+
   const handleMouseMove: MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
       if (!resizeEvent) return;
@@ -266,11 +281,35 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     setCells((cells) => getResizeEventHandledCells({ e: resizeEvent, cells }));
   }, [resizeEvent, getResizeEventHandledCells]);
 
+  useEffect(() => {
+    const { isLastRowHovered, isLastColumnHovered } = TableditorUtil.getLastRowColumnHovered(cells, cellHoverEvent);
+
+    const { width, height } = tableRef.current?.getBoundingClientRect()!;
+
+    setRowAddExtender((prev) => ({
+      size: {
+        width,
+        height: prev.size.height,
+      },
+      visible: isLastRowHovered,
+    }));
+
+    setColumnAddExtender((prev) => ({
+      size: {
+        width: prev.size.width,
+        height,
+      },
+      visible: isLastColumnHovered,
+    }));
+  }, [cells, cellHoverEvent]);
+
   return {
     tableRef,
     cells,
     cellHoverEvent,
     resizeEvent,
+    rowAddExtender,
+    columnAddExtender,
     handleMouseMove,
     handleMouseUp,
     onCellHover,
@@ -279,5 +318,6 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     onResizerHover,
     onResizeStart,
     onResizeEnd,
+    onCellKeyDown,
   };
 }

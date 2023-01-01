@@ -19,7 +19,7 @@
     "baseUrl": "./src",
     "paths": {
       "@components/*": ["lib/components/*"],
-      "@constants/*": ["lib/constants/*"],
+      "@defines/*": ["lib/defines/*"],
       "@hooks/*": ["lib/hooks/*"],
       "@utils/*": ["lib/utils/*"],
       "@pages/*": ["pages/*"],

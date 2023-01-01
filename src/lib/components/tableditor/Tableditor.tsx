@@ -1,8 +1,9 @@
 /** @jsxImportSource @emotion/react */
-import { CellData } from '@components/tableditor/constants';
+import { CellData } from '@components/tableditor/defines';
 import { useTableditor } from '@components/tableditor/hooks/useTableditor';
 import { Cell } from '@components/tableditor/components/cell';
 import { TableditorStyle } from '@components/tableditor/styles';
+import { TableColumnAddExtender, TableRowAddExtender } from '@components/tableditor/components/tableExtender';
 
 export interface TableditorProps {
   cells?: CellData[][];
@@ -10,7 +11,7 @@ export interface TableditorProps {
 
 export function Tableditor(props: TableditorProps) {
   const tableditor = useTableditor(props);
-  const { tableRef, cells, cellHoverEvent, resizeEvent, handleMouseMove, handleMouseUp, ...rest } = tableditor;
+  const { tableRef, cells, cellHoverEvent, resizeEvent, rowAddExtender, columnAddExtender, handleMouseMove, handleMouseUp, ...rest } = tableditor;
 
   return (
     <div onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} css={TableditorStyle.container(resizeEvent)}>
@@ -25,6 +26,11 @@ export function Tableditor(props: TableditorProps) {
           ))}
         </tbody>
       </table>
+
+      <div>
+        <TableRowAddExtender rowAddExtender={rowAddExtender} columnAddExtender={columnAddExtender} />
+        <TableColumnAddExtender rowAddExtender={rowAddExtender} columnAddExtender={columnAddExtender} />
+      </div>
     </div>
   );
 }

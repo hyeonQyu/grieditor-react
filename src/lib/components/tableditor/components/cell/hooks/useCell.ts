@@ -39,6 +39,7 @@ export function useCell(params: IUseCellParams): IUseCell {
     onResizerHover,
     onResizeStart,
     onResizeEnd,
+    onCellKeyDown,
   } = params;
 
   const resizerRef = useRef<HTMLDivElement>(null);
@@ -70,6 +71,8 @@ export function useCell(params: IUseCellParams): IUseCell {
 
   const handleContentEditableKeyDown: KeyboardEventHandler<HTMLDivElement> = useCallback(
     (e) => {
+      onCellKeyDown();
+
       switch (e.key) {
         case 'Enter':
           if (e.shiftKey) {
