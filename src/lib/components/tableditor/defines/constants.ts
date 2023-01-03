@@ -27,6 +27,7 @@ export const DEFAULT_CELL_WIDTH = 120;
 export const RESIZER_WIDTH = 8;
 export const CELL_MIN_WIDTH = 32;
 export const MIN_TABLE_EXTENDER_SIZE = 20;
+export const TABLE_EXTENDER_MARGIN = 4;
 
 export const DEFAULT_TABLE_EXTENDER: TableExtender = {
   size: { width: MIN_TABLE_EXTENDER_SIZE, height: MIN_TABLE_EXTENDER_SIZE },

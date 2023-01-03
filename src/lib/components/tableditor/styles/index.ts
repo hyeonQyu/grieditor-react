@@ -1,4 +1,4 @@
-import { MIN_TABLE_EXTENDER_SIZE, ResizeEvent, RESIZER_WIDTH } from '@components/tableditor/defines';
+import { MIN_TABLE_EXTENDER_SIZE, ResizeEvent, RESIZER_WIDTH, TABLE_EXTENDER_MARGIN } from '@components/tableditor/defines';
 import { css } from '@emotion/react';
 import { Color } from '@defines/index';
 
@@ -6,7 +6,7 @@ export namespace TableditorStyle {
   export const container = (resizeEvent?: ResizeEvent) => css`
     overflow-x: auto;
     overflow-y: hidden;
-    padding: 0 0 ${MIN_TABLE_EXTENDER_SIZE}px;
+    padding: 0 0 ${MIN_TABLE_EXTENDER_SIZE + TABLE_EXTENDER_MARGIN}px;
     cursor: ${resizeEvent ? 'col-resize' : 'default'};
     position: relative;
 
