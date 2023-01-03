@@ -6,10 +6,11 @@ import { TABLE_EXTENDER_MARGIN } from '@components/tableditor/defines';
 export interface TableColumnAddExtenderProps extends TableExtenderProps {}
 
 export function TableColumnAddExtender(props: TableColumnAddExtenderProps) {
-  const { rowAddExtender, columnAddExtender } = props;
+  const { rowAddExtender, columnAddExtender, onClick } = props;
 
   return (
     <button
+      onClick={onClick}
       css={[TableditorStyle.extender(columnAddExtender.visible), TableditorStyle.columnAddExtender()]}
       style={{ ...columnAddExtender.size, left: rowAddExtender.size.width + TABLE_EXTENDER_MARGIN }}
     >

@@ -120,7 +120,7 @@ export function useCell(params: IUseCellParams): IUseCell {
           return;
       }
     },
-    [row, column, onCellFocus],
+    [onCellKeyDown, row, column, onCellFocus],
   );
 
   const handleResizerMouseEnter: MouseEventHandler<HTMLDivElement> = useCallback(() => {

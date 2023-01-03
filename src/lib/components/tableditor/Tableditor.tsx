@@ -21,6 +21,8 @@ export function Tableditor(props: TableditorProps) {
     handleMouseMove,
     handleMouseUp,
     handleTableMouseLeave,
+    handleRowAddClick,
+    handleColumnAddClick,
     ...rest
   } = tableditor;
 
@@ -38,8 +40,8 @@ export function Tableditor(props: TableditorProps) {
         </tbody>
       </table>
 
-      <TableRowAddExtender rowAddExtender={rowAddExtender} columnAddExtender={columnAddExtender} />
-      <TableColumnAddExtender rowAddExtender={rowAddExtender} columnAddExtender={columnAddExtender} />
+      <TableRowAddExtender rowAddExtender={rowAddExtender} columnAddExtender={columnAddExtender} onClick={handleRowAddClick} />
+      <TableColumnAddExtender rowAddExtender={rowAddExtender} columnAddExtender={columnAddExtender} onClick={handleColumnAddClick} />
     </div>
   );
 }

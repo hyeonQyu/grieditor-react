@@ -1,27 +1,36 @@
-import { CellData, CellHoverEvent, RenderingCellData, ResizeEvent } from '@components/tableditor/defines';
+import { CellData, CellHoverEvent, DEFAULT_CELL, RenderingCellData, ResizeEvent } from '@components/tableditor/defines';
 import { Direction } from '@defines/types';
-import { useRef } from 'react';
+import { createRef } from 'react';
 
 export namespace TableditorUtil {
   /**
-   * Return default rendering cell data from the cells passed as prop
+   * Return default rendering cells' data from the cells passed as prop
    * @param cells The cells passed as prop
    */
   export function cellsToInitialRenderingCells(cells: CellData[][]): RenderingCellData[][] {
-    return cells.map((row) => {
-      return row.map((cell) => {
-        return {
-          focused: false,
-          resizerHovered: false,
-          isResizing: false,
-          contentEditableRef: useRef(null),
-          caretOffset: 0,
-          ...cell,
-        };
-      });
-    });
+    return cells.map((row) => row.map((cell) => cellToInitialRenderingCell(cell)));
   }
 
+  /**
+   * Return default rendering cell data from the cell
+   * @param cell
+   */
+  export function cellToInitialRenderingCell(cell: CellData): RenderingCellData {
+    return {
+      focused: false,
+      resizerHovered: false,
+      isResizing: false,
+      contentEditableRef: createRef(),
+      caretOffset: 0,
+      ...cell,
+    };
+  }
+
+  /**
+   * Return caret offset of the cell by direction
+   * @param cell
+   * @param direction
+   */
   export function getCellCaretOffsetFromDirection(cell: RenderingCellData, direction?: Direction): number {
     switch (direction) {
       case 'up':
@@ -66,5 +75,26 @@ export namespace TableditorUtil {
       rowAddExtenderVisible: isLastRowHovered,
       columnAddExtenderVisible: isLastColumnHovered,
     };
+  }
+
+  export function addRow(originCells: RenderingCellData[][]): RenderingCellData[][] {
+    const cells = [...originCells];
+
+    const firstRow = cells[0];
+    const columns = firstRow.length;
+    const row = Array.from({ length: columns }, (_, i) =>
+      cellToInitialRenderingCell({
+        ...DEFAULT_CELL,
+        width: firstRow[i].width,
+      }),
+    );
+    cells.push(row);
+
+    return cells;
+  }
+
+  export function addColumn(originCells: RenderingCellData[][]): RenderingCellData[][] {
+    const cells = [...originCells];
+    return cells.map((row) => [...row, cellToInitialRenderingCell(DEFAULT_CELL)]);
   }
 }

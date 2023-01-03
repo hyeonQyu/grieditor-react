@@ -1,4 +1,4 @@
-import { ColorMap, TableExtender } from '@components/tableditor/defines';
+import { CellData, ColorMap, TableExtender } from '@components/tableditor/defines';
 
 export const COLOR_MAP: ColorMap = {
   black: '#1d1d1d',
@@ -32,4 +32,14 @@ export const TABLE_EXTENDER_MARGIN = 4;
 export const DEFAULT_TABLE_EXTENDER: TableExtender = {
   size: { width: MIN_TABLE_EXTENDER_SIZE, height: MIN_TABLE_EXTENDER_SIZE },
   visible: false,
+};
+
+export const DEFAULT_CELL: CellData = {
+  width: DEFAULT_CELL_WIDTH,
+  content: '',
+  backgroundColor: 'white',
+  font: {
+    color: 'black',
+    style: 'default',
+  },
 };

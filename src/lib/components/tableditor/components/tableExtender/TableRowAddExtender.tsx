@@ -5,10 +5,14 @@ import { TableditorStyle } from '@components/tableditor/styles';
 export interface TableRowAddExtenderProps extends TableExtenderProps {}
 
 export function TableRowAddExtender(props: TableRowAddExtenderProps) {
-  const { rowAddExtender } = props;
+  const { rowAddExtender, onClick } = props;
 
   return (
-    <button css={[TableditorStyle.extender(rowAddExtender.visible), TableditorStyle.rowAddExtender()]} style={{ ...rowAddExtender.size, bottom: 0 }}>
+    <button
+      onClick={onClick}
+      css={[TableditorStyle.extender(rowAddExtender.visible), TableditorStyle.rowAddExtender()]}
+      style={{ ...rowAddExtender.size, bottom: 0 }}
+    >
       +
     </button>
   );

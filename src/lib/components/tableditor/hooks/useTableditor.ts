@@ -1,7 +1,6 @@
 import { TableditorProps } from '@components/tableditor';
 import { MouseEventHandler, MutableRefObject, useCallback, useEffect, useState } from 'react';
 import {
-  CellData,
   CellFocusEvent,
   CellHoverEvent,
   ResizerHoverEvent,
@@ -11,9 +10,9 @@ import {
   GetEventHandledCells,
   TableditorEventHandler,
   RenderingCellData,
-  DEFAULT_CELL_WIDTH,
   TableExtender,
   DEFAULT_TABLE_EXTENDER,
+  DEFAULT_CELL,
 } from '@components/tableditor/defines';
 import useClickOutside from '@hooks/useClickOutside';
 import { TableditorUtil } from '@components/tableditor/utils/tableditorUtil';
@@ -30,6 +29,8 @@ export interface IUseTableditor {
   handleMouseMove: MouseEventHandler<HTMLDivElement>;
   handleMouseUp: MouseEventHandler<HTMLDivElement>;
   handleTableMouseLeave: MouseEventHandler<HTMLTableElement>;
+  handleRowAddClick: MouseEventHandler<HTMLButtonElement>;
+  handleColumnAddClick: MouseEventHandler<HTMLButtonElement>;
   onCellHover: TableditorEventHandler<CellHoverEvent>;
   onCellFocus: TableditorEventHandler<CellFocusEvent>;
   onContentChange: TableditorEventHandler<CellChangeEvent>;
@@ -39,21 +40,11 @@ export interface IUseTableditor {
   onCellKeyDown: TableditorEventHandler<undefined>;
 }
 
-const defaultCell: CellData = {
-  width: DEFAULT_CELL_WIDTH,
-  content: '',
-  backgroundColor: 'white',
-  font: {
-    color: 'black',
-    style: 'default',
-  },
-};
-
 export function useTableditor(params: IUseTableditorParams): IUseTableditor {
   const {
     cells: initialCells = [
-      [{ ...defaultCell }, { ...defaultCell }],
-      [{ ...defaultCell }, { ...defaultCell }],
+      [{ ...DEFAULT_CELL }, { ...DEFAULT_CELL }],
+      [{ ...DEFAULT_CELL }, { ...DEFAULT_CELL }],
     ],
   } = params;
 
@@ -282,6 +273,14 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     setCellHoverEvent(undefined);
   }, []);
 
+  const handleRowAddClick: MouseEventHandler<HTMLButtonElement> = useCallback(() => {
+    setCells(TableditorUtil.addRow);
+  }, []);
+
+  const handleColumnAddClick: MouseEventHandler<HTMLButtonElement> = useCallback(() => {
+    setCells(TableditorUtil.addColumn);
+  }, []);
+
   useEffect(() => {
     setCells((cells) => getResizeEventHandledCells({ e: resizeEvent, cells }));
 
@@ -323,6 +322,8 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     handleMouseMove,
     handleMouseUp,
     handleTableMouseLeave,
+    handleRowAddClick,
+    handleColumnAddClick,
     onCellHover,
     onCellFocus,
     onContentChange,
