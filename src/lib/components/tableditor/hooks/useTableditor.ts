@@ -252,8 +252,19 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
   }, []);
 
   const onCellKeyDown: TableditorEventHandler<undefined> = useCallback(() => {
-    setRowAddExtender((prev) => ({ ...prev, visible: false }));
-    setColumnAddExtender((prev) => ({ ...prev, visible: false }));
+    setTimeout(() => {
+      const { height } = tableRef.current?.getBoundingClientRect()!;
+
+      setRowAddExtender((prev) => ({ ...prev, visible: false }));
+      setColumnAddExtender((prev) => ({
+        ...prev,
+        size: {
+          width: prev.size.width,
+          height,
+        },
+        visible: false,
+      }));
+    }, 0);
   }, []);
 
   const handleMouseMove: MouseEventHandler<HTMLDivElement> = useCallback(
