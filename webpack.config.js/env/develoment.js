@@ -1,5 +1,5 @@
 const { merge } = require('webpack-merge');
-const pageCommon = require('./pageCommon');
+const pageCommon = require('../pageCommon');
 
 module.exports = merge(pageCommon, {
   mode: 'development',

@@ -1,6 +1,13 @@
-const development = require('./develoment');
-const production = require('./production');
-const asModule = require('./module');
+const development = require('./env/develoment');
+const production = require('./env/production');
+const asModule = require('./env/module');
+const setupPackage = require('./callbacks/setupPackage');
+
+const callback = {
+  development: () => {},
+  production: () => {},
+  module: setupPackage,
+};
 
 const config = {
   development,
@@ -8,6 +15,8 @@ const config = {
   module: asModule,
 };
 
-module.exports = (env) => {
-  return config[Object.keys(env).filter((key) => !key.includes('WEBPACK'))[0]];
+module.exports = (option) => {
+  const env = Object.keys(option).filter((key) => !key.includes('WEBPACK'))[0];
+  callback[env]();
+  return config[env];
 };

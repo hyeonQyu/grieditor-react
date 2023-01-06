@@ -1,8 +1,7 @@
 {
   "name": "tableditor-react",
-  "version": "0.0.1",
+  "version": "0.1.2",
   "description": "Table editor component for react",
-  "private": "false",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "browser": "./browser/specific/main.js",
@@ -11,7 +10,8 @@
     "dev": "webpack-dev-server --env development --hot",
     "start": "webpack --env development",
     "build:page": "webpack --env production",
-    "build:module": "webpack --env module"
+    "build:module": "webpack --env module",
+    "publish": "cd ./dist && npm publish"
   },
   "repository": {
     "type": "git",
