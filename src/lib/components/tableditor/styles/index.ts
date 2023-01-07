@@ -52,6 +52,14 @@ export namespace TableditorStyle {
     }
   `;
 
+  export const highlighting = () => css`
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    height: 100%;
+  `;
+
   export const resizerController = () => css`
     position: absolute;
     display: flex;

@@ -8,7 +8,6 @@ import {
   ResizeEvent,
   RenderingCellData,
 } from '@components/tableditor/defines';
-import { css } from '@emotion/react';
 import { useCell } from '@components/tableditor/components/cell/hooks/useCell';
 import React from 'react';
 import _ from 'lodash';
@@ -73,13 +72,7 @@ function Cell(props: CellProps) {
 
         {/*highlighting box*/}
         <div
-          css={css`
-            position: absolute;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            height: 100%;
-          `}
+          css={TableditorStyle.highlighting()}
           className={'highlighting'}
           style={{
             width,
