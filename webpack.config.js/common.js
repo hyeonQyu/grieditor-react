@@ -11,6 +11,7 @@ module.exports = {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
     alias: {
       '@components': getSrcPath('lib/components'),
+      '@contexts': getSrcPath('lib/contexts'),
       '@defines': getSrcPath('lib/defines'),
       '@hooks': getSrcPath('lib/hooks'),
       '@utils': getSrcPath('lib/utils'),

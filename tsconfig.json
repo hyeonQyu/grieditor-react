@@ -19,6 +19,7 @@
     "baseUrl": "./src",
     "paths": {
       "@components/*": ["lib/components/*"],
+      "@contexts/*": ["lib/contexts/*"],
       "@defines/*": ["lib/defines/*"],
       "@hooks/*": ["lib/hooks/*"],
       "@utils/*": ["lib/utils/*"],
