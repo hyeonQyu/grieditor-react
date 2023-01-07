@@ -22,6 +22,7 @@
       "@defines/*": ["lib/defines/*"],
       "@hooks/*": ["lib/hooks/*"],
       "@utils/*": ["lib/utils/*"],
+      "@icons/*": ["lib/icons/*"],
       "@pages/*": ["pages/*"],
       "@styles/*": ["styles/*"]
     },

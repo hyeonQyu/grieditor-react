@@ -6,3 +6,9 @@ export interface RectSize {
   width: number;
   height: number;
 }
+
+export interface IconCommonProps {
+  width?: number;
+  height?: number;
+  color?: string;
+}

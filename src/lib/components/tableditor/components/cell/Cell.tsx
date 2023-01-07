@@ -12,12 +12,13 @@ import { useCell } from '@components/tableditor/components/cell/hooks/useCell';
 import React from 'react';
 import _ from 'lodash';
 import { TableditorStyle } from '@components/tableditor/styles';
+import { ThreeDotsVerticalIcon } from '@icons/ThreeDotsVerticalIcon';
+import { Color } from '@defines/constants';
 
 export interface CellProps {
   cell: RenderingCellData;
   row: number;
   column: number;
-  focusEvent: CellFocusEvent | undefined;
   onCellHover: TableditorEventHandler<CellHoverEvent>;
   onCellFocus: TableditorEventHandler<CellFocusEvent>;
   onContentChange: TableditorEventHandler<CellChangeEvent>;
@@ -29,14 +30,16 @@ export interface CellProps {
 
 function Cell(props: CellProps) {
   const {
-    cell: { width = 0, content, backgroundColor, font, resizerHovered, isResizing, contentEditableRef },
+    cell: { width = 0, content, backgroundColor, font, resizerHovered, isResizing, contentEditableRef, focused },
   } = props;
   const {
     resizerRef,
+    contentInnerText,
     handleTableDataHover,
     handleTableDataClick,
     handleContentEditableFocus,
     handleContentEditableKeyDown,
+    handleContentEditableInput,
     handleResizerMouseEnter,
     handleResizerMouseLeave,
     handleResizerMouseDown,
@@ -44,7 +47,7 @@ function Cell(props: CellProps) {
     handleResizerPreventDrag,
     handleResizerDragEnd,
   } = useCell(props);
-  console.log(props.row, props.column, width);
+  console.log(props.row, props.column, width, focused);
 
   return (
     <td onMouseEnter={handleTableDataHover} onClick={handleTableDataClick} css={TableditorStyle.tableData()} style={{ width }}>
@@ -61,7 +64,8 @@ function Cell(props: CellProps) {
           ref={contentEditableRef}
           onFocus={handleContentEditableFocus}
           onKeyDown={handleContentEditableKeyDown}
-          css={TableditorStyle.content(isResizing)}
+          onInput={handleContentEditableInput}
+          css={TableditorStyle.content(isResizing, Boolean(contentInnerText))}
           style={{
             backgroundColor,
             color: font.color,
@@ -69,6 +73,11 @@ function Cell(props: CellProps) {
         >
           {content}
         </div>
+
+        {/*more options button*/}
+        <button css={TableditorStyle.moreOptions()} className={'more-options'}>
+          <ThreeDotsVerticalIcon width={14} height={14} color={Color.GRAY_6} />
+        </button>
 
         {/*highlighting box*/}
         <div

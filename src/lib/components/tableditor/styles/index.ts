@@ -33,9 +33,12 @@ export namespace TableditorStyle {
     :hover .highlighting {
       border: 1px solid ${Color.CYAN_0};
     }
+    :hover button.more-options {
+      visibility: visible;
+    }
   `;
 
-  export const content = (isResizing: boolean) => css`
+  export const content = (isResizing: boolean, hasContent: boolean) => css`
     padding: 8px;
     outline: none;
     line-height: 1.2;
@@ -46,9 +49,30 @@ export namespace TableditorStyle {
     :focus {
       cursor: text;
 
-      + .highlighting {
+      ~ .highlighting {
         border: 2px solid ${Color.CYAN_3} !important;
       }
+
+      ~ button.more-options:not(:hover) {
+        opacity: ${hasContent ? 0.7 : 1};
+      }
+    }
+  `;
+
+  export const moreOptions = () => css`
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    padding: 2px;
+    background-color: ${Color.WHITE};
+    cursor: pointer;
+    transition: background-color 0.2s, opacity 0.2s;
+    box-shadow: 1px 1px 5px ${Color.GRAY_3};
+    border-radius: 4px;
+    visibility: hidden;
+
+    :hover {
+      background-color: ${Color.GRAY_0};
     }
   `;
 

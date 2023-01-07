@@ -14,6 +14,7 @@ module.exports = {
       '@defines': getSrcPath('lib/defines'),
       '@hooks': getSrcPath('lib/hooks'),
       '@utils': getSrcPath('lib/utils'),
+      '@icons': getSrcPath('lib/icons'),
       '@pages': getSrcPath('pages'),
       '@styles': getSrcPath('styles'),
     },

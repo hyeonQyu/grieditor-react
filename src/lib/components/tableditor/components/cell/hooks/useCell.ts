@@ -2,12 +2,14 @@ import { CellProps } from '@components/tableditor/components/cell';
 import {
   DragEventHandler,
   FocusEventHandler,
+  FormEventHandler,
   KeyboardEventHandler,
   MouseEventHandler,
   MutableRefObject,
   useCallback,
   useEffect,
   useRef,
+  useState,
 } from 'react';
 import { ContentEditableUtil } from '@utils/contentEditableUtil';
 
@@ -15,10 +17,12 @@ export interface IUseCellParams extends CellProps {}
 
 export interface IUseCell {
   resizerRef: MutableRefObject<HTMLDivElement | null>;
+  contentInnerText: string;
   handleTableDataHover: MouseEventHandler<HTMLTableDataCellElement>;
   handleTableDataClick: MouseEventHandler<HTMLTableDataCellElement>;
   handleContentEditableFocus: FocusEventHandler<HTMLDivElement>;
   handleContentEditableKeyDown: KeyboardEventHandler<HTMLDivElement>;
+  handleContentEditableInput: FormEventHandler<HTMLDivElement>;
   handleResizerMouseEnter: MouseEventHandler<HTMLDivElement>;
   handleResizerMouseLeave: MouseEventHandler<HTMLDivElement>;
   handleResizerMouseDown: MouseEventHandler<HTMLDivElement>;
@@ -32,7 +36,6 @@ export function useCell(params: IUseCellParams): IUseCell {
     cell: { focused, isResizing, contentEditableRef, caretOffset },
     row,
     column,
-    focusEvent,
     onCellHover,
     onCellFocus,
     onContentChange,
@@ -44,6 +47,8 @@ export function useCell(params: IUseCellParams): IUseCell {
 
   const resizerRef = useRef<HTMLDivElement>(null);
 
+  const [contentInnerText, setContentInnerText] = useState<string>('');
+
   useEffect(() => {
     if (!focused) {
       onContentChange({ rowColumn: { row, column }, content: contentEditableRef.current?.innerText ?? '' });
@@ -53,7 +58,7 @@ export function useCell(params: IUseCellParams): IUseCell {
     // Move cursor position
     const cellElement = contentEditableRef.current;
     ContentEditableUtil.setCaretOffset((cellElement?.firstChild as HTMLElement) ?? cellElement, caretOffset);
-  }, [focused, focusEvent, onContentChange, row, column]);
+  }, [focused, onContentChange, row, column]);
 
   const handleTableDataHover: MouseEventHandler<HTMLTableDataCellElement> = useCallback(() => {
     onCellHover({ rowColumn: { row, column } });
@@ -123,6 +128,10 @@ export function useCell(params: IUseCellParams): IUseCell {
     [onCellKeyDown, row, column, onCellFocus],
   );
 
+  const handleContentEditableInput: FormEventHandler<HTMLDivElement> = useCallback((e) => {
+    setContentInnerText((e.target as HTMLDivElement).innerText);
+  }, []);
+
   const handleResizerMouseEnter: MouseEventHandler<HTMLDivElement> = useCallback(() => {
     onResizerHover({ rowColumn: { row, column } });
   }, [row, column, onResizerHover]);
@@ -149,10 +158,12 @@ export function useCell(params: IUseCellParams): IUseCell {
 
   return {
     resizerRef,
+    contentInnerText,
     handleTableDataHover,
     handleTableDataClick,
     handleContentEditableFocus,
     handleContentEditableKeyDown,
+    handleContentEditableInput,
     handleResizerMouseEnter,
     handleResizerMouseLeave,
     handleResizerMouseDown,

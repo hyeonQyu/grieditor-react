@@ -33,7 +33,7 @@ export function Tableditor(props: TableditorProps) {
           {cells.map((row, rowIndex) => (
             <tr key={rowIndex}>
               {row.map((cell, columnIndex) => {
-                return <Cell key={columnIndex} cell={cell} row={rowIndex} column={columnIndex} focusEvent={undefined} {...rest} />;
+                return <Cell key={columnIndex} cell={cell} row={rowIndex} column={columnIndex} {...rest} />;
               })}
             </tr>
           ))}
