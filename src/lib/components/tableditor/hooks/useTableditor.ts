@@ -53,6 +53,8 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
   const [cellHoverEvent, setCellHoverEvent] = useState<CellHoverEvent>();
   const [resizeEvent, setResizeEvent] = useState<ResizeEvent>();
 
+  const [isMouseDown, setIsMouseDown] = useState(false);
+
   const [rowAddExtender, setRowAddExtender] = useState<TableExtender>({ ...DEFAULT_TABLE_EXTENDER });
   const [columnAddExtender, setColumnAddExtender] = useState<TableExtender>({ ...DEFAULT_TABLE_EXTENDER });
 
@@ -293,13 +295,29 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
   }, []);
 
   useEffect(() => {
-    setCells((cells) => getResizeEventHandledCells({ e: resizeEvent, cells }));
+    const handleMouseDown = () => setIsMouseDown(true);
+    const handleMouseUp = () => {
+      setIsMouseDown(false);
+      setResizeEvent(undefined);
+    };
+
+    window.addEventListener('mousedown', handleMouseDown);
+    window.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      window.removeEventListener('mousedown', handleMouseDown);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, []);
+
+  useEffect(() => {
+    setCells((cells) => getResizeEventHandledCells({ e: isMouseDown ? resizeEvent : undefined, cells }));
 
     if (resizeEvent) {
       setRowAddExtender((prev) => ({ ...prev, visible: false }));
       setColumnAddExtender((prev) => ({ ...prev, visible: false }));
     }
-  }, [resizeEvent, getResizeEventHandledCells]);
+  }, [resizeEvent, getResizeEventHandledCells, isMouseDown]);
 
   useEffect(() => {
     const { rowAddExtenderVisible, columnAddExtenderVisible } = TableditorUtil.getTableExtenderVisible(cells, cellHoverEvent, resizeEvent);

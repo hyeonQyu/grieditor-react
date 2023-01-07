@@ -30,7 +30,7 @@ export interface CellProps {
 
 function Cell(props: CellProps) {
   const {
-    cell: { width = 0, content, backgroundColor, font, resizerHovered, isResizing, contentEditableRef, focused },
+    cell: { width = 0, content, backgroundColor, font, resizerHovered, isResizing, contentEditableRef },
   } = props;
   const {
     resizerRef,
@@ -47,7 +47,7 @@ function Cell(props: CellProps) {
     handleResizerPreventDrag,
     handleResizerDragEnd,
   } = useCell(props);
-  console.log(props.row, props.column, width, focused);
+  console.log(props.row, props.column);
 
   return (
     <td onMouseEnter={handleTableDataHover} onClick={handleTableDataClick} css={TableditorStyle.tableData()} style={{ width }}>

@@ -58,7 +58,7 @@ export function useCell(params: IUseCellParams): IUseCell {
     // Move cursor position
     const cellElement = contentEditableRef.current;
     ContentEditableUtil.setCaretOffset((cellElement?.firstChild as HTMLElement) ?? cellElement, caretOffset);
-  }, [focused, onContentChange, row, column]);
+  }, [focused, onContentChange, row, column, contentEditableRef.current]);
 
   const handleTableDataHover: MouseEventHandler<HTMLTableDataCellElement> = useCallback(() => {
     onCellHover({ rowColumn: { row, column } });
@@ -125,7 +125,7 @@ export function useCell(params: IUseCellParams): IUseCell {
           return;
       }
     },
-    [onCellKeyDown, row, column, onCellFocus],
+    [onCellKeyDown, row, column, onCellFocus, contentEditableRef.current],
   );
 
   const handleContentEditableInput: FormEventHandler<HTMLDivElement> = useCallback((e) => {
@@ -142,7 +142,7 @@ export function useCell(params: IUseCellParams): IUseCell {
 
   const handleResizerMouseDown: MouseEventHandler<HTMLDivElement> = useCallback(() => {
     onResizeStart({ rowColumn: { row, column }, pivotX: contentEditableRef.current?.getBoundingClientRect().x });
-  }, [onResizeStart, row, column]);
+  }, [onResizeStart, row, column, contentEditableRef.current]);
 
   const handleResizerMouseUp: MouseEventHandler<HTMLDivElement> = useCallback(() => {
     onResizeEnd();

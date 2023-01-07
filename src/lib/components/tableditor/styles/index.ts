@@ -61,8 +61,8 @@ export namespace TableditorStyle {
 
   export const moreOptions = () => css`
     position: absolute;
-    top: 4px;
-    right: 4px;
+    top: 5px;
+    right: 5px;
     padding: 2px;
     background-color: ${Color.WHITE};
     cursor: pointer;
