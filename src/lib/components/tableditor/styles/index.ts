@@ -1,6 +1,6 @@
 import { MIN_TABLE_EXTENDER_SIZE, ResizeEvent, RESIZER_WIDTH, TABLE_EXTENDER_MARGIN } from '@components/tableditor/defines';
 import { css } from '@emotion/react';
-import { Color } from '@defines/index';
+import { Color, ZIndex } from '@defines/index';
 
 export namespace TableditorStyle {
   export const container = (resizeEvent?: ResizeEvent) => css`
@@ -96,7 +96,7 @@ export namespace TableditorStyle {
     height: 100%;
     top: 0;
     right: -4px;
-    z-index: 10;
+    z-index: ${ZIndex.RESIZER};
     cursor: col-resize;
   `;
 

@@ -21,6 +21,7 @@ export enum Color {
 }
 
 export enum ZIndex {
+  RESIZER = 100,
   MENU = 10000,
 }
 

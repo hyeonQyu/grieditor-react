@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { Color } from '@defines/constants';
+import { Color, ZIndex } from '@defines/constants';
 
 export namespace MenuStyle {
   export const container = (opened: boolean, disappearAnimationDuration: number) => css`
@@ -10,6 +10,7 @@ export namespace MenuStyle {
     background-color: ${Color.WHITE};
     transition: opacity ${disappearAnimationDuration}s ease-in-out;
     opacity: ${opened ? 1 : 0};
+    z-index: ${ZIndex.MENU};
   `;
 
   export const item = () => css`
