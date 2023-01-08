@@ -14,7 +14,7 @@ import _ from 'lodash';
 import { TableditorStyle } from '@components/tableditor/styles';
 import { ThreeDotsVerticalIcon } from '@icons/ThreeDotsVerticalIcon';
 import { Color } from '@defines/constants';
-import { Menu } from '@components/menu';
+import { CellMenu } from '@components/tableditor/components/menu/cell';
 
 export interface CellProps {
   cell: RenderingCellData;
@@ -81,8 +81,7 @@ function Cell(props: CellProps) {
         <button onClick={handleMoreOptionsClick} css={TableditorStyle.moreOptions()} className={'more-options'}>
           <ThreeDotsVerticalIcon width={14} height={14} color={Color.GRAY_6} />
         </button>
-
-        <Menu ref={menuRef} sections={[{ items: [{ node: <div>안녕</div> }] }]} />
+        <CellMenu ref={menuRef} />
 
         {/*highlighting box*/}
         <div

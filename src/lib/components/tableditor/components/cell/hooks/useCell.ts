@@ -82,7 +82,7 @@ export function useCell(params: IUseCellParams): IUseCell {
   const handleContentEditableKeyDown: KeyboardEventHandler<HTMLDivElement> = useCallback(
     (e) => {
       onCellKeyDown();
-      menuRef.current?.close(e.target);
+      menuRef.current?.close(e);
 
       switch (e.key) {
         case 'Enter':
