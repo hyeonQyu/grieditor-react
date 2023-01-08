@@ -14,6 +14,7 @@ export function useCellMenu(params: IUseCellMenuParams): IUseCellMenu {
 
   const menuSections: MenuSectionProps[] = [
     {
+      label: 'Edit cell',
       items: [
         {
           node: <MenuItemTemplate icon={<PaintBucketIcon />} label={'Background colors'} hasChildMenu />,
@@ -27,6 +28,11 @@ export function useCellMenu(params: IUseCellMenuParams): IUseCellMenu {
           node: <MenuItemTemplate icon={<EraserIcon />} label={'Clear content'} />,
           onEvent() {},
         },
+      ],
+    },
+    {
+      label: 'Edit table',
+      items: [
         {
           node: <MenuItemTemplate icon={<ArrowIcon direction={'up'} />} label={'Add row above'} />,
           onEvent() {},
@@ -43,6 +49,11 @@ export function useCellMenu(params: IUseCellMenuParams): IUseCellMenu {
           node: <MenuItemTemplate icon={<ArrowIcon direction={'right'} />} label={'Add column to right'} />,
           onEvent() {},
         },
+      ],
+    },
+    {
+      label: 'Select',
+      items: [
         {
           node: <MenuItemTemplate icon={<HorizontalIcon />} label={'Select row'} />,
           onEvent() {},

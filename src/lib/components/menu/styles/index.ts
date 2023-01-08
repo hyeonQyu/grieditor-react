@@ -34,9 +34,8 @@ export namespace MenuStyle {
 
     > ul > .label {
       font-weight: bold;
-      padding: 5px;
-      font-size: 16px;
-      color: ${Color.BLACK};
+      padding: 5px 10px;
+      color: ${Color.GRAY_9};
     }
   `;
 
