@@ -14,4 +14,14 @@ export namespace MenuStyle {
     width: 100px;
     height: 100px;
   `;
+
+  export const item = () => css`
+    border-radius: 4px;
+    padding: 5px 8px;
+    cursor: pointer;
+
+    :hover {
+      background-color: ${Color.GRAY_0};
+    }
+  `;
 }
