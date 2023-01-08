@@ -1,7 +1,7 @@
 import React, { MutableRefObject, Ref, useEffect, useRef, useState } from 'react';
 import useClickOutside from '@hooks/useClickOutside';
 import useAnimationMount from '@hooks/useAnimationMount';
-import { MenuProps } from '@components/menu/Menu';
+import { MenuProps } from '@components/menu';
 import { MenuPosition, MenuRef } from '@components/menu/defines';
 
 export interface IUseMenuParams extends MenuProps {

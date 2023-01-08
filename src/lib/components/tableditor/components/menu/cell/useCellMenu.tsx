@@ -1,6 +1,6 @@
 import { MenuSectionProps } from '@components/menu/components/menuSection';
 import { MenuItemTemplate } from '@components/tableditor/components/menu/itemTemplate';
-import { CellMenuProps } from '@components/tableditor/components/menu/cell/CellMenu';
+import { CellMenuProps } from '@components/tableditor/components/menu/cell';
 import { ArrowIcon, EraserIcon, HorizontalIcon, PaintBucketIcon, PencilIcon, VerticalIcon } from '@icons/index';
 
 export interface IUseCellMenuParams extends CellMenuProps {}

@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { TableExtenderProps } from '@components/tableditor/components/tableExtender/TableExtender';
+import { TableExtenderProps } from '@components/tableditor/components/tableExtender';
 import { TableditorStyle } from '@components/tableditor/styles';
 import { TABLE_EXTENDER_MARGIN } from '@components/tableditor/defines';
 
