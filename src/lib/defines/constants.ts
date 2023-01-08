@@ -1,3 +1,5 @@
+import { Direction } from '@defines/types';
+
 export enum Color {
   CYAN_0 = '#CBF6F5',
   CYAN_1 = '#85EAE7',
@@ -21,3 +23,10 @@ export enum Color {
 export enum ZIndex {
   MENU = 10000,
 }
+
+export const ROTATE_ANGLE_BY_DIRECTION: { [key in Direction]: number } = {
+  up: 0,
+  down: 180,
+  right: 90,
+  left: 270,
+};

@@ -1,9 +1,10 @@
 import { IconCommonProps } from '@defines/types';
+import { Color } from '@defines/constants';
 
 export interface ThreeDotsVerticalIconProps extends IconCommonProps {}
 
 export function ThreeDotsVerticalIcon(props: ThreeDotsVerticalIconProps) {
-  const { width = 16, height = 16, color = 'currentColor' } = props;
+  const { width = 16, height = 16, color = Color.GRAY_8 } = props;
 
   return (
     <svg
