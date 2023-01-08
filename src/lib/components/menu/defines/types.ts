@@ -1,9 +1,9 @@
-import { MouseEventHandler } from 'react';
+import { EventHandler, MouseEventHandler } from 'react';
 
 export interface MenuRef {
   opened: boolean;
   open: MouseEventHandler;
-  close: MouseEventHandler;
+  close: EventHandler<any>;
   toggle: MouseEventHandler;
 }
 
