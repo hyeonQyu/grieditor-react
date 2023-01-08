@@ -1,8 +1,24 @@
-import { css } from '@emotion/react';
+import { css, keyframes } from '@emotion/react';
 import { Color, ZIndex } from '@defines/constants';
 
 export namespace MenuStyle {
-  export const container = (opened: boolean, disappearAnimationDuration: number) => css`
+  const appear = keyframes`
+    0% {
+      visibility: hidden;
+    }
+    5% {
+      visibility: visible;
+      opacity: 0;
+      padding: 0 5px;
+    }
+    100% {
+      opacity: 1;
+      padding: 10px 5px;
+    }
+  `;
+
+  export const container = (opened: boolean, appearAnimationDuration: number, disappearAnimationDuration: number) => css`
+    animation: ${appear} ${appearAnimationDuration}s;
     position: absolute;
     padding: 10px 5px;
     border-radius: 8px;

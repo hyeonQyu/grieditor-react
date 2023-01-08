@@ -14,13 +14,13 @@ export interface MenuProps {
 
 export const Menu = forwardRef<MenuRef, MenuProps>((props, ref) => {
   const { sections } = props;
-  const { menuRef, opened, mounted, disappearAnimationDuration, position } = useMenu({ ...props, ref });
+  const { menuRef, opened, mounted, appearAnimationDuration, disappearAnimationDuration, position } = useMenu({ ...props, ref });
 
   if (!mounted) return null;
 
   return (
     <Portal.Consumer>
-      <div ref={menuRef} css={MenuStyle.container(opened, disappearAnimationDuration)} style={{ ...position }}>
+      <div ref={menuRef} css={MenuStyle.container(opened, appearAnimationDuration, disappearAnimationDuration)} style={{ ...position }}>
         <ul>
           {sections.map((section, i) => (
             <MenuSection key={i} {...section} />

@@ -12,6 +12,7 @@ export interface IUseMenu {
   menuRef: MutableRefObject<HTMLDivElement | null>;
   opened: boolean;
   mounted: boolean;
+  appearAnimationDuration: number;
   disappearAnimationDuration: number;
   position: MenuPosition;
 }
@@ -19,6 +20,7 @@ export interface IUseMenu {
 export function useMenu(params: IUseMenuParams): IUseMenu {
   const { ref, onOpen, onClose } = params;
 
+  const appearAnimationDuration = 0.2;
   const disappearAnimationDuration = 0.2;
 
   const [opened, setOpened] = useState(false);
@@ -96,6 +98,7 @@ export function useMenu(params: IUseMenuParams): IUseMenu {
     menuRef,
     opened,
     mounted,
+    appearAnimationDuration,
     disappearAnimationDuration,
     position,
   };
