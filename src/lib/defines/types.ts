@@ -12,3 +12,5 @@ export interface IconCommonProps {
   height?: number;
   color?: string;
 }
+
+export type CustomEventHandler<E> = (e?: E) => void;

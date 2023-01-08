@@ -6,16 +6,19 @@ import {
   KeyboardEventHandler,
   MouseEventHandler,
   MutableRefObject,
+  Ref,
   useCallback,
   useEffect,
   useRef,
   useState,
 } from 'react';
 import { ContentEditableUtil } from '@utils/contentEditableUtil';
+import { MenuRef } from '@components/menu/defines';
 
 export interface IUseCellParams extends CellProps {}
 
 export interface IUseCell {
+  menuRef: Ref<MenuRef>;
   resizerRef: MutableRefObject<HTMLDivElement | null>;
   contentInnerText: string;
   handleTableDataHover: MouseEventHandler<HTMLTableDataCellElement>;
@@ -23,6 +26,7 @@ export interface IUseCell {
   handleContentEditableFocus: FocusEventHandler<HTMLDivElement>;
   handleContentEditableKeyDown: KeyboardEventHandler<HTMLDivElement>;
   handleContentEditableInput: FormEventHandler<HTMLDivElement>;
+  handleMoreOptionsClick: MouseEventHandler<HTMLButtonElement>;
   handleResizerMouseEnter: MouseEventHandler<HTMLDivElement>;
   handleResizerMouseLeave: MouseEventHandler<HTMLDivElement>;
   handleResizerMouseDown: MouseEventHandler<HTMLDivElement>;
@@ -45,6 +49,7 @@ export function useCell(params: IUseCellParams): IUseCell {
     onCellKeyDown,
   } = params;
 
+  const menuRef = useRef<MenuRef>(null);
   const resizerRef = useRef<HTMLDivElement>(null);
 
   const [contentInnerText, setContentInnerText] = useState<string>('');
@@ -132,6 +137,10 @@ export function useCell(params: IUseCellParams): IUseCell {
     setContentInnerText((e.target as HTMLDivElement).innerText);
   }, []);
 
+  const handleMoreOptionsClick: MouseEventHandler<HTMLButtonElement> = useCallback((e) => {
+    menuRef.current?.toggle(e);
+  }, []);
+
   const handleResizerMouseEnter: MouseEventHandler<HTMLDivElement> = useCallback(() => {
     onResizerHover({ rowColumn: { row, column } });
   }, [row, column, onResizerHover]);
@@ -157,6 +166,7 @@ export function useCell(params: IUseCellParams): IUseCell {
   }, [onResizeEnd]);
 
   return {
+    menuRef,
     resizerRef,
     contentInnerText,
     handleTableDataHover,
@@ -164,6 +174,7 @@ export function useCell(params: IUseCellParams): IUseCell {
     handleContentEditableFocus,
     handleContentEditableKeyDown,
     handleContentEditableInput,
+    handleMoreOptionsClick,
     handleResizerMouseEnter,
     handleResizerMouseLeave,
     handleResizerMouseDown,

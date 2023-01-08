@@ -17,3 +17,7 @@ export enum Color {
   GRAY_9 = '#373E43',
   BLACK = '#1f2426',
 }
+
+export enum ZIndex {
+  MENU = 10000,
+}

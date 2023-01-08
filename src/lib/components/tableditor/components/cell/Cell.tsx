@@ -14,6 +14,7 @@ import _ from 'lodash';
 import { TableditorStyle } from '@components/tableditor/styles';
 import { ThreeDotsVerticalIcon } from '@icons/ThreeDotsVerticalIcon';
 import { Color } from '@defines/constants';
+import { Menu } from '@components/menu';
 
 export interface CellProps {
   cell: RenderingCellData;
@@ -33,6 +34,7 @@ function Cell(props: CellProps) {
     cell: { width = 0, content, backgroundColor, font, resizerHovered, isResizing, contentEditableRef },
   } = props;
   const {
+    menuRef,
     resizerRef,
     contentInnerText,
     handleTableDataHover,
@@ -40,6 +42,7 @@ function Cell(props: CellProps) {
     handleContentEditableFocus,
     handleContentEditableKeyDown,
     handleContentEditableInput,
+    handleMoreOptionsClick,
     handleResizerMouseEnter,
     handleResizerMouseLeave,
     handleResizerMouseDown,
@@ -75,9 +78,11 @@ function Cell(props: CellProps) {
         </div>
 
         {/*more options button*/}
-        <button css={TableditorStyle.moreOptions()} className={'more-options'}>
+        <button onClick={handleMoreOptionsClick} css={TableditorStyle.moreOptions()} className={'more-options'}>
           <ThreeDotsVerticalIcon width={14} height={14} color={Color.GRAY_6} />
         </button>
+
+        <Menu ref={menuRef} sections={[{ items: [{ node: <div>안녕</div> }] }]} />
 
         {/*highlighting box*/}
         <div

@@ -1,5 +1,5 @@
 import { TableditorProps } from '@components/tableditor';
-import { MouseEventHandler, MutableRefObject, useCallback, useEffect, useState } from 'react';
+import { MouseEventHandler, MutableRefObject, useCallback, useEffect, useRef, useState } from 'react';
 import {
   CellFocusEvent,
   CellHoverEvent,
@@ -58,7 +58,10 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
   const [rowAddExtender, setRowAddExtender] = useState<TableExtender>({ ...DEFAULT_TABLE_EXTENDER });
   const [columnAddExtender, setColumnAddExtender] = useState<TableExtender>({ ...DEFAULT_TABLE_EXTENDER });
 
-  const { ref: tableRef } = useClickOutside<HTMLTableElement>({
+  const tableRef = useRef<HTMLTableElement | null>(null);
+
+  useClickOutside<HTMLTableElement>({
+    ref: tableRef,
     onClickOutside: () => onCellFocus(),
   });
 

@@ -74,6 +74,10 @@ export namespace TableditorStyle {
     :hover {
       background-color: ${Color.GRAY_0};
     }
+
+    > svg {
+      pointer-events: none;
+    }
   `;
 
   export const highlighting = () => css`
