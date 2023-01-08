@@ -88,7 +88,7 @@ export const RESET_STYLE = css`
     padding: 0;
     border: 0;
     font: inherit;
-    font-size: 16px;
+    font-size: 14px;
     vertical-align: baseline;
     box-sizing: border-box;
     font-family: Pretendard, serif;
