@@ -1,4 +1,4 @@
-import React, { MutableRefObject, Ref, useRef, useState } from 'react';
+import React, { MutableRefObject, Ref, useEffect, useRef, useState } from 'react';
 import useClickOutside from '@hooks/useClickOutside';
 import useAnimationMount from '@hooks/useAnimationMount';
 import { MenuProps } from '@components/menu/Menu';
@@ -25,6 +25,7 @@ export function useMenu(params: IUseMenuParams): IUseMenu {
   const [position, setPosition] = useState<MenuPosition>({ top: Number.MAX_VALUE, left: Number.MAX_VALUE });
 
   const menuRef = useRef<HTMLDivElement>(null);
+  const menuToggleTargetRectRef = useRef<DOMRect>();
 
   useClickOutside<HTMLDivElement>({
     ref: menuRef,
@@ -40,13 +41,37 @@ export function useMenu(params: IUseMenuParams): IUseMenu {
 
   const handleOpen = (target: Element) => {
     onOpen?.();
-    const { top, left, width, height } = target.getBoundingClientRect();
-    setPosition({ top: top + height, left: left + width });
+    menuToggleTargetRectRef.current = target.getBoundingClientRect();
   };
 
   const handleClose = () => {
     onClose?.();
   };
+
+  useEffect(() => {
+    if (!mounted) return;
+
+    const menuElement = menuRef.current;
+    const targetRect = menuToggleTargetRectRef?.current;
+
+    if (!menuElement || !targetRect) return;
+
+    let left = targetRect.left + targetRect.width;
+    const right = left + menuElement.clientWidth;
+
+    if (right > window.innerWidth) {
+      left = targetRect.left - menuElement.clientWidth;
+    }
+
+    let top = targetRect.top;
+    const bottom = top + menuElement.clientHeight;
+
+    if (bottom > window.innerHeight) {
+      top = targetRect.top - menuElement.clientHeight + targetRect.height;
+    }
+
+    setPosition({ top, left });
+  }, [mounted]);
 
   React.useImperativeHandle<MenuRef, MenuRef>(ref, () => ({
     opened,
