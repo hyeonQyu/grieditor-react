@@ -69,11 +69,11 @@ export function useCell(params: IUseCellParams): IUseCell {
     onCellHover({ rowColumn: { row, column } });
   }, [row, column, onCellHover]);
 
-  const handleTableDataClick: MouseEventHandler<HTMLTableDataCellElement> = useCallback(() => {
+  const handleTableDataClick: MouseEventHandler<HTMLTableDataCellElement> = () => {
     if (!isResizing) {
       contentEditableRef.current?.focus();
     }
-  }, [isResizing]);
+  };
 
   const handleContentEditableFocus: FocusEventHandler<HTMLDivElement> = useCallback(() => {
     onCellFocus({ rowColumn: { row, column } });
