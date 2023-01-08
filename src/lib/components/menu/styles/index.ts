@@ -13,6 +13,17 @@ export namespace MenuStyle {
     z-index: ${ZIndex.MENU};
   `;
 
+  export const section = () => css`
+    padding: 4px 0;
+
+    > ul > .label {
+      font-weight: bold;
+      padding: 5px;
+      font-size: 16px;
+      color: ${Color.BLACK};
+    }
+  `;
+
   export const item = () => css`
     border-radius: 4px;
     padding: 5px 8px;

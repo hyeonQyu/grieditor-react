@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { MenuItem, MenuItemProps } from '@components/menu/components/menuItem';
+import { MenuStyle } from '@components/menu/styles';
 
 export interface MenuSectionProps {
   label?: string;
@@ -10,8 +11,9 @@ export function MenuSection(props: MenuSectionProps) {
   const { label, items } = props;
 
   return (
-    <li>
+    <li css={MenuStyle.section()}>
       <ul>
+        {label && <div className={'label'}>{label}</div>}
         {items.map((item, i) => (
           <MenuItem key={i} {...item} />
         ))}
