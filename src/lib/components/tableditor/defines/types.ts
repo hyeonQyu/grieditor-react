@@ -21,33 +21,22 @@ export interface Font {
   style: FontStyle;
 }
 
-export type TableditorColor =
-  | 'black'
-  | 'white'
-  | 'gray_dark'
-  | 'gray_light'
-  | 'brown_dark'
-  | 'brown_light'
-  | 'orange_dark'
-  | 'orange_light'
-  | 'yellow_dark'
-  | 'yellow_light'
-  | 'green_dark'
-  | 'green_light'
-  | 'blue_dark'
-  | 'blue_light'
-  | 'purple_dark'
-  | 'purple_light'
-  | 'pink_dark'
-  | 'pink_light'
-  | 'red_dark'
-  | 'red_light';
+export type TableditorAchromaticColor = 'black' | 'white';
+export type TableditorChromaticColor = 'gray' | 'brown' | 'orange' | 'yellow' | 'green' | 'blue' | 'purple' | 'pink' | 'red';
+
+export type TableditorChromaticDarkColor = `${TableditorChromaticColor}_dark`;
+export type TableditorChromaticLightColor = `${TableditorChromaticColor}_light`;
+
+export type TableditorColor = TableditorAchromaticColor | TableditorChromaticDarkColor | TableditorChromaticLightColor;
+export type TableditorColorName = TableditorAchromaticColor | TableditorChromaticColor;
+
+export type ColorMap = Record<TableditorColor, string>;
+
+export type BackgroundColorMap = Record<TableditorColorName, Extract<TableditorColor, TableditorAchromaticColor | TableditorChromaticLightColor>>;
+
+export type FontColorMap = Record<TableditorColorName, Extract<TableditorColor, TableditorAchromaticColor | TableditorChromaticDarkColor>>;
 
 export type FontStyle = 'default' | 'bold' | 'italic' | 'underline' | 'strikethrough';
-
-export type ColorMap = {
-  [key in TableditorColor]: string;
-};
 
 export interface RowColumn {
   row: number;

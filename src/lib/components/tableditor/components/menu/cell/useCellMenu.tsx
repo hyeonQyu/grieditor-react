@@ -1,7 +1,8 @@
 import { MenuSectionProps } from '@components/menu/components/menuSection';
-import { MenuItemTemplate } from '@components/tableditor/components/menu/itemTemplate';
+import { MenuColorItemTemplate, MenuItemTemplate } from '@components/tableditor/components/menu/itemTemplate';
 import { CellMenuProps } from '@components/tableditor/components/menu/cell';
 import { ArrowIcon, EraserIcon, HorizontalIcon, PaintBucketIcon, PencilIcon, VerticalIcon } from '@icons/index';
+import { BACKGROUND_COLOR_MAP, FONT_COLOR_MAP, TableditorColorName } from '@components/tableditor/defines';
 
 export interface IUseCellMenuParams extends CellMenuProps {}
 
@@ -18,11 +19,27 @@ export function useCellMenu(params: IUseCellMenuParams): IUseCellMenu {
       items: [
         {
           node: <MenuItemTemplate icon={<PaintBucketIcon />} label={'Background colors'} hasChildMenu />,
-          sections: [],
+          sections: [
+            {
+              label: 'Background colors',
+              items: Object.keys(BACKGROUND_COLOR_MAP).map((colorName) => ({
+                node: <MenuColorItemTemplate colorName={colorName as TableditorColorName} type={'background'} />,
+                onEvent() {},
+              })),
+            },
+          ],
         },
         {
           node: <MenuItemTemplate icon={<PencilIcon />} label={'Font colors'} hasChildMenu />,
-          sections: [],
+          sections: [
+            {
+              label: 'Font colors',
+              items: Object.keys(FONT_COLOR_MAP).map((colorName) => ({
+                node: <MenuColorItemTemplate colorName={colorName as TableditorColorName} type={'font'} />,
+                onEvent() {},
+              })),
+            },
+          ],
         },
         {
           node: <MenuItemTemplate icon={<EraserIcon />} label={'Clear content'} />,

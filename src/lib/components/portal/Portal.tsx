@@ -1,6 +1,8 @@
+/** @jsxImportSource @emotion/react */
 import { PortalContext } from '@contexts/portalContext';
 import { ReactNode, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { css } from '@emotion/react';
 
 export interface PortalProviderProps {
   children: ReactNode;
@@ -19,6 +21,11 @@ function PortalProvider(props: PortalProviderProps) {
           if (portalContainerRef !== null || element === null) return;
           setPortalContainerRef(element);
         }}
+        css={css`
+          position: absolute;
+          top: 0;
+          left: 0;
+        `}
       />
     </PortalContext.Provider>
   );

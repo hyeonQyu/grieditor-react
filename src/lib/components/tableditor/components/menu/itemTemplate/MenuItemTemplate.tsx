@@ -14,10 +14,10 @@ export function MenuItemTemplate(props: MenuItemTemplateProps) {
   const { icon, label, hasChildMenu } = props;
 
   return (
-    <div css={TableditorMenuStyle.itemTemplate()}>
-      <div className={'icon-container'}>{icon}</div>
+    <div css={[TableditorMenuStyle.commonItemTemplate(), TableditorMenuStyle.itemTemplate()]}>
+      <div>{icon}</div>
       <div className={'label'}>{label}</div>
-      <div className={'more'}>{hasChildMenu && <ChevronIcon direction={'right'} color={Color.GRAY_6} />}</div>
+      <div>{hasChildMenu && <ChevronIcon direction={'right'} color={Color.GRAY_6} />}</div>
     </div>
   );
 }

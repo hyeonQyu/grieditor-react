@@ -6,7 +6,7 @@ export namespace MenuStyle {
     0% {
       visibility: hidden;
     }
-    2% {
+    5% {
       visibility: visible;
       opacity: 0;
       padding: 0 5px;

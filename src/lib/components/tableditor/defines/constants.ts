@@ -1,4 +1,4 @@
-import { CellData, ColorMap, TableExtender } from '@components/tableditor/defines';
+import { BackgroundColorMap, CellData, ColorMap, FontColorMap, TableExtender } from '@components/tableditor/defines';
 
 export const COLOR_MAP: ColorMap = {
   black: '#1d1d1d',
@@ -42,4 +42,32 @@ export const DEFAULT_CELL: CellData = {
     color: 'black',
     style: 'default',
   },
+};
+
+export const BACKGROUND_COLOR_MAP: BackgroundColorMap = {
+  black: 'black',
+  white: 'white',
+  gray: 'gray_light',
+  brown: 'brown_light',
+  orange: 'orange_light',
+  yellow: 'yellow_light',
+  green: 'green_light',
+  blue: 'blue_light',
+  purple: 'purple_light',
+  pink: 'pink_light',
+  red: 'red_light',
+};
+
+export const FONT_COLOR_MAP: FontColorMap = {
+  black: 'black',
+  white: 'white',
+  gray: 'gray_dark',
+  brown: 'brown_dark',
+  orange: 'orange_dark',
+  yellow: 'yellow_dark',
+  green: 'green_dark',
+  blue: 'blue_dark',
+  purple: 'purple_dark',
+  pink: 'pink_dark',
+  red: 'red_dark',
 };
