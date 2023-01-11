@@ -7,6 +7,16 @@ export interface RectSize {
   height: number;
 }
 
+export interface Coordinate {
+  x: number;
+  y: number;
+}
+
+export interface Rect {
+  size: RectSize;
+  coordinate: Coordinate;
+}
+
 export interface IconCommonProps {
   width?: number;
   height?: number;

@@ -22,6 +22,7 @@ export namespace TableditorUtil {
       isResizing: false,
       contentEditableRef: createRef(),
       caretOffset: 0,
+      selected: false,
       ...cell,
     };
   }

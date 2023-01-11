@@ -13,6 +13,7 @@ import {
   TableExtender,
   DEFAULT_TABLE_EXTENDER,
   DEFAULT_CELL,
+  TableditorEvent,
 } from '@components/tableditor/defines';
 import useClickOutside from '@hooks/useClickOutside';
 import { TableditorUtil } from '@components/tableditor/utils/tableditorUtil';
@@ -38,6 +39,7 @@ export interface IUseTableditor {
   onResizeStart: TableditorEventHandler<ResizeEvent>;
   onResizeEnd: TableditorEventHandler<ResizeEvent>;
   onCellKeyDown: TableditorEventHandler<undefined>;
+  onCellMenuSelectRow: TableditorEventHandler<TableditorEvent>;
 }
 
 export function useTableditor(params: IUseTableditorParams): IUseTableditor {
@@ -217,6 +219,18 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     );
   }, []);
 
+  const getCellMenuSelectRowEventHandledCells: GetEventHandledCells<TableditorEvent> = useCallback(({ e, cells }) => {
+    if (!e) return cells;
+
+    const {
+      rowColumn: { row },
+    } = e;
+
+    return cells.map((cellRows, i) => {
+      return cellRows.map((cell) => ({ ...cell, selected: row === i }));
+    });
+  }, []);
+
   const onCellHover: TableditorEventHandler<CellHoverEvent> = useCallback((e) => {
     setCellHoverEvent(e);
   }, []);
@@ -272,6 +286,13 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     }, 0);
   }, []);
 
+  const onCellMenuSelectRow: TableditorEventHandler<TableditorEvent> = useCallback(
+    (e) => {
+      setCells((cells) => getCellMenuSelectRowEventHandledCells({ e, cells }));
+    },
+    [getCellMenuSelectRowEventHandledCells],
+  );
+
   const handleMouseMove: MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
       if (!resizeEvent) return;
@@ -313,6 +334,9 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     };
   }, []);
 
+  /**
+   * Resize cells' width and hide table extender on cell resize events
+   */
   useEffect(() => {
     setCells((cells) => getResizeEventHandledCells({ e: isMouseDown ? resizeEvent : undefined, cells }));
 
@@ -322,6 +346,9 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     }
   }, [resizeEvent, getResizeEventHandledCells, isMouseDown]);
 
+  /**
+   * Set size and visibility of table extender on cell hover events
+   */
   useEffect(() => {
     const { rowAddExtenderVisible, columnAddExtenderVisible } = TableditorUtil.getTableExtenderVisible(cells, cellHoverEvent, resizeEvent);
 
@@ -363,5 +390,6 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     onResizeStart,
     onResizeEnd,
     onCellKeyDown,
+    onCellMenuSelectRow,
   };
 }

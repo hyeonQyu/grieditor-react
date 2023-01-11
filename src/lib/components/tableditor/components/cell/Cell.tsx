@@ -7,6 +7,7 @@ import {
   ResizerHoverEvent,
   ResizeEvent,
   RenderingCellData,
+  TableditorEvent,
 } from '@components/tableditor/defines';
 import { useCell } from '@components/tableditor/components/cell/hooks/useCell';
 import React from 'react';
@@ -27,11 +28,15 @@ export interface CellProps {
   onResizeStart: TableditorEventHandler<ResizeEvent>;
   onResizeEnd: TableditorEventHandler<ResizeEvent>;
   onCellKeyDown: TableditorEventHandler<undefined>;
+  onCellMenuSelectRow: TableditorEventHandler<TableditorEvent>;
 }
 
 function Cell(props: CellProps) {
   const {
-    cell: { width = 0, content, backgroundColor, font, resizerHovered, isResizing, contentEditableRef },
+    cell: { width = 0, content, backgroundColor, font, resizerHovered, isResizing, contentEditableRef, selected },
+    row,
+    column,
+    onCellMenuSelectRow,
   } = props;
   const {
     menuRef,
@@ -81,7 +86,7 @@ function Cell(props: CellProps) {
         <button onClick={handleMoreOptionsClick} css={TableditorStyle.moreOptions()} className={'more-options'}>
           <ThreeDotsVerticalIcon width={14} height={14} color={Color.GRAY_6} />
         </button>
-        <CellMenu ref={menuRef} />
+        <CellMenu ref={menuRef} row={row} column={column} onCellMenuSelectRow={onCellMenuSelectRow} />
 
         {/*highlighting box*/}
         <div
@@ -106,6 +111,9 @@ function Cell(props: CellProps) {
         >
           <div css={TableditorStyle.resizer(resizerHovered)} />
         </div>
+
+        {/*selector*/}
+        {selected && <div css={TableditorStyle.cellSelector()} style={{ width }} />}
       </div>
     </td>
   );

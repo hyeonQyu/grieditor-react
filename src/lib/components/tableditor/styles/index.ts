@@ -33,6 +33,9 @@ export namespace TableditorStyle {
     :hover .highlighting {
       border: 1px solid ${Color.CYAN_0};
     }
+    button.more-options {
+      z-index: ${ZIndex.MENU};
+    }
     :hover button.more-options {
       visibility: visible;
     }
@@ -138,5 +141,15 @@ export namespace TableditorStyle {
   export const columnAddExtender = () => css`
     width: 24px;
     top: 0;
+  `;
+
+  export const cellSelector = () => css`
+    position: absolute;
+    height: 100%;
+    top: 0;
+    z-index: ${ZIndex.CELL_SELECTOR};
+    background-color: ${Color.CYAN_1};
+    pointer-events: none;
+    opacity: 0.3;
   `;
 }

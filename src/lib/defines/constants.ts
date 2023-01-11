@@ -22,6 +22,7 @@ export enum Color {
 
 export enum ZIndex {
   RESIZER = 100,
+  CELL_SELECTOR = 1000,
   MENU = 10000,
 }
 

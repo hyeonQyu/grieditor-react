@@ -3,15 +3,19 @@ import { MenuColorItemTemplate, MenuItemTemplate } from '@components/tableditor/
 import { CellMenuProps } from '@components/tableditor/components/menu/cell';
 import { ArrowIcon, EraserIcon, HorizontalIcon, PaintBucketIcon, PencilIcon, VerticalIcon } from '@icons/index';
 import { BACKGROUND_COLOR_MAP, FONT_COLOR_MAP, TableditorColorName } from '@components/tableditor/defines';
+import { RefObject } from 'react';
+import { MenuRef } from '@components/menu/defines';
 
-export interface IUseCellMenuParams extends CellMenuProps {}
+export interface IUseCellMenuParams extends CellMenuProps {
+  ref: RefObject<MenuRef>;
+}
 
 export interface IUseCellMenu {
   menuSections: MenuSectionProps[];
 }
 
 export function useCellMenu(params: IUseCellMenuParams): IUseCellMenu {
-  const {} = params;
+  const { ref, row, column, onCellMenuSelectRow } = params;
 
   const menuSections: MenuSectionProps[] = [
     {
@@ -73,7 +77,11 @@ export function useCellMenu(params: IUseCellMenuParams): IUseCellMenu {
       items: [
         {
           node: <MenuItemTemplate icon={<HorizontalIcon />} label={'Select row'} />,
-          onEvent() {},
+          onEvent(e) {
+            console.log('select row', row, column);
+            onCellMenuSelectRow({ rowColumn: { row, column } });
+            ref.current?.close(e);
+          },
         },
         {
           node: <MenuItemTemplate icon={<VerticalIcon />} label={'Select column'} />,
