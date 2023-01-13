@@ -69,10 +69,9 @@ export function useCell(params: IUseCellParams): IUseCell {
     onCellHover({ rowColumn: { row, column } });
   }, [row, column, onCellHover]);
 
-  const handleTableDataClick: MouseEventHandler<HTMLTableDataCellElement> = () => {
-    if (!isResizing) {
-      contentEditableRef.current?.focus();
-    }
+  const handleTableDataClick: MouseEventHandler<HTMLTableDataCellElement> = (e) => {
+    if (isResizing || menuRef.current?.element?.contains(e.target as Node)) return;
+    contentEditableRef.current?.focus();
   };
 
   const handleContentEditableFocus: FocusEventHandler<HTMLDivElement> = useCallback(() => {

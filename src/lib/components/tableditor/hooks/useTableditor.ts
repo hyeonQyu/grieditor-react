@@ -64,64 +64,62 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
 
   useClickOutside<HTMLTableElement>({
     ref: tableRef,
-    onClickOutside: () => onCellFocus(),
+    onClickOutside() {
+      onCellFocus();
+    },
   });
 
   const getCellFocusEventHandledCells: GetEventHandledCells<CellFocusEvent> = useCallback(({ e, cells }) => {
-    if (e) {
-      const {
-        rowColumn: { row, column },
-        direction,
-      } = e;
-      const rowCount = cells.length;
-      if (rowCount <= row || row < 0) {
-        // Row limitation
-        return cells;
-      }
+    if (!e) return cells;
+    const {
+      rowColumn: { row, column },
+      direction,
+    } = e;
+    const rowCount = cells.length;
+    if (rowCount <= row || row < 0) {
+      // Row limitation
+      return cells;
+    }
 
-      const columnCount = cells[row].length;
-      if (columnCount <= column) {
-        // To next row
-        return getCellFocusEventHandledCells({
-          e: {
-            ...e,
-            rowColumn: {
-              row: row + 1,
-              column: 0,
-            },
+    const columnCount = cells[row].length;
+    if (columnCount <= column) {
+      // To next row
+      return getCellFocusEventHandledCells({
+        e: {
+          ...e,
+          rowColumn: {
+            row: row + 1,
+            column: 0,
           },
-          cells,
-        });
-      }
-      if (column < 0) {
-        // To previous row
-        return getCellFocusEventHandledCells({
-          e: {
-            ...e,
-            rowColumn: {
-              row: row - 1,
-              column: (cells[row - 1]?.length ?? 1) - 1,
-            },
+        },
+        cells,
+      });
+    }
+    if (column < 0) {
+      // To previous row
+      return getCellFocusEventHandledCells({
+        e: {
+          ...e,
+          rowColumn: {
+            row: row - 1,
+            column: (cells[row - 1]?.length ?? 1) - 1,
           },
-          cells,
-        });
-      }
-
-      cells[row][column].contentEditableRef.current?.focus();
-
-      return cells.map((cellRow, rowIndex) => {
-        return cellRow.map((cell, columnIndex) => {
-          const focused = row === rowIndex && column === columnIndex;
-          return {
-            ...cell,
-            focused,
-            caretOffset: focused ? TableditorUtil.getCellCaretOffsetFromDirection(cell, direction) : cell.caretOffset,
-          };
-        });
+        },
+        cells,
       });
     }
 
-    return cells;
+    return cells.map((cellRow, rowIndex) => {
+      return cellRow.map((cell, columnIndex) => {
+        const focused = row === rowIndex && column === columnIndex;
+        return {
+          ...cell,
+          focused,
+          caretOffset: focused ? TableditorUtil.getCellCaretOffsetFromDirection(cell, direction) : cell.caretOffset,
+          selected: false,
+        };
+      });
+    });
   }, []);
 
   const getCellChangeEventHandledCells: GetEventHandledCells<CellChangeEvent> = useCallback(({ e, cells }) => {

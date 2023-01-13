@@ -78,7 +78,6 @@ export function useCellMenu(params: IUseCellMenuParams): IUseCellMenu {
         {
           node: <MenuItemTemplate icon={<HorizontalIcon />} label={'Select row'} />,
           onEvent(e) {
-            console.log('select row', row, column);
             onCellMenuSelectRow({ rowColumn: { row, column } });
             ref.current?.close(e);
           },

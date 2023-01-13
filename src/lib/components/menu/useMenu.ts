@@ -1,4 +1,4 @@
-import React, { MutableRefObject, Ref, useEffect, useRef, useState } from 'react';
+import { MutableRefObject, Ref, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import useClickOutside from '@hooks/useClickOutside';
 import useAnimationMount from '@hooks/useAnimationMount';
 import { MenuProps } from '@components/menu';
@@ -75,7 +75,7 @@ export function useMenu(params: IUseMenuParams): IUseMenu {
     setPosition({ top, left });
   }, [mounted]);
 
-  React.useImperativeHandle<MenuRef, MenuRef>(ref, () => ({
+  useImperativeHandle<MenuRef, MenuRef>(ref, () => ({
     opened,
     open(e) {
       setOpened(true);
@@ -92,6 +92,7 @@ export function useMenu(params: IUseMenuParams): IUseMenu {
         return next;
       });
     },
+    element: menuRef.current,
   }));
 
   return {

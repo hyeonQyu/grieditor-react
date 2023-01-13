@@ -5,6 +5,7 @@ export interface MenuRef {
   open: MouseEventHandler;
   close: EventHandler<any>;
   toggle: MouseEventHandler;
+  element: HTMLDivElement | null;
 }
 
 export interface MenuPosition {
