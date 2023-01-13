@@ -29,10 +29,11 @@ export interface CellProps {
   onResizeEnd: TableditorEventHandler<ResizeEvent>;
   onCellKeyDown: TableditorEventHandler<undefined>;
   onCellMenuSelectRow: TableditorEventHandler<TableditorEvent>;
+  onCellMenuSelectColumn: TableditorEventHandler<TableditorEvent>;
 }
 
 function Cell(props: CellProps) {
-  const { cell, row, column, onCellMenuSelectRow } = props;
+  const { cell, row, column, onCellMenuSelectRow, onCellMenuSelectColumn } = props;
   const {
     menuRef,
     resizerRef,
@@ -82,7 +83,7 @@ function Cell(props: CellProps) {
         <button onClick={handleMoreOptionsClick} css={TableditorStyle.moreOptions()} className={'more-options'}>
           <ThreeDotsVerticalIcon width={14} height={14} color={Color.GRAY_6} />
         </button>
-        <CellMenu ref={menuRef} row={row} column={column} onCellMenuSelectRow={onCellMenuSelectRow} />
+        <CellMenu ref={menuRef} row={row} column={column} onCellMenuSelectRow={onCellMenuSelectRow} onCellMenuSelectColumn={onCellMenuSelectColumn} />
 
         {/*highlighting box*/}
         <div

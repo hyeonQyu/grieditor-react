@@ -40,6 +40,7 @@ export interface IUseTableditor {
   onResizeEnd: TableditorEventHandler<ResizeEvent>;
   onCellKeyDown: TableditorEventHandler<undefined>;
   onCellMenuSelectRow: TableditorEventHandler<TableditorEvent>;
+  onCellMenuSelectColumn: TableditorEventHandler<TableditorEvent>;
 }
 
 export function useTableditor(params: IUseTableditorParams): IUseTableditor {
@@ -229,6 +230,18 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     });
   }, []);
 
+  const getCellMenuSelectColumnEventHandledCells: GetEventHandledCells<TableditorEvent> = useCallback(({ e, cells }) => {
+    if (!e) return cells;
+
+    const {
+      rowColumn: { column },
+    } = e;
+
+    return cells.map((cellRows) => {
+      return cellRows.map((cell, i) => ({ ...cell, selected: column === i }));
+    });
+  }, []);
+
   const onCellHover: TableditorEventHandler<CellHoverEvent> = useCallback((e) => {
     setCellHoverEvent(e);
   }, []);
@@ -289,6 +302,13 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
       setCells((cells) => getCellMenuSelectRowEventHandledCells({ e, cells }));
     },
     [getCellMenuSelectRowEventHandledCells],
+  );
+
+  const onCellMenuSelectColumn: TableditorEventHandler<TableditorEvent> = useCallback(
+    (e) => {
+      setCells((cells) => getCellMenuSelectColumnEventHandledCells({ e, cells }));
+    },
+    [getCellMenuSelectColumnEventHandledCells],
   );
 
   const handleMouseMove: MouseEventHandler<HTMLDivElement> = useCallback(
@@ -389,5 +409,6 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     onResizeEnd,
     onCellKeyDown,
     onCellMenuSelectRow,
+    onCellMenuSelectColumn,
   };
 }

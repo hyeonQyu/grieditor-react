@@ -2,7 +2,7 @@ import { MenuSectionProps } from '@components/menu/components/menuSection';
 import { MenuColorItemTemplate, MenuItemTemplate } from '@components/tableditor/components/menu/itemTemplate';
 import { CellMenuProps } from '@components/tableditor/components/menu/cell';
 import { ArrowIcon, EraserIcon, HorizontalIcon, PaintBucketIcon, PencilIcon, VerticalIcon } from '@icons/index';
-import { BACKGROUND_COLOR_MAP, FONT_COLOR_MAP, TableditorColorName } from '@components/tableditor/defines';
+import { BACKGROUND_COLOR_MAP, FONT_COLOR_MAP, RowColumn, TableditorColorName } from '@components/tableditor/defines';
 import { RefObject } from 'react';
 import { MenuRef } from '@components/menu/defines';
 
@@ -15,7 +15,8 @@ export interface IUseCellMenu {
 }
 
 export function useCellMenu(params: IUseCellMenuParams): IUseCellMenu {
-  const { ref, row, column, onCellMenuSelectRow } = params;
+  const { ref, row, column, onCellMenuSelectRow, onCellMenuSelectColumn } = params;
+  const rowColumn: RowColumn = { row, column };
 
   const menuSections: MenuSectionProps[] = [
     {
@@ -78,13 +79,16 @@ export function useCellMenu(params: IUseCellMenuParams): IUseCellMenu {
         {
           node: <MenuItemTemplate icon={<HorizontalIcon />} label={'Select row'} />,
           onEvent(e) {
-            onCellMenuSelectRow({ rowColumn: { row, column } });
+            onCellMenuSelectRow({ rowColumn });
             ref.current?.close(e);
           },
         },
         {
           node: <MenuItemTemplate icon={<VerticalIcon />} label={'Select column'} />,
-          onEvent() {},
+          onEvent(e) {
+            onCellMenuSelectColumn({ rowColumn });
+            ref.current?.close(e);
+          },
         },
       ],
     },
