@@ -19,7 +19,7 @@ export function MenuItem(props: MenuItemProps) {
   return (
     <>
       <li onClick={handleClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} css={MenuStyle.item()}>
-        <div>{node}</div>
+        <div className={'node'}>{node}</div>
         {hasChildren && <Menu ref={childMenuRef} sections={sections!} />}
       </li>
     </>

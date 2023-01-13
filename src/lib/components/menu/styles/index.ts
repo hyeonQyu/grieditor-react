@@ -44,6 +44,10 @@ export namespace MenuStyle {
     padding: 5px 8px;
     cursor: pointer;
 
+    > .node {
+      pointer-events: none;
+    }
+
     :hover {
       background-color: ${Color.GRAY_0};
     }

@@ -19,7 +19,7 @@ export function useMenuItem(params: IUseMenuItemParams): IUseMenuItem {
   const childMenuRef = useRef<MenuRef>(null);
 
   const handleClick: MouseEventHandler<HTMLLIElement> = (e) => {
-    if (hasChildren) return;
+    if (hasChildren) return childMenuRef.current?.toggle(e);
     onEvent?.(e);
   };
 
