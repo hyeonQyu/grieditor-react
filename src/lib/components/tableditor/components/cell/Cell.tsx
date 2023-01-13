@@ -79,7 +79,7 @@ function Cell(props: CellProps) {
           onFocus={handleContentEditableFocus}
           onKeyDown={handleContentEditableKeyDown}
           onInput={handleContentEditableInput}
-          css={TableditorStyle.content(isResizing, Boolean(contentInnerText))}
+          css={TableditorStyle.content(isResizing, Boolean(contentInnerText || content))}
           style={{
             backgroundColor,
             color: font.color,
