@@ -15,7 +15,17 @@ export interface IUseCellMenu {
 }
 
 export function useCellMenu(params: IUseCellMenuParams): IUseCellMenu {
-  const { ref, row, column, onCellMenuSelectRow, onCellMenuSelectColumn } = params;
+  const {
+    ref,
+    row,
+    column,
+    onClickCellMenuAddRowAbove,
+    onClickCellMenuAddRowBelow,
+    onClickCellMenuAddColumnLeft,
+    onClickCellMenuAddColumnRight,
+    onClickCellMenuSelectRow,
+    onClickCellMenuSelectColumn,
+  } = params;
   const rowColumn: RowColumn = { row, column };
 
   const menuSections: MenuSectionProps[] = [
@@ -57,19 +67,31 @@ export function useCellMenu(params: IUseCellMenuParams): IUseCellMenu {
       items: [
         {
           node: <MenuItemTemplate icon={<ArrowIcon direction={'up'} />} label={'Add row above'} />,
-          onEvent() {},
+          onEvent(e) {
+            onClickCellMenuAddRowAbove({ rowColumn });
+            ref.current?.close(e);
+          },
         },
         {
           node: <MenuItemTemplate icon={<ArrowIcon direction={'down'} />} label={'Add row below'} />,
-          onEvent() {},
+          onEvent(e) {
+            onClickCellMenuAddRowBelow({ rowColumn });
+            ref.current?.close(e);
+          },
         },
         {
           node: <MenuItemTemplate icon={<ArrowIcon direction={'left'} />} label={'Add column to left'} />,
-          onEvent() {},
+          onEvent(e) {
+            onClickCellMenuAddColumnLeft({ rowColumn });
+            ref.current?.close(e);
+          },
         },
         {
           node: <MenuItemTemplate icon={<ArrowIcon direction={'right'} />} label={'Add column to right'} />,
-          onEvent() {},
+          onEvent(e) {
+            onClickCellMenuAddColumnRight({ rowColumn });
+            ref.current?.close(e);
+          },
         },
       ],
     },
@@ -79,14 +101,14 @@ export function useCellMenu(params: IUseCellMenuParams): IUseCellMenu {
         {
           node: <MenuItemTemplate icon={<HorizontalIcon />} label={'Select row'} />,
           onEvent(e) {
-            onCellMenuSelectRow({ rowColumn });
+            onClickCellMenuSelectRow({ rowColumn });
             ref.current?.close(e);
           },
         },
         {
           node: <MenuItemTemplate icon={<VerticalIcon />} label={'Select column'} />,
           onEvent(e) {
-            onCellMenuSelectColumn({ rowColumn });
+            onClickCellMenuSelectColumn({ rowColumn });
             ref.current?.close(e);
           },
         },

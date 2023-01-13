@@ -39,8 +39,12 @@ export interface IUseTableditor {
   onResizeStart: TableditorEventHandler<ResizeEvent>;
   onResizeEnd: TableditorEventHandler<ResizeEvent>;
   onCellKeyDown: TableditorEventHandler<undefined>;
-  onCellMenuSelectRow: TableditorEventHandler<TableditorEvent>;
-  onCellMenuSelectColumn: TableditorEventHandler<TableditorEvent>;
+  onClickCellMenuAddRowAbove: TableditorEventHandler<TableditorEvent>;
+  onClickCellMenuAddRowBelow: TableditorEventHandler<TableditorEvent>;
+  onClickCellMenuAddColumnLeft: TableditorEventHandler<TableditorEvent>;
+  onClickCellMenuAddColumnRight: TableditorEventHandler<TableditorEvent>;
+  onClickCellMenuSelectRow: TableditorEventHandler<TableditorEvent>;
+  onClickCellMenuSelectColumn: TableditorEventHandler<TableditorEvent>;
 }
 
 export function useTableditor(params: IUseTableditorParams): IUseTableditor {
@@ -218,6 +222,38 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     );
   }, []);
 
+  const getCellMenuAddRowAboveEventHandledCells: GetEventHandledCells<TableditorEvent> = useCallback(({ e, cells }) => {
+    if (!e) return cells;
+    const {
+      rowColumn: { row },
+    } = e;
+    return TableditorUtil.getNewRowAddedCells(cells, row);
+  }, []);
+
+  const getCellMenuAddRowBelowEventHandledCells: GetEventHandledCells<TableditorEvent> = useCallback(({ e, cells }) => {
+    if (!e) return cells;
+    const {
+      rowColumn: { row },
+    } = e;
+    return TableditorUtil.getNewRowAddedCells(cells, row + 1);
+  }, []);
+
+  const getCellMenuAddColumnLeftEventHandledCells: GetEventHandledCells<TableditorEvent> = useCallback(({ e, cells }) => {
+    if (!e) return cells;
+    const {
+      rowColumn: { column },
+    } = e;
+    return TableditorUtil.getNewColumnAddedCells(cells, column);
+  }, []);
+
+  const getCellMenuAddColumnRightEventHandledCells: GetEventHandledCells<TableditorEvent> = useCallback(({ e, cells }) => {
+    if (!e) return cells;
+    const {
+      rowColumn: { column },
+    } = e;
+    return TableditorUtil.getNewColumnAddedCells(cells, column + 1);
+  }, []);
+
   const getCellMenuSelectRowEventHandledCells: GetEventHandledCells<TableditorEvent> = useCallback(({ e, cells }) => {
     if (!e) return cells;
 
@@ -297,14 +333,42 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     }, 0);
   }, []);
 
-  const onCellMenuSelectRow: TableditorEventHandler<TableditorEvent> = useCallback(
+  const onClickCellMenuAddRowAbove: TableditorEventHandler<TableditorEvent> = useCallback(
+    (e) => {
+      setCells((cells) => getCellMenuAddRowAboveEventHandledCells({ e, cells }));
+    },
+    [getCellMenuAddRowAboveEventHandledCells],
+  );
+
+  const onClickCellMenuAddRowBelow: TableditorEventHandler<TableditorEvent> = useCallback(
+    (e) => {
+      setCells((cells) => getCellMenuAddRowBelowEventHandledCells({ e, cells }));
+    },
+    [getCellMenuAddRowBelowEventHandledCells],
+  );
+
+  const onClickCellMenuAddColumnLeft: TableditorEventHandler<TableditorEvent> = useCallback(
+    (e) => {
+      setCells((cells) => getCellMenuAddColumnLeftEventHandledCells({ e, cells }));
+    },
+    [getCellMenuAddColumnLeftEventHandledCells],
+  );
+
+  const onClickCellMenuAddColumnRight: TableditorEventHandler<TableditorEvent> = useCallback(
+    (e) => {
+      setCells((cells) => getCellMenuAddColumnRightEventHandledCells({ e, cells }));
+    },
+    [getCellMenuAddColumnRightEventHandledCells],
+  );
+
+  const onClickCellMenuSelectRow: TableditorEventHandler<TableditorEvent> = useCallback(
     (e) => {
       setCells((cells) => getCellMenuSelectRowEventHandledCells({ e, cells }));
     },
     [getCellMenuSelectRowEventHandledCells],
   );
 
-  const onCellMenuSelectColumn: TableditorEventHandler<TableditorEvent> = useCallback(
+  const onClickCellMenuSelectColumn: TableditorEventHandler<TableditorEvent> = useCallback(
     (e) => {
       setCells((cells) => getCellMenuSelectColumnEventHandledCells({ e, cells }));
     },
@@ -408,7 +472,11 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     onResizeStart,
     onResizeEnd,
     onCellKeyDown,
-    onCellMenuSelectRow,
-    onCellMenuSelectColumn,
+    onClickCellMenuAddRowAbove,
+    onClickCellMenuAddRowBelow,
+    onClickCellMenuAddColumnLeft,
+    onClickCellMenuAddColumnRight,
+    onClickCellMenuSelectRow,
+    onClickCellMenuSelectColumn,
   };
 }

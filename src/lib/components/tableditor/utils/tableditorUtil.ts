@@ -78,24 +78,38 @@ export namespace TableditorUtil {
     };
   }
 
-  export function addRow(originCells: RenderingCellData[][]): RenderingCellData[][] {
-    const cells = [...originCells];
+  /**
+   * Add last row
+   * @param cells
+   */
+  export function addRow(cells: RenderingCellData[][]): RenderingCellData[][] {
+    return [...cells, getNewRow(cells)];
+  }
 
+  /**
+   * Add last column
+   * @param cells
+   */
+  export function addColumn(cells: RenderingCellData[][]): RenderingCellData[][] {
+    return cells.map((row) => [...row, cellToInitialRenderingCell(DEFAULT_CELL)]);
+  }
+
+  export function getNewRowAddedCells(cells: RenderingCellData[][], index: number): RenderingCellData[][] {
+    return [...cells.slice(0, index), getNewRow(cells), ...cells.slice(index)];
+  }
+
+  export function getNewColumnAddedCells(cells: RenderingCellData[][], index: number): RenderingCellData[][] {
+    return cells.map((row) => [...row.slice(0, index), cellToInitialRenderingCell(DEFAULT_CELL), ...row.slice(index)]);
+  }
+
+  function getNewRow(cells: RenderingCellData[][]): RenderingCellData[] {
     const firstRow = cells[0];
     const columns = firstRow.length;
-    const row = Array.from({ length: columns }, (_, i) =>
+    return Array.from({ length: columns }, (_, i) =>
       cellToInitialRenderingCell({
         ...DEFAULT_CELL,
         width: firstRow[i].width,
       }),
     );
-    cells.push(row);
-
-    return cells;
-  }
-
-  export function addColumn(originCells: RenderingCellData[][]): RenderingCellData[][] {
-    const cells = [...originCells];
-    return cells.map((row) => [...row, cellToInitialRenderingCell(DEFAULT_CELL)]);
   }
 }

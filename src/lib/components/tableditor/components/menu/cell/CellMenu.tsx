@@ -4,7 +4,18 @@ import { MenuRef } from '@components/menu/defines';
 import { useCellMenu } from '@components/tableditor/components/menu/cell/useCellMenu';
 import { CellProps } from '@components/tableditor/components/cell';
 
-export interface CellMenuProps extends Pick<CellProps, 'row' | 'column' | 'onCellMenuSelectRow' | 'onCellMenuSelectColumn'> {}
+export interface CellMenuProps
+  extends Pick<
+    CellProps,
+    | 'row'
+    | 'column'
+    | 'onClickCellMenuAddRowAbove'
+    | 'onClickCellMenuAddRowBelow'
+    | 'onClickCellMenuAddColumnLeft'
+    | 'onClickCellMenuAddColumnRight'
+    | 'onClickCellMenuSelectRow'
+    | 'onClickCellMenuSelectColumn'
+  > {}
 
 export const CellMenu = forwardRef<MenuRef, CellMenuProps>((props, ref) => {
   const {} = props;

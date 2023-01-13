@@ -1,14 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import {
-  CellFocusEvent,
-  TableditorEventHandler,
-  CellHoverEvent,
-  CellChangeEvent,
-  ResizerHoverEvent,
-  ResizeEvent,
-  RenderingCellData,
-  TableditorEvent,
-} from '@components/tableditor/defines';
+import { RenderingCellData } from '@components/tableditor/defines';
 import { useCell } from '@components/tableditor/components/cell/hooks/useCell';
 import React from 'react';
 import _ from 'lodash';
@@ -16,24 +7,42 @@ import { TableditorStyle } from '@components/tableditor/styles';
 import { ThreeDotsVerticalIcon } from '@icons/ThreeDotsVerticalIcon';
 import { Color } from '@defines/constants';
 import { CellMenu } from '@components/tableditor/components/menu/cell';
+import { IUseTableditor } from '@components/tableditor/hooks/useTableditor';
 
-export interface CellProps {
+export interface CellProps
+  extends Pick<
+    IUseTableditor,
+    | 'onCellHover'
+    | 'onCellFocus'
+    | 'onContentChange'
+    | 'onResizerHover'
+    | 'onResizeStart'
+    | 'onResizeEnd'
+    | 'onCellKeyDown'
+    | 'onClickCellMenuAddRowAbove'
+    | 'onClickCellMenuAddRowBelow'
+    | 'onClickCellMenuAddColumnLeft'
+    | 'onClickCellMenuAddColumnRight'
+    | 'onClickCellMenuSelectRow'
+    | 'onClickCellMenuSelectColumn'
+  > {
   cell: RenderingCellData;
   row: number;
   column: number;
-  onCellHover: TableditorEventHandler<CellHoverEvent>;
-  onCellFocus: TableditorEventHandler<CellFocusEvent>;
-  onContentChange: TableditorEventHandler<CellChangeEvent>;
-  onResizerHover: TableditorEventHandler<ResizerHoverEvent>;
-  onResizeStart: TableditorEventHandler<ResizeEvent>;
-  onResizeEnd: TableditorEventHandler<ResizeEvent>;
-  onCellKeyDown: TableditorEventHandler<undefined>;
-  onCellMenuSelectRow: TableditorEventHandler<TableditorEvent>;
-  onCellMenuSelectColumn: TableditorEventHandler<TableditorEvent>;
 }
 
 function Cell(props: CellProps) {
-  const { cell, row, column, onCellMenuSelectRow, onCellMenuSelectColumn } = props;
+  const {
+    cell,
+    row,
+    column,
+    onClickCellMenuAddRowAbove,
+    onClickCellMenuAddRowBelow,
+    onClickCellMenuAddColumnLeft,
+    onClickCellMenuAddColumnRight,
+    onClickCellMenuSelectRow,
+    onClickCellMenuSelectColumn,
+  } = props;
   const {
     menuRef,
     resizerRef,
@@ -83,7 +92,17 @@ function Cell(props: CellProps) {
         <button onClick={handleMoreOptionsClick} css={TableditorStyle.moreOptions()} className={'more-options'}>
           <ThreeDotsVerticalIcon width={14} height={14} color={Color.GRAY_6} />
         </button>
-        <CellMenu ref={menuRef} row={row} column={column} onCellMenuSelectRow={onCellMenuSelectRow} onCellMenuSelectColumn={onCellMenuSelectColumn} />
+        <CellMenu
+          ref={menuRef}
+          row={row}
+          column={column}
+          onClickCellMenuAddRowAbove={onClickCellMenuAddRowAbove}
+          onClickCellMenuAddRowBelow={onClickCellMenuAddRowBelow}
+          onClickCellMenuAddColumnLeft={onClickCellMenuAddColumnLeft}
+          onClickCellMenuAddColumnRight={onClickCellMenuAddColumnRight}
+          onClickCellMenuSelectRow={onClickCellMenuSelectRow}
+          onClickCellMenuSelectColumn={onClickCellMenuSelectColumn}
+        />
 
         {/*highlighting box*/}
         <div
