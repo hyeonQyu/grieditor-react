@@ -19,6 +19,7 @@ export interface CellProps
     | 'onResizeStart'
     | 'onResizeEnd'
     | 'onCellKeyDown'
+    | 'onClickCellMenuClearContent'
     | 'onClickCellMenuAddRowAbove'
     | 'onClickCellMenuAddRowBelow'
     | 'onClickCellMenuAddColumnLeft'
@@ -36,6 +37,7 @@ function Cell(props: CellProps) {
     cell,
     row,
     column,
+    onClickCellMenuClearContent,
     onClickCellMenuAddRowAbove,
     onClickCellMenuAddRowBelow,
     onClickCellMenuAddColumnLeft,
@@ -43,6 +45,7 @@ function Cell(props: CellProps) {
     onClickCellMenuSelectRow,
     onClickCellMenuSelectColumn,
   } = props;
+
   const {
     menuRef,
     resizerRef,
@@ -60,6 +63,7 @@ function Cell(props: CellProps) {
     handleResizerPreventDrag,
     handleResizerDragEnd,
   } = useCell(props);
+
   const { width = 0, content, backgroundColor, font, resizerHovered, isResizing, contentEditableRef, selected } = cell;
   console.log(props.row, props.column);
 
@@ -96,6 +100,7 @@ function Cell(props: CellProps) {
           ref={menuRef}
           row={row}
           column={column}
+          onClickCellMenuClearContent={onClickCellMenuClearContent}
           onClickCellMenuAddRowAbove={onClickCellMenuAddRowAbove}
           onClickCellMenuAddRowBelow={onClickCellMenuAddRowBelow}
           onClickCellMenuAddColumnLeft={onClickCellMenuAddColumnLeft}

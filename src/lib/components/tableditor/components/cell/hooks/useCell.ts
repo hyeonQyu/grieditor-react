@@ -37,7 +37,7 @@ export interface IUseCell {
 
 export function useCell(params: IUseCellParams): IUseCell {
   const {
-    cell: { focused, isResizing, contentEditableRef, caretOffset },
+    cell: { content, focused, isResizing, contentEditableRef, caretOffset },
     row,
     column,
     onCellHover,
@@ -52,7 +52,7 @@ export function useCell(params: IUseCellParams): IUseCell {
   const menuRef = useRef<MenuRef>(null);
   const resizerRef = useRef<HTMLDivElement>(null);
 
-  const [contentInnerText, setContentInnerText] = useState<string>('');
+  const [contentInnerText, setContentInnerText] = useState<string>(content);
 
   useEffect(() => {
     if (!focused) {
@@ -137,9 +137,13 @@ export function useCell(params: IUseCellParams): IUseCell {
     setContentInnerText((e.target as HTMLDivElement).innerText);
   }, []);
 
-  const handleMoreOptionsClick: MouseEventHandler<HTMLButtonElement> = useCallback((e) => {
-    menuRef.current?.toggle(e);
-  }, []);
+  const handleMoreOptionsClick: MouseEventHandler<HTMLButtonElement> = useCallback(
+    (e) => {
+      onContentChange({ rowColumn: { row, column }, content: contentEditableRef.current?.innerText ?? '' });
+      menuRef.current?.toggle(e);
+    },
+    [row, column, contentEditableRef.current],
+  );
 
   const handleResizerMouseEnter: MouseEventHandler<HTMLDivElement> = useCallback(() => {
     onResizerHover({ rowColumn: { row, column } });

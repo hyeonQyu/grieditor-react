@@ -74,13 +74,12 @@ export namespace TableditorEventUtil {
     } = e;
 
     // Content not changed
-    if (cells[row][column].content === content) {
-      return cells;
-    }
+    if (cells[row][column].content === content) return cells;
 
-    return cells.map((rows, rowIndex) => {
-      return rows.map((cell, columnIndex) => {
-        if (row === rowIndex && column === columnIndex) {
+    return cells.map((rowCells, rowIndex) => {
+      if (row !== rowIndex) return rowCells;
+      return rowCells.map((cell, columnIndex) => {
+        if (column === columnIndex) {
           return {
             ...cell,
             content,
@@ -163,6 +162,25 @@ export namespace TableditorEventUtil {
         return cell;
       }),
     );
+  };
+
+  export const getCellMenuClearContentEventHandledCells: GetEventHandledCells<TableditorEvent> = ({ e, cells }) => {
+    if (!e) return cells;
+    const {
+      rowColumn: { row, column },
+    } = e;
+
+    return cells.map((rowCells, rowIndex) => {
+      if (row !== rowIndex) return rowCells;
+      return rowCells.map((cell, columnIndex) => {
+        if (column !== columnIndex) return cell;
+        cell.contentEditableRef.current?.focus();
+        return {
+          ...cell,
+          content: '',
+        };
+      });
+    });
   };
 
   export const getCellMenuAddRowAboveEventHandledCells: GetEventHandledCells<TableditorEvent> = ({ e, cells }) => {

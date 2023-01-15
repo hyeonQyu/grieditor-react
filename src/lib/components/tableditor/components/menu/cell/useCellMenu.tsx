@@ -19,6 +19,7 @@ export function useCellMenu(params: IUseCellMenuParams): IUseCellMenu {
     ref,
     row,
     column,
+    onClickCellMenuClearContent,
     onClickCellMenuAddRowAbove,
     onClickCellMenuAddRowBelow,
     onClickCellMenuAddColumnLeft,
@@ -58,7 +59,10 @@ export function useCellMenu(params: IUseCellMenuParams): IUseCellMenu {
         },
         {
           node: <MenuItemTemplate icon={<EraserIcon />} label={'Clear content'} />,
-          onEvent() {},
+          onEvent(e) {
+            onClickCellMenuClearContent({ rowColumn });
+            ref.current?.close(e);
+          },
         },
       ],
     },

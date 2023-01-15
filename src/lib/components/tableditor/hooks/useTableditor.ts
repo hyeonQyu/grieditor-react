@@ -38,6 +38,7 @@ export interface IUseTableditor {
   onResizeStart: TableditorEventHandler<ResizeEvent>;
   onResizeEnd: TableditorEventHandler<ResizeEvent>;
   onCellKeyDown: TableditorEventHandler<undefined>;
+  onClickCellMenuClearContent: TableditorEventHandler<TableditorEvent>;
   onClickCellMenuAddRowAbove: TableditorEventHandler<TableditorEvent>;
   onClickCellMenuAddRowBelow: TableditorEventHandler<TableditorEvent>;
   onClickCellMenuAddColumnLeft: TableditorEventHandler<TableditorEvent>;
@@ -118,6 +119,14 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
       }));
     }, 0);
   }, []);
+
+  const onClickCellMenuClearContent: TableditorEventHandler<TableditorEvent> = useCallback(
+    (e) => {
+      if (!e) return;
+      setCells((cells) => TableditorEventUtil.getCellMenuClearContentEventHandledCells({ e, cells }));
+    },
+    [onContentChange],
+  );
 
   const onClickCellMenuAddRowAbove: TableditorEventHandler<TableditorEvent> = useCallback((e) => {
     setCells((cells) => TableditorEventUtil.getCellMenuAddRowAboveEventHandledCells({ e, cells }));
@@ -240,6 +249,7 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     onResizeStart,
     onResizeEnd,
     onCellKeyDown,
+    onClickCellMenuClearContent,
     onClickCellMenuAddRowAbove,
     onClickCellMenuAddRowBelow,
     onClickCellMenuAddColumnLeft,
