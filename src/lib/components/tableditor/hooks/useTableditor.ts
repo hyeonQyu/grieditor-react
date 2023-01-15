@@ -198,7 +198,12 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     } = e;
 
     return cells.map((rows) =>
-      rows.map((cell, columnIndex) => {
+      rows.map((originCell, columnIndex) => {
+        const cell = {
+          ...originCell,
+          selected: false,
+        };
+
         if (columnIndex === column + 1) {
           return {
             ...cell,
