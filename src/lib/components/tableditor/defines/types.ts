@@ -8,7 +8,7 @@ export interface CellData {
   font: Font;
 }
 
-export interface RenderingCellData extends CellData {
+export interface CellState {
   focused: boolean;
   resizerHovered: boolean;
   isResizing: boolean;
@@ -16,6 +16,8 @@ export interface RenderingCellData extends CellData {
   caretOffset: number;
   selected: boolean;
 }
+
+export interface RenderingCellData extends CellData, CellState {}
 
 export interface Font {
   color: TableditorColor;
