@@ -19,6 +19,8 @@ export interface CellProps
     | 'onResizeStart'
     | 'onResizeEnd'
     | 'onCellKeyDown'
+    | 'onClickCellMenuChangeBackgroundColor'
+    | 'onClickCellMenuChangeFontColor'
     | 'onClickCellMenuClearContent'
     | 'onClickCellMenuAddRowAbove'
     | 'onClickCellMenuAddRowBelow'
@@ -37,6 +39,8 @@ function Cell(props: CellProps) {
     cell,
     row,
     column,
+    onClickCellMenuChangeBackgroundColor,
+    onClickCellMenuChangeFontColor,
     onClickCellMenuClearContent,
     onClickCellMenuAddRowAbove,
     onClickCellMenuAddRowBelow,
@@ -68,7 +72,7 @@ function Cell(props: CellProps) {
   console.log(props.row, props.column);
 
   return (
-    <td onMouseEnter={handleTableDataHover} onClick={handleTableDataClick} css={TableditorStyle.tableData()} style={{ width }}>
+    <td onMouseEnter={handleTableDataHover} onClick={handleTableDataClick} css={TableditorStyle.tableData(backgroundColor, font)} style={{ width }}>
       <div
         style={{
           width,
@@ -84,10 +88,6 @@ function Cell(props: CellProps) {
           onKeyDown={handleContentEditableKeyDown}
           onInput={handleContentEditableInput}
           css={TableditorStyle.content(isResizing, Boolean(contentInnerText || content))}
-          style={{
-            backgroundColor,
-            color: font.color,
-          }}
         >
           {content}
         </div>
@@ -100,6 +100,8 @@ function Cell(props: CellProps) {
           ref={menuRef}
           row={row}
           column={column}
+          onClickCellMenuChangeBackgroundColor={onClickCellMenuChangeBackgroundColor}
+          onClickCellMenuChangeFontColor={onClickCellMenuChangeFontColor}
           onClickCellMenuClearContent={onClickCellMenuClearContent}
           onClickCellMenuAddRowAbove={onClickCellMenuAddRowAbove}
           onClickCellMenuAddRowBelow={onClickCellMenuAddRowBelow}

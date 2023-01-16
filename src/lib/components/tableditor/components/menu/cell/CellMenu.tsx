@@ -9,6 +9,8 @@ export interface CellMenuProps
     CellProps,
     | 'row'
     | 'column'
+    | 'onClickCellMenuChangeBackgroundColor'
+    | 'onClickCellMenuChangeFontColor'
     | 'onClickCellMenuClearContent'
     | 'onClickCellMenuAddRowAbove'
     | 'onClickCellMenuAddRowBelow'

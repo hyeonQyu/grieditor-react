@@ -1,11 +1,12 @@
 import {
   CELL_MIN_WIDTH,
-  CellChangeEvent,
+  CellContentChangeEvent,
   CellFocusEvent,
   GetEventHandledCells,
-  ResizeEvent,
+  CellResizeEvent,
   ResizerHoverEvent,
   TableditorEvent,
+  CellColorChangeEvent,
 } from '@components/tableditor/defines';
 import { TableditorUtil } from '@components/tableditor/utils/tableditorUtil';
 
@@ -65,29 +66,19 @@ export namespace TableditorEventUtil {
     });
   };
 
-  export const getCellChangeEventHandledCells: GetEventHandledCells<CellChangeEvent> = ({ e, cells }) => {
+  export const getCellChangeEventHandledCells: GetEventHandledCells<CellContentChangeEvent> = ({ e, cells }) => {
     if (!e) return cells;
 
-    const {
-      rowColumn: { row, column },
-      content,
-    } = e;
+    const { rowColumn, content } = e;
+    const { row, column } = rowColumn;
 
     // Content not changed
     if (cells[row][column].content === content) return cells;
 
-    return cells.map((rowCells, rowIndex) => {
-      if (row !== rowIndex) return rowCells;
-      return rowCells.map((cell, columnIndex) => {
-        if (column === columnIndex) {
-          return {
-            ...cell,
-            content,
-          };
-        }
-        return cell;
-      });
-    });
+    return TableditorUtil.getSpecificCellChangedCells(cells, rowColumn, (cell) => ({
+      ...cell,
+      content,
+    }));
   };
 
   export const getResizerHoverEventHandledCells: GetEventHandledCells<ResizerHoverEvent> = ({ e, cells }) => {
@@ -116,7 +107,7 @@ export namespace TableditorEventUtil {
     });
   };
 
-  export const getResizeEventHandledCells: GetEventHandledCells<ResizeEvent> = ({ e, cells }) => {
+  export const getResizeEventHandledCells: GetEventHandledCells<CellResizeEvent> = ({ e, cells }) => {
     if (!e) {
       return cells.map((rows) => {
         return rows.map((cell) => {
@@ -164,22 +155,39 @@ export namespace TableditorEventUtil {
     );
   };
 
+  export const getCellMenuChangeBackgroundColorEventHandledCells: GetEventHandledCells<CellColorChangeEvent> = ({ e, cells }) => {
+    if (!e) return cells;
+    const { rowColumn, color } = e;
+
+    return TableditorUtil.getSpecificCellChangedCells(cells, rowColumn, (cell) => ({
+      ...cell,
+      backgroundColor: color,
+    }));
+  };
+
+  export const getCellMenuChangeFontColorEventHandledCells: GetEventHandledCells<CellColorChangeEvent> = ({ e, cells }) => {
+    if (!e) return cells;
+    const { rowColumn, color } = e;
+
+    return TableditorUtil.getSpecificCellChangedCells(cells, rowColumn, (cell) => ({
+      ...cell,
+      font: {
+        ...cell.font,
+        color,
+      },
+    }));
+  };
+
   export const getCellMenuClearContentEventHandledCells: GetEventHandledCells<TableditorEvent> = ({ e, cells }) => {
     if (!e) return cells;
-    const {
-      rowColumn: { row, column },
-    } = e;
+    const { rowColumn } = e;
 
-    return cells.map((rowCells, rowIndex) => {
-      if (row !== rowIndex) return rowCells;
-      return rowCells.map((cell, columnIndex) => {
-        if (column !== columnIndex) return cell;
-        cell.contentEditableRef.current?.focus();
-        return {
-          ...cell,
-          content: '',
-        };
-      });
+    return TableditorUtil.getSpecificCellChangedCells(cells, rowColumn, (cell) => {
+      cell.contentEditableRef.current?.focus();
+      return {
+        ...cell,
+        content: '',
+      };
     });
   };
 

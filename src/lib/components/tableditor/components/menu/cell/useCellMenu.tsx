@@ -19,6 +19,8 @@ export function useCellMenu(params: IUseCellMenuParams): IUseCellMenu {
     ref,
     row,
     column,
+    onClickCellMenuChangeBackgroundColor,
+    onClickCellMenuChangeFontColor,
     onClickCellMenuClearContent,
     onClickCellMenuAddRowAbove,
     onClickCellMenuAddRowBelow,
@@ -38,9 +40,11 @@ export function useCellMenu(params: IUseCellMenuParams): IUseCellMenu {
           sections: [
             {
               label: 'Background colors',
-              items: Object.keys(BACKGROUND_COLOR_MAP).map((colorName) => ({
-                node: <MenuColorItemTemplate colorName={colorName as TableditorColorName} type={'background'} />,
-                onEvent() {},
+              items: (Object.keys(BACKGROUND_COLOR_MAP) as TableditorColorName[]).map((colorName) => ({
+                node: <MenuColorItemTemplate colorName={colorName} type={'background'} />,
+                onEvent() {
+                  onClickCellMenuChangeBackgroundColor({ rowColumn, color: BACKGROUND_COLOR_MAP[colorName] });
+                },
               })),
             },
           ],
@@ -50,9 +54,11 @@ export function useCellMenu(params: IUseCellMenuParams): IUseCellMenu {
           sections: [
             {
               label: 'Font colors',
-              items: Object.keys(FONT_COLOR_MAP).map((colorName) => ({
-                node: <MenuColorItemTemplate colorName={colorName as TableditorColorName} type={'font'} />,
-                onEvent() {},
+              items: (Object.keys(FONT_COLOR_MAP) as TableditorColorName[]).map((colorName) => ({
+                node: <MenuColorItemTemplate colorName={colorName} type={'font'} />,
+                onEvent() {
+                  onClickCellMenuChangeFontColor({ rowColumn, color: FONT_COLOR_MAP[colorName] });
+                },
               })),
             },
           ],

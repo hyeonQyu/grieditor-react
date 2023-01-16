@@ -1,4 +1,4 @@
-import { CellData, CellHoverEvent, DEFAULT_CELL, RenderingCellData, ResizeEvent } from '@components/tableditor/defines';
+import { CellData, CellHoverEvent, DEFAULT_CELL, RenderingCellData, CellResizeEvent, RowColumn } from '@components/tableditor/defines';
 import { Direction } from '@defines/types';
 import { createRef } from 'react';
 
@@ -56,7 +56,7 @@ export namespace TableditorUtil {
   export function getTableExtenderVisible(
     cells: CellData[][],
     cellHoverEvent?: CellHoverEvent,
-    resizeEvent?: ResizeEvent,
+    resizeEvent?: CellResizeEvent,
   ): { rowAddExtenderVisible: boolean; columnAddExtenderVisible: boolean } {
     if (!cellHoverEvent || resizeEvent) {
       return {
@@ -94,12 +94,43 @@ export namespace TableditorUtil {
     return cells.map((row) => [...row, cellToInitialRenderingCell(DEFAULT_CELL)]);
   }
 
+  /**
+   * Return cells new row added
+   * @param cells Source cells
+   * @param index Index at which the new row will be inserted
+   */
   export function getNewRowAddedCells(cells: RenderingCellData[][], index: number): RenderingCellData[][] {
     return [...cells.slice(0, index), getNewRow(cells), ...cells.slice(index)];
   }
 
+  /**
+   * Return cells new column added
+   * @param cells Source cells
+   * @param index Index at which the new column will be inserted
+   */
   export function getNewColumnAddedCells(cells: RenderingCellData[][], index: number): RenderingCellData[][] {
     return cells.map((row) => [...row.slice(0, index), cellToInitialRenderingCell(DEFAULT_CELL), ...row.slice(index)]);
+  }
+
+  /**
+   * Returns cells in which only cells corresponding to a specific row or column have been changed
+   * @param cells Source cells
+   * @param rowColumn Row, column of the cell to be changed
+   * @param getChangedCell Callback that changes and returns the corresponding cell
+   */
+  export function getSpecificCellChangedCells(
+    cells: RenderingCellData[][],
+    rowColumn: RowColumn,
+    getChangedCell: (cell: RenderingCellData) => RenderingCellData,
+  ) {
+    const { row, column } = rowColumn;
+    return cells.map((rowCells, rowIndex) => {
+      if (row !== rowIndex) return rowCells;
+      return rowCells.map((cell, columnIndex) => {
+        if (column !== columnIndex) return cell;
+        return getChangedCell(cell);
+      });
+    });
   }
 
   function getNewRow(cells: RenderingCellData[][]): RenderingCellData[] {

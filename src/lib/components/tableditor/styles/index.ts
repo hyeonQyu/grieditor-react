@@ -1,9 +1,17 @@
-import { MIN_TABLE_EXTENDER_SIZE, ResizeEvent, RESIZER_WIDTH, TABLE_EXTENDER_MARGIN } from '@components/tableditor/defines';
+import {
+  MIN_TABLE_EXTENDER_SIZE,
+  CellResizeEvent,
+  RESIZER_WIDTH,
+  TABLE_EXTENDER_MARGIN,
+  TableditorColor,
+  Font,
+  COLOR_MAP,
+} from '@components/tableditor/defines';
 import { css } from '@emotion/react';
 import { Color, ZIndex } from '@defines/index';
 
 export namespace TableditorStyle {
-  export const container = (resizeEvent?: ResizeEvent) => css`
+  export const container = (resizeEvent?: CellResizeEvent) => css`
     overflow-x: auto;
     overflow-y: hidden;
     padding: 0 0 ${MIN_TABLE_EXTENDER_SIZE + TABLE_EXTENDER_MARGIN}px;
@@ -24,11 +32,13 @@ export namespace TableditorStyle {
     }
   `;
 
-  export const tableData = () => css`
+  export const tableData = (backgroundColor: TableditorColor, { color }: Font) => css`
     border: 1px solid ${Color.GRAY_1};
     position: relative;
     white-space: pre-wrap;
     word-break: break-word;
+    background-color: ${COLOR_MAP[backgroundColor]};
+    color: ${COLOR_MAP[color]};
 
     :hover .highlighting {
       border: 1px solid ${Color.CYAN_0};

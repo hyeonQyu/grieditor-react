@@ -4,14 +4,15 @@ import {
   CellFocusEvent,
   CellHoverEvent,
   ResizerHoverEvent,
-  ResizeEvent,
-  CellChangeEvent,
+  CellResizeEvent,
+  CellContentChangeEvent,
   TableditorEventHandler,
   RenderingCellData,
   TableExtender,
   DEFAULT_TABLE_EXTENDER,
   DEFAULT_CELL,
   TableditorEvent,
+  CellColorChangeEvent,
 } from '@components/tableditor/defines';
 import useClickOutside from '@hooks/useClickOutside';
 import { TableditorUtil } from '@components/tableditor/utils/tableditorUtil';
@@ -23,7 +24,7 @@ export interface IUseTableditor {
   tableRef: MutableRefObject<HTMLTableElement | null>;
   cells: RenderingCellData[][];
   cellHoverEvent: CellHoverEvent | undefined;
-  resizeEvent: ResizeEvent | undefined;
+  resizeEvent: CellResizeEvent | undefined;
   rowAddExtender: TableExtender;
   columnAddExtender: TableExtender;
   handleMouseMove: MouseEventHandler<HTMLDivElement>;
@@ -33,11 +34,13 @@ export interface IUseTableditor {
   handleColumnAddClick: MouseEventHandler<HTMLButtonElement>;
   onCellHover: TableditorEventHandler<CellHoverEvent>;
   onCellFocus: TableditorEventHandler<CellFocusEvent>;
-  onContentChange: TableditorEventHandler<CellChangeEvent>;
+  onContentChange: TableditorEventHandler<CellContentChangeEvent>;
   onResizerHover: TableditorEventHandler<ResizerHoverEvent>;
-  onResizeStart: TableditorEventHandler<ResizeEvent>;
-  onResizeEnd: TableditorEventHandler<ResizeEvent>;
+  onResizeStart: TableditorEventHandler<CellResizeEvent>;
+  onResizeEnd: TableditorEventHandler<CellResizeEvent>;
   onCellKeyDown: TableditorEventHandler<undefined>;
+  onClickCellMenuChangeBackgroundColor: TableditorEventHandler<CellColorChangeEvent>;
+  onClickCellMenuChangeFontColor: TableditorEventHandler<CellColorChangeEvent>;
   onClickCellMenuClearContent: TableditorEventHandler<TableditorEvent>;
   onClickCellMenuAddRowAbove: TableditorEventHandler<TableditorEvent>;
   onClickCellMenuAddRowBelow: TableditorEventHandler<TableditorEvent>;
@@ -58,7 +61,7 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
   const [cells, setCells] = useState<RenderingCellData[][]>(TableditorUtil.cellsToInitialRenderingCells(initialCells));
 
   const [cellHoverEvent, setCellHoverEvent] = useState<CellHoverEvent>();
-  const [resizeEvent, setResizeEvent] = useState<ResizeEvent>();
+  const [resizeEvent, setResizeEvent] = useState<CellResizeEvent>();
 
   const [isMouseDown, setIsMouseDown] = useState(false);
 
@@ -82,7 +85,7 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     setCells((cells) => TableditorEventUtil.getCellFocusEventHandledCells({ e, cells }));
   }, []);
 
-  const onContentChange: TableditorEventHandler<CellChangeEvent> = useCallback((e) => {
+  const onContentChange: TableditorEventHandler<CellContentChangeEvent> = useCallback((e) => {
     setCells((cells) => TableditorEventUtil.getCellChangeEventHandledCells({ e, cells }));
   }, []);
 
@@ -90,17 +93,17 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     setCells((cells) => TableditorEventUtil.getResizerHoverEventHandledCells({ e, cells }));
   }, []);
 
-  const onResizeStart: TableditorEventHandler<ResizeEvent> = useCallback((e) => {
+  const onResizeStart: TableditorEventHandler<CellResizeEvent> = useCallback((e) => {
     setResizeEvent(e);
   }, []);
 
-  const onResizeEnd: TableditorEventHandler<ResizeEvent> = useCallback(() => {
+  const onResizeEnd: TableditorEventHandler<CellResizeEvent> = useCallback(() => {
     setTimeout(() => {
       setResizeEvent(undefined);
     }, 0);
   }, []);
 
-  const onResize: TableditorEventHandler<ResizeEvent> = useCallback((e) => {
+  const onResize: TableditorEventHandler<CellResizeEvent> = useCallback((e) => {
     setResizeEvent(e);
   }, []);
 
@@ -120,9 +123,16 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     }, 0);
   }, []);
 
+  const onClickCellMenuChangeBackgroundColor: TableditorEventHandler<CellColorChangeEvent> = useCallback((e) => {
+    setCells((cells) => TableditorEventUtil.getCellMenuChangeBackgroundColorEventHandledCells({ e, cells }));
+  }, []);
+
+  const onClickCellMenuChangeFontColor: TableditorEventHandler<CellColorChangeEvent> = useCallback((e) => {
+    setCells((cells) => TableditorEventUtil.getCellMenuChangeFontColorEventHandledCells({ e, cells }));
+  }, []);
+
   const onClickCellMenuClearContent: TableditorEventHandler<TableditorEvent> = useCallback(
     (e) => {
-      if (!e) return;
       setCells((cells) => TableditorEventUtil.getCellMenuClearContentEventHandledCells({ e, cells }));
     },
     [onContentChange],
@@ -249,6 +259,8 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
     onResizeStart,
     onResizeEnd,
     onCellKeyDown,
+    onClickCellMenuChangeBackgroundColor,
+    onClickCellMenuChangeFontColor,
     onClickCellMenuClearContent,
     onClickCellMenuAddRowAbove,
     onClickCellMenuAddRowBelow,

@@ -1,4 +1,4 @@
-import { RowColumn } from '@components/tableditor/defines/index';
+import { RowColumn, TableditorColor } from '@components/tableditor/defines/index';
 import { CaretPosition, Direction } from '@defines/types';
 
 export type TableditorEvent =
@@ -14,15 +14,19 @@ export type CellFocusEvent = {
   direction?: Direction;
 } & TableditorEvent;
 
-export type CellChangeEvent = {
+export type CellContentChangeEvent = {
   content: string;
 } & TableditorEvent;
 
 export type ResizerHoverEvent = {} & TableditorEvent;
 
-export type ResizeEvent = {
+export type CellResizeEvent = {
   pivotX?: number;
   mouseX?: number;
+} & TableditorEvent;
+
+export type CellColorChangeEvent = {
+  color: TableditorColor;
 } & TableditorEvent;
 
 export type TableditorEventHandler<E extends TableditorEvent> = (e?: E) => void;
