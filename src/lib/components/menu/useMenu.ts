@@ -1,11 +1,11 @@
-import { MutableRefObject, Ref, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { ForwardedRef, MutableRefObject, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import useClickOutside from '@hooks/useClickOutside';
 import useAnimationMount from '@hooks/useAnimationMount';
 import { MenuProps } from '@components/menu';
 import { MenuPosition, MenuRef } from '@components/menu/defines';
 
 export interface IUseMenuParams extends MenuProps {
-  ref: Ref<MenuRef>;
+  ref: ForwardedRef<MenuRef>;
 }
 
 export interface IUseMenu {
@@ -18,7 +18,7 @@ export interface IUseMenu {
 }
 
 export function useMenu(params: IUseMenuParams): IUseMenu {
-  const { ref, onOpen, onClose } = params;
+  const { ref, onOpen, onClose, onToggle } = params;
 
   const appearAnimationDuration = 0.2;
   const disappearAnimationDuration = 0.2;
@@ -40,15 +40,6 @@ export function useMenu(params: IUseMenuParams): IUseMenu {
     display: opened,
     disappearAnimationDuration,
   });
-
-  const handleOpen = (target: Element) => {
-    onOpen?.();
-    menuToggleTargetRectRef.current = target.getBoundingClientRect();
-  };
-
-  const handleClose = () => {
-    onClose?.();
-  };
 
   useEffect(() => {
     if (!mounted) return;
@@ -76,24 +67,24 @@ export function useMenu(params: IUseMenuParams): IUseMenu {
   }, [mounted]);
 
   useImperativeHandle<MenuRef, MenuRef>(ref, () => ({
-    opened,
     open(e) {
       setOpened(true);
-      handleOpen(e.target as Element);
+      menuToggleTargetRectRef.current = (e.target as Element).getBoundingClientRect();
     },
     close() {
       setOpened(false);
-      handleClose();
     },
     toggle(e) {
-      setOpened((prev) => {
-        const next = !prev;
-        next ? handleOpen(e.target as Element) : handleClose();
-        return next;
-      });
+      setOpened((prev) => !prev);
+      menuToggleTargetRectRef.current = (e.target as Element).getBoundingClientRect();
     },
     element: menuRef.current,
   }));
+
+  useEffect(() => {
+    opened ? onOpen?.() : onClose?.();
+    onToggle?.(opened);
+  }, [opened]);
 
   return {
     menuRef,

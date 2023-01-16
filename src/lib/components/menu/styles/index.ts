@@ -39,10 +39,11 @@ export namespace MenuStyle {
     }
   `;
 
-  export const item = () => css`
+  export const item = (childMenuOpened: boolean) => css`
     border-radius: 4px;
     padding: 5px 8px;
     cursor: pointer;
+    background-color: ${childMenuOpened ? Color.GRAY_0 : 'none'};
 
     > .node {
       pointer-events: none;

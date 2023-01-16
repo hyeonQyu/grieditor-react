@@ -14,13 +14,13 @@ export interface MenuItemProps {
 export function MenuItem(props: MenuItemProps) {
   const { node, sections } = props;
 
-  const { childMenuRef, hasChildren, handleClick, handleMouseEnter, handleMouseLeave } = useMenuItem(props);
+  const { childMenuRef, hasChildren, childMenuOpened, handleClick, handleMouseEnter, handleMouseLeave, handleChildMenuToggle } = useMenuItem(props);
 
   return (
     <>
-      <li onClick={handleClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} css={MenuStyle.item()}>
+      <li onClick={handleClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} css={MenuStyle.item(childMenuOpened)}>
         <div className={'node'}>{node}</div>
-        {hasChildren && <Menu ref={childMenuRef} sections={sections!} />}
+        {hasChildren && <Menu ref={childMenuRef} sections={sections!} onToggle={handleChildMenuToggle} />}
       </li>
     </>
   );

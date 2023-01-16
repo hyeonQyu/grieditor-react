@@ -40,8 +40,8 @@ export namespace ContentEditableUtil {
     const selection = window.getSelection();
     const range = document.createRange();
 
-    range.setStart(element, offset);
-    range.collapse(true);
+    range?.setStart(element, offset);
+    range?.collapse(true);
 
     selection?.removeAllRanges();
     selection?.addRange(range);

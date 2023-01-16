@@ -10,6 +10,7 @@ export interface MenuProps {
   sections: MenuSectionProps[];
   onOpen?: () => void;
   onClose?: () => void;
+  onToggle?: (opened: boolean) => void;
 }
 
 export const Menu = forwardRef<MenuRef, MenuProps>((props, ref) => {

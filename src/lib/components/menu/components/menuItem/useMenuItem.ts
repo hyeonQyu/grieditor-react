@@ -1,15 +1,17 @@
 import { MenuItemProps } from '@components/menu/components/menuItem';
-import { MouseEventHandler, Ref, useRef } from 'react';
+import { ForwardedRef, MouseEventHandler, useRef, useState } from 'react';
 import { MenuRef } from '@components/menu/defines';
 
 export interface IUseMenuItemParams extends MenuItemProps {}
 
 export interface IUseMenuItem {
-  childMenuRef: Ref<MenuRef>;
+  childMenuRef: ForwardedRef<MenuRef>;
   hasChildren: boolean;
+  childMenuOpened: boolean;
   handleClick: MouseEventHandler<HTMLLIElement>;
   handleMouseEnter: MouseEventHandler<HTMLLIElement>;
   handleMouseLeave: MouseEventHandler<HTMLLIElement>;
+  handleChildMenuToggle: (opened: boolean) => void;
 }
 
 export function useMenuItem(params: IUseMenuItemParams): IUseMenuItem {
@@ -17,6 +19,7 @@ export function useMenuItem(params: IUseMenuItemParams): IUseMenuItem {
 
   const hasChildren = Boolean(sections) || Boolean(sections?.length);
   const childMenuRef = useRef<MenuRef>(null);
+  const [childMenuOpened, setChildMenuOpened] = useState(false);
 
   const handleClick: MouseEventHandler<HTMLLIElement> = (e) => {
     if (hasChildren) return childMenuRef.current?.toggle(e);
@@ -34,11 +37,17 @@ export function useMenuItem(params: IUseMenuItemParams): IUseMenuItem {
     childMenuRef.current?.close(e);
   };
 
+  const handleChildMenuToggle = (opened: boolean) => {
+    setChildMenuOpened(opened);
+  };
+
   return {
     childMenuRef,
     hasChildren,
+    childMenuOpened,
     handleClick,
     handleMouseEnter,
     handleMouseLeave,
+    handleChildMenuToggle,
   };
 }
