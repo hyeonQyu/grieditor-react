@@ -72,7 +72,12 @@ function Cell(props: CellProps) {
   console.log(props.row, props.column);
 
   return (
-    <td onMouseEnter={handleTableDataHover} onClick={handleTableDataClick} css={TableditorStyle.tableData(backgroundColor, font)} style={{ width }}>
+    <td
+      onMouseEnter={handleTableDataHover}
+      onClick={handleTableDataClick}
+      css={TableditorStyle.tableData(backgroundColor, font, isResizing)}
+      style={{ width }}
+    >
       <div
         style={{
           width,

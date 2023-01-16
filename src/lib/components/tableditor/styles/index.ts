@@ -32,7 +32,7 @@ export namespace TableditorStyle {
     }
   `;
 
-  export const tableData = (backgroundColor: TableditorColor, { color }: Font) => css`
+  export const tableData = (backgroundColor: TableditorColor, { color }: Font, isResizing: boolean) => css`
     border: 1px solid ${Color.GRAY_1};
     position: relative;
     white-space: pre-wrap;
@@ -47,7 +47,7 @@ export namespace TableditorStyle {
       z-index: ${ZIndex.MENU};
     }
     :hover button.more-options {
-      visibility: visible;
+      visibility: ${isResizing ? 'hidden' : 'visible'};
     }
   `;
 
