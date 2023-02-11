@@ -34,6 +34,7 @@ export function useMenu(params: IUseMenuParams): IUseMenu {
     onClickOutside() {
       setOpened(false);
     },
+    clickEventType: 'mousedown',
   });
 
   const { mounted } = useAnimationMount({

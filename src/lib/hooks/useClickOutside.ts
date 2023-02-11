@@ -1,14 +1,15 @@
 import { MutableRefObject, useEffect } from 'react';
 
-export interface IUseClickOutsideParams<T> {
+export interface UseClickOutsideParams<T> {
   ref: MutableRefObject<T | null>;
   onClickOutside: (e?: MouseEvent) => void;
+  clickEventType?: 'click' | 'mousedown' | 'mouseup';
 }
 
-export interface IUseClickOutside {}
+export interface UseClickOutside {}
 
-export function useClickOutside<T extends HTMLElement>(params: IUseClickOutsideParams<T>): IUseClickOutside {
-  const { ref, onClickOutside } = params;
+export function useClickOutside<T extends HTMLElement>(params: UseClickOutsideParams<T>): UseClickOutside {
+  const { ref, onClickOutside, clickEventType = 'click' } = params;
 
   useEffect(() => {
     const clickOutside = (e: MouseEvent) => {
@@ -18,11 +19,11 @@ export function useClickOutside<T extends HTMLElement>(params: IUseClickOutsideP
       }
     };
 
-    window.addEventListener('click', clickOutside);
+    window.addEventListener(clickEventType, clickOutside);
     return () => {
-      window.removeEventListener('click', clickOutside);
+      window.removeEventListener(clickEventType, clickOutside);
     };
-  }, [ref, onClickOutside]);
+  }, [ref, onClickOutside, clickEventType]);
 
   return {};
 }
