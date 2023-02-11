@@ -1,21 +1,21 @@
 /** @jsxImportSource @emotion/react */
 import { TableditorMenuStyle } from '@components/tableditor/components/menu/styles';
-import { BACKGROUND_COLOR_MAP, COLOR_MAP, FONT_COLOR_MAP, TableditorColorName } from '@components/tableditor/defines';
+import { backgroundColorMap, colorMap, fontColorMap, TableditorColorName } from '@components/tableditor/defines';
 
 export interface MenuColorItemTemplateProps {
   colorName: TableditorColorName;
   type: 'background' | 'font';
 }
 
-const colorMap = {
-  background: BACKGROUND_COLOR_MAP,
-  font: FONT_COLOR_MAP,
+const colorMapByColorType = {
+  background: backgroundColorMap,
+  font: fontColorMap,
 };
 
 export function MenuColorItemTemplate(props: MenuColorItemTemplateProps) {
   const { colorName, type } = props;
-  const colorKey = colorMap[type][colorName];
-  const color = COLOR_MAP[colorKey];
+  const colorKey = colorMapByColorType[type][colorName];
+  const color = colorMap[colorKey];
 
   return (
     <div css={[TableditorMenuStyle.commonItemTemplate(), TableditorMenuStyle.colorItemTemplate(color)]}>

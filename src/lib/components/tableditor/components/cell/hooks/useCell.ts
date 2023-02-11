@@ -15,14 +15,14 @@ import {
 import { ContentEditableUtil } from '@utils/contentEditableUtil';
 import { MenuRef } from '@components/menu/defines';
 
-export interface IUseCellParams extends CellProps {}
+export interface UseCellParams extends CellProps {}
 
-export interface IUseCell {
+export interface UseCell {
   menuRef: Ref<MenuRef>;
   resizerRef: MutableRefObject<HTMLDivElement | null>;
   contentInnerText: string;
-  handleTableDataHover: MouseEventHandler<HTMLTableDataCellElement>;
-  handleTableDataClick: MouseEventHandler<HTMLTableDataCellElement>;
+  handleTableCellHover: MouseEventHandler<HTMLTableCellElement>;
+  handleTableCellClick: MouseEventHandler<HTMLTableCellElement>;
   handleContentEditableFocus: FocusEventHandler<HTMLDivElement>;
   handleContentEditableKeyDown: KeyboardEventHandler<HTMLDivElement>;
   handleContentEditableInput: FormEventHandler<HTMLDivElement>;
@@ -35,7 +35,7 @@ export interface IUseCell {
   handleResizerDragEnd: DragEventHandler<HTMLDivElement>;
 }
 
-export function useCell(params: IUseCellParams): IUseCell {
+export function useCell(params: UseCellParams): UseCell {
   const {
     cell: { content, focused, isResizing, contentEditableRef, caretOffset },
     row,
@@ -65,11 +65,11 @@ export function useCell(params: IUseCellParams): IUseCell {
     ContentEditableUtil.setCaretOffset((cellElement?.firstChild as HTMLElement) ?? cellElement, caretOffset);
   }, [focused, onContentChange, row, column, contentEditableRef.current]);
 
-  const handleTableDataHover: MouseEventHandler<HTMLTableDataCellElement> = useCallback(() => {
+  const handleTableCellHover: MouseEventHandler<HTMLTableCellElement> = useCallback(() => {
     onCellHover({ rowColumn: { row, column } });
   }, [row, column, onCellHover]);
 
-  const handleTableDataClick: MouseEventHandler<HTMLTableDataCellElement> = (e) => {
+  const handleTableCellClick: MouseEventHandler<HTMLTableCellElement> = (e) => {
     if (isResizing || menuRef.current?.element?.contains(e.target as Node)) return;
     contentEditableRef.current?.focus();
   };
@@ -173,8 +173,8 @@ export function useCell(params: IUseCellParams): IUseCell {
     menuRef,
     resizerRef,
     contentInnerText,
-    handleTableDataHover,
-    handleTableDataClick,
+    handleTableCellHover,
+    handleTableCellClick,
     handleContentEditableFocus,
     handleContentEditableKeyDown,
     handleContentEditableInput,

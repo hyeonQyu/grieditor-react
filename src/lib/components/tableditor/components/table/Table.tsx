@@ -17,9 +17,9 @@ export function Table(props: TableProps) {
       <tbody>
         {cells.map((row, rowIndex) => (
           <tr key={rowIndex}>
-            {row.map((cell, columnIndex) => {
-              return <Cell key={columnIndex} cell={cell} row={rowIndex} column={columnIndex} {...rest} />;
-            })}
+            {row.map((cell, columnIndex) => (
+              <Cell key={columnIndex} cell={cell} row={rowIndex} column={columnIndex} {...rest} />
+            ))}
           </tr>
         ))}
       </tbody>

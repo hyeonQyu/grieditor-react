@@ -1,22 +1,22 @@
 import { MenuSectionProps } from '@components/menu/components/menuSection';
 import { MenuColorItemTemplate, MenuItemTemplate } from '@components/tableditor/components/menu/itemTemplate';
-import { CellMenuProps } from '@components/tableditor/components/menu/cell';
 import { ArrowIcon, EraserIcon, HorizontalIcon, PaintBucketIcon, PencilIcon, VerticalIcon } from '@icons/index';
-import { BACKGROUND_COLOR_MAP, FONT_COLOR_MAP, RowColumn, TableditorColorName } from '@components/tableditor/defines';
+import { backgroundColorMap, fontColorMap, RowColumn, TableditorColorName } from '@components/tableditor/defines';
 import { RefObject } from 'react';
 import { MenuRef } from '@components/menu/defines';
+import { useCellContext } from '@components/tableditor/components/cell/contexts/CellContext';
 
-export interface IUseCellMenuParams extends CellMenuProps {
+export interface UseCellMenuParams {
   ref: RefObject<MenuRef>;
 }
 
-export interface IUseCellMenu {
+export interface UseCellMenu {
   menuSections: MenuSectionProps[];
 }
 
-export function useCellMenu(params: IUseCellMenuParams): IUseCellMenu {
+export function useCellMenu(params: UseCellMenuParams): UseCellMenu {
+  const { ref } = params;
   const {
-    ref,
     row,
     column,
     onClickCellMenuChangeBackgroundColor,
@@ -28,7 +28,7 @@ export function useCellMenu(params: IUseCellMenuParams): IUseCellMenu {
     onClickCellMenuAddColumnRight,
     onClickCellMenuSelectRow,
     onClickCellMenuSelectColumn,
-  } = params;
+  } = useCellContext();
   const rowColumn: RowColumn = { row, column };
 
   const menuSections: MenuSectionProps[] = [
@@ -40,10 +40,10 @@ export function useCellMenu(params: IUseCellMenuParams): IUseCellMenu {
           sections: [
             {
               label: 'Background colors',
-              items: (Object.keys(BACKGROUND_COLOR_MAP) as TableditorColorName[]).map((colorName) => ({
+              items: (Object.keys(backgroundColorMap) as TableditorColorName[]).map((colorName) => ({
                 node: <MenuColorItemTemplate colorName={colorName} type={'background'} />,
                 onEvent() {
-                  onClickCellMenuChangeBackgroundColor({ rowColumn, color: BACKGROUND_COLOR_MAP[colorName] });
+                  onClickCellMenuChangeBackgroundColor({ rowColumn, color: backgroundColorMap[colorName] });
                 },
               })),
             },
@@ -54,10 +54,10 @@ export function useCellMenu(params: IUseCellMenuParams): IUseCellMenu {
           sections: [
             {
               label: 'Font colors',
-              items: (Object.keys(FONT_COLOR_MAP) as TableditorColorName[]).map((colorName) => ({
+              items: (Object.keys(fontColorMap) as TableditorColorName[]).map((colorName) => ({
                 node: <MenuColorItemTemplate colorName={colorName} type={'font'} />,
                 onEvent() {
-                  onClickCellMenuChangeFontColor({ rowColumn, color: FONT_COLOR_MAP[colorName] });
+                  onClickCellMenuChangeFontColor({ rowColumn, color: fontColorMap[colorName] });
                 },
               })),
             },

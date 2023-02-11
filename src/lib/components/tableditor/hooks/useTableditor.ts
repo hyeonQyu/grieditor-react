@@ -9,8 +9,8 @@ import {
   TableditorEventHandler,
   RenderingCellData,
   TableExtender,
-  DEFAULT_TABLE_EXTENDER,
-  DEFAULT_CELL,
+  defaultTableExtender,
+  defaultCell,
   TableditorEvent,
   CellColorChangeEvent,
 } from '@components/tableditor/defines';
@@ -53,8 +53,8 @@ export interface IUseTableditor {
 export function useTableditor(params: IUseTableditorParams): IUseTableditor {
   const {
     cells: initialCells = [
-      [{ ...DEFAULT_CELL }, { ...DEFAULT_CELL }],
-      [{ ...DEFAULT_CELL }, { ...DEFAULT_CELL }],
+      [{ ...defaultCell }, { ...defaultCell }],
+      [{ ...defaultCell }, { ...defaultCell }],
     ],
   } = params;
 
@@ -65,8 +65,8 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
 
   const [isMouseDown, setIsMouseDown] = useState(false);
 
-  const [rowAddExtender, setRowAddExtender] = useState<TableExtender>({ ...DEFAULT_TABLE_EXTENDER });
-  const [columnAddExtender, setColumnAddExtender] = useState<TableExtender>({ ...DEFAULT_TABLE_EXTENDER });
+  const [rowAddExtender, setRowAddExtender] = useState<TableExtender>({ ...defaultTableExtender });
+  const [columnAddExtender, setColumnAddExtender] = useState<TableExtender>({ ...defaultTableExtender });
 
   const tableRef = useRef<HTMLTableElement | null>(null);
 

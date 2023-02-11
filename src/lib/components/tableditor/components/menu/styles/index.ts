@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { Color } from '@defines/constants';
-import { COLOR_MAP } from '@components/tableditor/defines';
+import { colorMap } from '@components/tableditor/defines';
 
 export namespace TableditorMenuStyle {
   export const commonItemTemplate = () => css`
@@ -32,7 +32,7 @@ export namespace TableditorMenuStyle {
       box-shadow: 1px 1px 5px ${Color.GRAY_4};
 
       &.background {
-        color: ${color === COLOR_MAP.black ? Color.GRAY_1 : Color.BLACK};
+        color: ${color === colorMap.black ? Color.GRAY_1 : Color.BLACK};
         background-color: ${color};
       }
 

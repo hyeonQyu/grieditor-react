@@ -5,7 +5,7 @@ import {
   TABLE_EXTENDER_MARGIN,
   TableditorColor,
   Font,
-  COLOR_MAP,
+  colorMap,
 } from '@components/tableditor/defines';
 import { css } from '@emotion/react';
 import { Color, ZIndex } from '@defines/index';
@@ -37,8 +37,8 @@ export namespace TableditorStyle {
     position: relative;
     white-space: pre-wrap;
     word-break: break-word;
-    background-color: ${COLOR_MAP[backgroundColor]};
-    color: ${COLOR_MAP[color]};
+    background-color: ${colorMap[backgroundColor]};
+    color: ${colorMap[color]};
 
     :hover .highlighting {
       border: 1px solid ${Color.CYAN_0};

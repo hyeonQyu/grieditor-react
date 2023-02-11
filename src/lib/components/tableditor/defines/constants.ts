@@ -1,6 +1,6 @@
 import { BackgroundColorMap, CellData, ColorMap, FontColorMap, TableExtender } from '@components/tableditor/defines';
 
-export const COLOR_MAP: ColorMap = {
+export const colorMap: ColorMap = {
   black: '#1d1d1d',
   white: '#ffffff',
   gray_dark: '#6a6a6a',
@@ -29,12 +29,12 @@ export const CELL_MIN_WIDTH = 32;
 export const MIN_TABLE_EXTENDER_SIZE = 20;
 export const TABLE_EXTENDER_MARGIN = 4;
 
-export const DEFAULT_TABLE_EXTENDER: TableExtender = {
+export const defaultTableExtender: TableExtender = {
   size: { width: MIN_TABLE_EXTENDER_SIZE, height: MIN_TABLE_EXTENDER_SIZE },
   visible: false,
 };
 
-export const DEFAULT_CELL: CellData = {
+export const defaultCell: CellData = {
   width: DEFAULT_CELL_WIDTH,
   content: '',
   backgroundColor: 'white',
@@ -44,7 +44,7 @@ export const DEFAULT_CELL: CellData = {
   },
 };
 
-export const BACKGROUND_COLOR_MAP: BackgroundColorMap = {
+export const backgroundColorMap: BackgroundColorMap = {
   black: 'black',
   white: 'white',
   gray: 'gray_light',
@@ -58,7 +58,7 @@ export const BACKGROUND_COLOR_MAP: BackgroundColorMap = {
   red: 'red_light',
 };
 
-export const FONT_COLOR_MAP: FontColorMap = {
+export const fontColorMap: FontColorMap = {
   black: 'black',
   white: 'white',
   gray: 'gray_dark',

@@ -1,4 +1,4 @@
-import { CellData, CellHoverEvent, DEFAULT_CELL, RenderingCellData, CellResizeEvent, RowColumn } from '@components/tableditor/defines';
+import { CellData, CellHoverEvent, defaultCell, RenderingCellData, CellResizeEvent, RowColumn } from '@components/tableditor/defines';
 import { Direction } from '@defines/types';
 import { createRef } from 'react';
 
@@ -91,7 +91,7 @@ export namespace TableditorUtil {
    * @param cells
    */
   export function addColumn(cells: RenderingCellData[][]): RenderingCellData[][] {
-    return cells.map((row) => [...row, cellToInitialRenderingCell(DEFAULT_CELL)]);
+    return cells.map((row) => [...row, cellToInitialRenderingCell(defaultCell)]);
   }
 
   /**
@@ -109,7 +109,7 @@ export namespace TableditorUtil {
    * @param index Index at which the new column will be inserted
    */
   export function getNewColumnAddedCells(cells: RenderingCellData[][], index: number): RenderingCellData[][] {
-    return cells.map((row) => [...row.slice(0, index), cellToInitialRenderingCell(DEFAULT_CELL), ...row.slice(index)]);
+    return cells.map((row) => [...row.slice(0, index), cellToInitialRenderingCell(defaultCell), ...row.slice(index)]);
   }
 
   /**
@@ -138,7 +138,7 @@ export namespace TableditorUtil {
     const columns = firstRow.length;
     return Array.from({ length: columns }, (_, i) =>
       cellToInitialRenderingCell({
-        ...DEFAULT_CELL,
+        ...defaultCell,
         width: firstRow[i].width,
       }),
     );
