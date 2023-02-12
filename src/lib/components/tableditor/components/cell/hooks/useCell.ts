@@ -40,6 +40,7 @@ export function useCell(params: UseCellParams): UseCell {
     cell: { content, focused, isResizing, contentEditableRef, caretOffset },
     row,
     column,
+    lastClickedCellMoreOptionButtonRef,
     onCellHover,
     onCellFocus,
     onContentChange,
@@ -141,6 +142,7 @@ export function useCell(params: UseCellParams): UseCell {
     (e) => {
       onContentChange({ rowColumn: { row, column }, content: contentEditableRef.current?.innerText ?? '' });
       menuRef.current?.toggle(e);
+      lastClickedCellMoreOptionButtonRef.current = e.target as HTMLButtonElement;
     },
     [row, column, contentEditableRef.current],
   );

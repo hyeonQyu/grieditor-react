@@ -1,5 +1,5 @@
 import { TableditorProps } from '@components/tableditor';
-import { MouseEventHandler, MutableRefObject, useCallback, useEffect, useRef, useState } from 'react';
+import { MouseEventHandler, MutableRefObject, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import {
   CellFocusEvent,
   CellHoverEvent,
@@ -17,11 +17,14 @@ import {
 import useClickOutside from '@hooks/useClickOutside';
 import { TableditorUtil } from '@components/tableditor/utils/tableditorUtil';
 import { TableditorEventUtil } from '@components/tableditor/utils/tableditorEventUtil';
+import { MenuRef } from '@components/menu/defines';
 
-export interface IUseTableditorParams extends TableditorProps {}
+export interface UseTableditorParams extends TableditorProps {}
 
-export interface IUseTableditor {
+export interface UseTableditor {
   tableRef: MutableRefObject<HTMLTableElement | null>;
+  rowMenuRef: RefObject<MenuRef>;
+  lastClickedCellMoreOptionButtonRef: MutableRefObject<HTMLButtonElement | null>;
   cells: RenderingCellData[][];
   cellHoverEvent: CellHoverEvent | undefined;
   resizeEvent: CellResizeEvent | undefined;
@@ -50,7 +53,7 @@ export interface IUseTableditor {
   onClickCellMenuSelectColumn: TableditorEventHandler<TableditorEvent>;
 }
 
-export function useTableditor(params: IUseTableditorParams): IUseTableditor {
+export function useTableditor(params: UseTableditorParams): UseTableditor {
   const {
     cells: initialCells = [
       [{ ...defaultCell }, { ...defaultCell }],
@@ -69,6 +72,8 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
   const [columnAddExtender, setColumnAddExtender] = useState<TableExtender>({ ...defaultTableExtender });
 
   const tableRef = useRef<HTMLTableElement | null>(null);
+  const rowMenuRef = useRef<MenuRef>(null);
+  const lastClickedCellMoreOptionButtonRef = useRef<HTMLButtonElement | null>(null);
 
   useClickOutside<HTMLTableElement>({
     ref: tableRef,
@@ -242,6 +247,8 @@ export function useTableditor(params: IUseTableditorParams): IUseTableditor {
 
   return {
     tableRef,
+    rowMenuRef,
+    lastClickedCellMoreOptionButtonRef,
     cells,
     cellHoverEvent,
     resizeEvent,

@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { forwardRef } from 'react';
+import React, { forwardRef, MutableRefObject } from 'react';
 import { useMenu } from '@components/menu/useMenu';
 import { MenuRef } from '@components/menu/defines';
 import { MenuSection, MenuSectionProps } from '@components/menu/components/menuSection';
@@ -8,6 +8,7 @@ import { Portal } from '@components/portal';
 
 export interface MenuProps {
   sections: MenuSectionProps[];
+  targetRef?: MutableRefObject<HTMLElement | null>;
   onOpen?: () => void;
   onClose?: () => void;
   onToggle?: (opened: boolean) => void;

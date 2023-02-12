@@ -1,4 +1,4 @@
-import { ForwardedRef, MutableRefObject, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { ForwardedRef, MutableRefObject, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import useClickOutside from '@hooks/useClickOutside';
 import useAnimationMount from '@hooks/useAnimationMount';
 import { MenuProps } from '@components/menu';
@@ -18,7 +18,7 @@ export interface IUseMenu {
 }
 
 export function useMenu(params: IUseMenuParams): IUseMenu {
-  const { ref, onOpen, onClose, onToggle } = params;
+  const { ref, targetRef, onOpen, onClose, onToggle } = params;
 
   const appearAnimationDuration = 0.2;
   const disappearAnimationDuration = 0.2;
@@ -29,17 +29,19 @@ export function useMenu(params: IUseMenuParams): IUseMenu {
   const menuRef = useRef<HTMLDivElement>(null);
   const menuToggleTargetRectRef = useRef<DOMRect>();
 
-  useClickOutside<HTMLDivElement>({
-    ref: menuRef,
-    onClickOutside() {
-      setOpened(false);
-    },
-    clickEventType: 'mousedown',
-  });
-
   const { mounted } = useAnimationMount({
     display: opened,
     disappearAnimationDuration,
+  });
+
+  const handleClickOutside = useCallback(() => {
+    setOpened(false);
+  }, []);
+
+  useClickOutside<HTMLDivElement>({
+    ref: menuRef,
+    onClickOutside: handleClickOutside,
+    clickEventType: 'mousedown',
   });
 
   useEffect(() => {
@@ -67,17 +69,20 @@ export function useMenu(params: IUseMenuParams): IUseMenu {
     setPosition({ top, left });
   }, [mounted]);
 
+  const getTargetBoundingRect = (target: EventTarget) =>
+    targetRef?.current?.getBoundingClientRect() || (target as HTMLElement).getBoundingClientRect();
+
   useImperativeHandle<MenuRef, MenuRef>(ref, () => ({
     open(e) {
       setOpened(true);
-      menuToggleTargetRectRef.current = (e.target as Element).getBoundingClientRect();
+      menuToggleTargetRectRef.current = getTargetBoundingRect(e.target);
     },
     close() {
       setOpened(false);
     },
     toggle(e) {
       setOpened((prev) => !prev);
-      menuToggleTargetRectRef.current = (e.target as Element).getBoundingClientRect();
+      menuToggleTargetRectRef.current = getTargetBoundingRect(e.target);
     },
     element: menuRef.current,
   }));

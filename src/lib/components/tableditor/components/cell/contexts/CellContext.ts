@@ -10,6 +10,8 @@ export const CellContext = React.createContext<CellContextProps>({
   cell: TableditorUtil.cellToInitialRenderingCell(defaultCell),
   row: 0,
   column: 0,
+  rowMenuRef: createRef(),
+  lastClickedCellMoreOptionButtonRef: createRef(),
   onCellHover() {},
   onCellFocus() {},
   onContentChange() {},

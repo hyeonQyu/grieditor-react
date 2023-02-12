@@ -7,12 +7,14 @@ import { TableditorStyle } from '@components/tableditor/styles';
 import { ThreeDotsVerticalIcon } from '@icons/ThreeDotsVerticalIcon';
 import { Color } from '@defines/constants';
 import { CellMenu } from '@components/tableditor/components/menu/cell';
-import { IUseTableditor } from '@components/tableditor/hooks/useTableditor';
+import { UseTableditor } from '@components/tableditor/hooks/useTableditor';
 import { CellContext } from '@components/tableditor/components/cell/contexts/CellContext';
 
 export interface CellProps
   extends Pick<
-    IUseTableditor,
+    UseTableditor,
+    | 'rowMenuRef'
+    | 'lastClickedCellMoreOptionButtonRef'
     | 'onCellHover'
     | 'onCellFocus'
     | 'onContentChange'

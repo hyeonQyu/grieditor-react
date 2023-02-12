@@ -23,7 +23,7 @@ export function useClickOutside<T extends HTMLElement>(params: UseClickOutsidePa
     return () => {
       window.removeEventListener(clickEventType, clickOutside);
     };
-  }, [ref, onClickOutside, clickEventType]);
+  }, [onClickOutside, clickEventType]);
 
   return {};
 }

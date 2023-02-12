@@ -19,6 +19,7 @@ export function useCellMenu(params: UseCellMenuParams): UseCellMenu {
   const {
     row,
     column,
+    rowMenuRef,
     onClickCellMenuChangeBackgroundColor,
     onClickCellMenuChangeFontColor,
     onClickCellMenuClearContent,
@@ -113,6 +114,7 @@ export function useCellMenu(params: UseCellMenuParams): UseCellMenu {
           onEvent(e) {
             onClickCellMenuSelectRow({ rowColumn });
             ref.current?.close(e);
+            rowMenuRef.current?.open(e);
           },
         },
         {
