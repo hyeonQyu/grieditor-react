@@ -1,11 +1,9 @@
 import { RefObject } from 'react';
 import { MenuRef } from '@components/menu/defines';
 import { MenuSectionProps } from '@components/menu/components/menuSection';
-import { MenuColorItemTemplate, MenuItemTemplate } from '@components/tableditor/components/menu/itemTemplate';
-import { PaintBucketIcon } from '@icons/PaintBucketIcon';
-import { backgroundColorMap, fontColorMap, TableditorColorName } from '@components/tableditor/defines';
-import { PencilIcon } from '@icons/PencilIcon';
-import { EraserIcon } from '@icons/EraserIcon';
+import { TableditorColor } from '@components/tableditor/defines';
+import { CustomEventHandler } from '@defines/types';
+import { TableditorMenuUtil } from '@components/tableditor/utils/tableditorMenuUtil';
 
 export interface UseRowMenuParams {
   ref: RefObject<MenuRef>;
@@ -18,42 +16,20 @@ export interface UseRowMenu {
 export default function useRowMenu(params: UseRowMenuParams): UseRowMenu {
   const { ref } = params;
 
+  const handleClickRowMenuChangeBackgroundColor: CustomEventHandler<TableditorColor> = (color) => {};
+
+  const handleClickRowMenuChangeFontColor: CustomEventHandler<TableditorColor> = (color) => {};
+
+  const handleClickRowMenuClearContent = () => {};
+
   const menuSections: MenuSectionProps[] = [
-    {
-      label: 'Edit row',
-      items: [
-        {
-          node: <MenuItemTemplate icon={<PaintBucketIcon />} label={'Background colors'} hasChildMenu />,
-          sections: [
-            {
-              label: 'Background colors',
-              items: (Object.keys(backgroundColorMap) as TableditorColorName[]).map((colorName) => ({
-                node: <MenuColorItemTemplate colorName={colorName} type={'background'} />,
-                onEvent() {},
-              })),
-            },
-          ],
-        },
-        {
-          node: <MenuItemTemplate icon={<PencilIcon />} label={'Font colors'} hasChildMenu />,
-          sections: [
-            {
-              label: 'Font colors',
-              items: (Object.keys(fontColorMap) as TableditorColorName[]).map((colorName) => ({
-                node: <MenuColorItemTemplate colorName={colorName} type={'font'} />,
-                onEvent() {},
-              })),
-            },
-          ],
-        },
-        {
-          node: <MenuItemTemplate icon={<EraserIcon />} label={'Clear content'} />,
-          onEvent(e) {
-            ref.current?.close(e);
-          },
-        },
-      ],
-    },
+    TableditorMenuUtil.getCommonTableditorMenuSection({
+      ref,
+      editLabel: 'Edit row',
+      onClickChangeBackgroundColor: handleClickRowMenuChangeBackgroundColor,
+      onClickChangeFontColor: handleClickRowMenuChangeFontColor,
+      onClickClearContent: handleClickRowMenuClearContent,
+    }),
   ];
 
   return {
