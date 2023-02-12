@@ -1,19 +1,16 @@
 /** @jsxImportSource @emotion/react */
+import React, { MouseEventHandler } from 'react';
 import { Cell, CellProps } from '@components/tableditor/components/cell';
-import React, { MouseEventHandler, MutableRefObject, RefObject } from 'react';
-import { RenderingCellData } from '@components/tableditor/defines';
-import { MenuRef } from '@components/menu/defines';
+import { UseTableditor } from '@components/tableditor/hooks/useTableditor';
 
-export interface TableProps extends Omit<CellProps, 'cell' | 'row' | 'column'> {
-  tableRef: MutableRefObject<HTMLTableElement | null>;
-  rowMenuRef: RefObject<MenuRef>;
-  lastClickedCellMoreOptionButtonRef: MutableRefObject<HTMLButtonElement | null>;
-  cells: RenderingCellData[][];
+export interface TableProps
+  extends Pick<UseTableditor, 'tableRef' | 'rowMenuRef' | 'columnMenuRef' | 'lastClickedCellMoreOptionButtonRef' | 'cells'>,
+    Omit<CellProps, 'cell' | 'row' | 'column'> {
   onMouseLeave: MouseEventHandler<HTMLTableElement>;
 }
 
 export function Table(props: TableProps) {
-  const { tableRef, rowMenuRef, lastClickedCellMoreOptionButtonRef, cells, onMouseLeave, ...rest } = props;
+  const { tableRef, cells, onMouseLeave, ...rest } = props;
 
   return (
     <table ref={tableRef} onMouseLeave={onMouseLeave}>
@@ -21,15 +18,7 @@ export function Table(props: TableProps) {
         {cells.map((row, rowIndex) => (
           <tr key={rowIndex}>
             {row.map((cell, columnIndex) => (
-              <Cell
-                key={columnIndex}
-                cell={cell}
-                row={rowIndex}
-                column={columnIndex}
-                lastClickedCellMoreOptionButtonRef={lastClickedCellMoreOptionButtonRef}
-                rowMenuRef={rowMenuRef}
-                {...rest}
-              />
+              <Cell key={columnIndex} cell={cell} row={rowIndex} column={columnIndex} {...rest} />
             ))}
           </tr>
         ))}

@@ -14,6 +14,7 @@ export interface CellProps
   extends Pick<
     UseTableditor,
     | 'rowMenuRef'
+    | 'columnMenuRef'
     | 'lastClickedCellMoreOptionButtonRef'
     | 'onCellHover'
     | 'onCellFocus'

@@ -11,6 +11,7 @@ export const CellContext = React.createContext<CellContextProps>({
   row: 0,
   column: 0,
   rowMenuRef: createRef(),
+  columnMenuRef: createRef(),
   lastClickedCellMoreOptionButtonRef: createRef(),
   onCellHover() {},
   onCellFocus() {},

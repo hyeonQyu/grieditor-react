@@ -9,6 +9,7 @@ import { RESET_STYLE } from '@styles/reset';
 import { Portal } from '@components/portal';
 import { Table } from '@components/tableditor/components/table';
 import { RowMenu } from '@components/tableditor/components/menu/row';
+import { ColumnMenu } from '@components/tableditor/components/menu/column';
 
 export interface TableditorProps {
   cells?: CellData[][];
@@ -19,6 +20,7 @@ export function Tableditor(props: TableditorProps) {
   const {
     tableRef,
     rowMenuRef,
+    columnMenuRef,
     lastClickedCellMoreOptionButtonRef,
     cells,
     cellHoverEvent,
@@ -41,6 +43,7 @@ export function Tableditor(props: TableditorProps) {
           <Table
             tableRef={tableRef}
             rowMenuRef={rowMenuRef}
+            columnMenuRef={columnMenuRef}
             lastClickedCellMoreOptionButtonRef={lastClickedCellMoreOptionButtonRef}
             cells={cells}
             onMouseLeave={handleTableMouseLeave}
@@ -51,6 +54,7 @@ export function Tableditor(props: TableditorProps) {
         </div>
 
         <RowMenu ref={rowMenuRef} targetRef={lastClickedCellMoreOptionButtonRef} />
+        <ColumnMenu ref={columnMenuRef} targetRef={lastClickedCellMoreOptionButtonRef} />
       </Portal.Provider>
     </>
   );

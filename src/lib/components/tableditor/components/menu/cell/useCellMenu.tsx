@@ -20,6 +20,7 @@ export function useCellMenu(params: UseCellMenuParams): UseCellMenu {
     row,
     column,
     rowMenuRef,
+    columnMenuRef,
     onClickCellMenuChangeBackgroundColor,
     onClickCellMenuChangeFontColor,
     onClickCellMenuClearContent,
@@ -122,6 +123,7 @@ export function useCellMenu(params: UseCellMenuParams): UseCellMenu {
           onEvent(e) {
             onClickCellMenuSelectColumn({ rowColumn });
             ref.current?.close(e);
+            columnMenuRef.current?.open(e);
           },
         },
       ],

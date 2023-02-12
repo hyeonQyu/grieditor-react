@@ -24,6 +24,7 @@ export interface UseTableditorParams extends TableditorProps {}
 export interface UseTableditor {
   tableRef: MutableRefObject<HTMLTableElement | null>;
   rowMenuRef: RefObject<MenuRef>;
+  columnMenuRef: RefObject<MenuRef>;
   lastClickedCellMoreOptionButtonRef: MutableRefObject<HTMLButtonElement | null>;
   cells: RenderingCellData[][];
   cellHoverEvent: CellHoverEvent | undefined;
@@ -73,6 +74,7 @@ export function useTableditor(params: UseTableditorParams): UseTableditor {
 
   const tableRef = useRef<HTMLTableElement | null>(null);
   const rowMenuRef = useRef<MenuRef>(null);
+  const columnMenuRef = useRef<MenuRef>(null);
   const lastClickedCellMoreOptionButtonRef = useRef<HTMLButtonElement | null>(null);
 
   useClickOutside<HTMLTableElement>({
@@ -248,6 +250,7 @@ export function useTableditor(params: UseTableditorParams): UseTableditor {
   return {
     tableRef,
     rowMenuRef,
+    columnMenuRef,
     lastClickedCellMoreOptionButtonRef,
     cells,
     cellHoverEvent,
