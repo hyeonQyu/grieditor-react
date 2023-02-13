@@ -4,8 +4,9 @@ import { MenuSectionProps } from '@components/menu/components/menuSection';
 import { TableditorColor } from '@components/tableditor/defines';
 import { CustomEventHandler } from '@defines/types';
 import { TableditorMenuUtil } from '@components/tableditor/utils/tableditorMenuUtil';
+import { ColumnMenuProps } from '@components/tableditor/components/menu/column/ColumnMenu';
 
-export interface UseColumnMenuParams {
+export interface UseColumnMenuParams extends ColumnMenuProps {
   ref: RefObject<MenuRef>;
 }
 
@@ -14,11 +15,15 @@ export interface UseColumnMenu {
 }
 
 export default function useColumnMenu(params: UseColumnMenuParams): UseColumnMenu {
-  const { ref } = params;
+  const { ref, onClickChangeBackgroundColor, onClickChangeFontColor } = params;
 
-  const handleClickColumnMenuChangeBackgroundColor: CustomEventHandler<TableditorColor> = (color) => {};
+  const handleClickColumnMenuChangeBackgroundColor: CustomEventHandler<TableditorColor> = (color) => {
+    onClickChangeBackgroundColor({ color: color! });
+  };
 
-  const handleClickColumnMenuChangeFontColor: CustomEventHandler<TableditorColor> = (color) => {};
+  const handleClickColumnMenuChangeFontColor: CustomEventHandler<TableditorColor> = (color) => {
+    onClickChangeFontColor({ color: color! });
+  };
 
   const handleClickColumnMenuClearContent = () => {};
 

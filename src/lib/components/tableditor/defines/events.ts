@@ -25,8 +25,10 @@ export type CellResizeEvent = {
   mouseX?: number;
 } & TableditorEvent;
 
-export type CellColorChangeEvent = {
+export type ColorChangeEvent = {
   color: TableditorColor;
-} & TableditorEvent;
+};
 
-export type TableditorEventHandler<E extends TableditorEvent> = (e?: E) => void;
+export type CellColorChangeEvent = ColorChangeEvent & TableditorEvent;
+
+export type TableditorEventHandler<E> = (e?: E) => void;

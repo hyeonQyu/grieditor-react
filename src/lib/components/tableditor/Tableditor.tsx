@@ -32,6 +32,8 @@ export function Tableditor(props: TableditorProps) {
     handleTableMouseLeave,
     handleRowAddClick,
     handleColumnAddClick,
+    onClickSelectedCellsChangeBackgroundColor,
+    onClickSelectedCellsChangeFontColor,
     ...rest
   } = tableditor;
 
@@ -53,8 +55,18 @@ export function Tableditor(props: TableditorProps) {
           <TableColumnAddExtender rowAddExtender={rowAddExtender} columnAddExtender={columnAddExtender} onClick={handleColumnAddClick} />
         </div>
 
-        <RowMenu ref={rowMenuRef} targetRef={lastClickedCellMoreOptionButtonRef} />
-        <ColumnMenu ref={columnMenuRef} targetRef={lastClickedCellMoreOptionButtonRef} />
+        <RowMenu
+          ref={rowMenuRef}
+          targetRef={lastClickedCellMoreOptionButtonRef}
+          onClickChangeBackgroundColor={onClickSelectedCellsChangeBackgroundColor}
+          onClickChangeFontColor={onClickSelectedCellsChangeFontColor}
+        />
+        <ColumnMenu
+          ref={columnMenuRef}
+          targetRef={lastClickedCellMoreOptionButtonRef}
+          onClickChangeBackgroundColor={onClickSelectedCellsChangeBackgroundColor}
+          onClickChangeFontColor={onClickSelectedCellsChangeFontColor}
+        />
       </Portal.Provider>
     </>
   );

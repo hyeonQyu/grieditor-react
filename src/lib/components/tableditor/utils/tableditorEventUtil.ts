@@ -7,6 +7,7 @@ import {
   ResizerHoverEvent,
   TableditorEvent,
   CellColorChangeEvent,
+  ColorChangeEvent,
 } from '@components/tableditor/defines';
 import { TableditorUtil } from '@components/tableditor/utils/tableditorUtil';
 
@@ -244,6 +245,43 @@ export namespace TableditorEventUtil {
 
     return cells.map((cellRows) => {
       return cellRows.map((cell, i) => ({ ...cell, selected: column === i }));
+    });
+  };
+
+  export const getSelectedCellsChangeBackgroundColorEventHandledCells: GetEventHandledCells<ColorChangeEvent> = ({ e, cells }) => {
+    if (!e) return cells;
+
+    const { color } = e;
+
+    return cells.map((cellRows) => {
+      return cellRows.map((cell) => {
+        if (!cell.selected) return cell;
+        return {
+          ...cell,
+          selected: false,
+          backgroundColor: color,
+        };
+      });
+    });
+  };
+
+  export const getSelectedCellsChangeFontColorEventHandledCells: GetEventHandledCells<ColorChangeEvent> = ({ e, cells }) => {
+    if (!e) return cells;
+
+    const { color } = e;
+
+    return cells.map((cellRows) => {
+      return cellRows.map((cell) => {
+        if (!cell.selected) return cell;
+        return {
+          ...cell,
+          selected: false,
+          font: {
+            ...cell.font,
+            color,
+          },
+        };
+      });
     });
   };
 }

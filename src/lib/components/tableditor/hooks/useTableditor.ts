@@ -13,6 +13,7 @@ import {
   defaultCell,
   TableditorEvent,
   CellColorChangeEvent,
+  ColorChangeEvent,
 } from '@components/tableditor/defines';
 import useClickOutside from '@hooks/useClickOutside';
 import { TableditorUtil } from '@components/tableditor/utils/tableditorUtil';
@@ -52,6 +53,8 @@ export interface UseTableditor {
   onClickCellMenuAddColumnRight: TableditorEventHandler<TableditorEvent>;
   onClickCellMenuSelectRow: TableditorEventHandler<TableditorEvent>;
   onClickCellMenuSelectColumn: TableditorEventHandler<TableditorEvent>;
+  onClickSelectedCellsChangeBackgroundColor: TableditorEventHandler<ColorChangeEvent>;
+  onClickSelectedCellsChangeFontColor: TableditorEventHandler<ColorChangeEvent>;
 }
 
 export function useTableditor(params: UseTableditorParams): UseTableditor {
@@ -169,6 +172,14 @@ export function useTableditor(params: UseTableditorParams): UseTableditor {
     setCells((cells) => TableditorEventUtil.getCellMenuSelectColumnEventHandledCells({ e, cells }));
   }, []);
 
+  const onClickSelectedCellsChangeBackgroundColor: TableditorEventHandler<ColorChangeEvent> = useCallback((e) => {
+    setCells((cells) => TableditorEventUtil.getSelectedCellsChangeBackgroundColorEventHandledCells({ e, cells }));
+  }, []);
+
+  const onClickSelectedCellsChangeFontColor: TableditorEventHandler<ColorChangeEvent> = useCallback((e) => {
+    setCells((cells) => TableditorEventUtil.getSelectedCellsChangeFontColorEventHandledCells({ e, cells }));
+  }, []);
+
   const handleMouseMove: MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
       if (!resizeEvent) return;
@@ -278,5 +289,7 @@ export function useTableditor(params: UseTableditorParams): UseTableditor {
     onClickCellMenuAddColumnRight,
     onClickCellMenuSelectRow,
     onClickCellMenuSelectColumn,
+    onClickSelectedCellsChangeBackgroundColor,
+    onClickSelectedCellsChangeFontColor,
   };
 }
