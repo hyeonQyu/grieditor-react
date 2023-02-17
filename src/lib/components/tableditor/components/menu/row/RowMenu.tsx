@@ -7,6 +7,7 @@ import { ColorChangeEvent, TableditorEventHandler } from '@components/tableditor
 export interface RowMenuProps extends Pick<MenuProps, 'targetRef'> {
   onClickChangeBackgroundColor: TableditorEventHandler<ColorChangeEvent>;
   onClickChangeFontColor: TableditorEventHandler<ColorChangeEvent>;
+  onClickClearContent: TableditorEventHandler;
 }
 
 export const RowMenu = forwardRef<MenuRef, RowMenuProps>((props, ref) => {

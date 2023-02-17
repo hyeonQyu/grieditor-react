@@ -284,4 +284,17 @@ export namespace TableditorEventUtil {
       });
     });
   };
+
+  export const getSelectedCellsClearContentEventHandledCells: GetEventHandledCells = ({ cells }) => {
+    return cells.map((cellRows) => {
+      return cellRows.map((cell) => {
+        if (!cell.selected) return cell;
+        return {
+          ...cell,
+          selected: false,
+          content: '',
+        };
+      });
+    });
+  };
 }

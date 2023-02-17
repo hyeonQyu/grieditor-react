@@ -15,7 +15,7 @@ export interface UseRowMenu {
 }
 
 export default function useRowMenu(params: UseRowMenuParams): UseRowMenu {
-  const { ref, onClickChangeBackgroundColor, onClickChangeFontColor } = params;
+  const { ref, onClickChangeBackgroundColor, onClickChangeFontColor, onClickClearContent } = params;
 
   const handleClickRowMenuChangeBackgroundColor: CustomEventHandler<TableditorColor> = (color) => {
     onClickChangeBackgroundColor({ color: color! });
@@ -25,15 +25,13 @@ export default function useRowMenu(params: UseRowMenuParams): UseRowMenu {
     onClickChangeFontColor({ color: color! });
   };
 
-  const handleClickRowMenuClearContent = () => {};
-
   const menuSections: MenuSectionProps[] = [
     TableditorMenuUtil.getCommonTableditorMenuSection({
       ref,
       editLabel: 'Edit row',
       onClickChangeBackgroundColor: handleClickRowMenuChangeBackgroundColor,
       onClickChangeFontColor: handleClickRowMenuChangeFontColor,
-      onClickClearContent: handleClickRowMenuClearContent,
+      onClickClearContent,
     }),
   ];
 

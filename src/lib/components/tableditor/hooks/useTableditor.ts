@@ -55,6 +55,7 @@ export interface UseTableditor {
   onClickCellMenuSelectColumn: TableditorEventHandler<TableditorEvent>;
   onClickSelectedCellsChangeBackgroundColor: TableditorEventHandler<ColorChangeEvent>;
   onClickSelectedCellsChangeFontColor: TableditorEventHandler<ColorChangeEvent>;
+  onClickSelectedCellsClearContent: TableditorEventHandler;
 }
 
 export function useTableditor(params: UseTableditorParams): UseTableditor {
@@ -180,6 +181,10 @@ export function useTableditor(params: UseTableditorParams): UseTableditor {
     setCells((cells) => TableditorEventUtil.getSelectedCellsChangeFontColorEventHandledCells({ e, cells }));
   }, []);
 
+  const onClickSelectedCellsClearContent: TableditorEventHandler = useCallback(() => {
+    setCells((cells) => TableditorEventUtil.getSelectedCellsClearContentEventHandledCells({ cells }));
+  }, []);
+
   const handleMouseMove: MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
       if (!resizeEvent) return;
@@ -291,5 +296,6 @@ export function useTableditor(params: UseTableditorParams): UseTableditor {
     onClickCellMenuSelectColumn,
     onClickSelectedCellsChangeBackgroundColor,
     onClickSelectedCellsChangeFontColor,
+    onClickSelectedCellsClearContent,
   };
 }

@@ -15,7 +15,7 @@ export interface UseColumnMenu {
 }
 
 export default function useColumnMenu(params: UseColumnMenuParams): UseColumnMenu {
-  const { ref, onClickChangeBackgroundColor, onClickChangeFontColor } = params;
+  const { ref, onClickChangeBackgroundColor, onClickChangeFontColor, onClickClearContent } = params;
 
   const handleClickColumnMenuChangeBackgroundColor: CustomEventHandler<TableditorColor> = (color) => {
     onClickChangeBackgroundColor({ color: color! });
@@ -25,15 +25,13 @@ export default function useColumnMenu(params: UseColumnMenuParams): UseColumnMen
     onClickChangeFontColor({ color: color! });
   };
 
-  const handleClickColumnMenuClearContent = () => {};
-
   const menuSections: MenuSectionProps[] = [
     TableditorMenuUtil.getCommonTableditorMenuSection({
       ref,
       editLabel: 'Edit column',
       onClickChangeBackgroundColor: handleClickColumnMenuChangeBackgroundColor,
       onClickChangeFontColor: handleClickColumnMenuChangeFontColor,
-      onClickClearContent: handleClickColumnMenuClearContent,
+      onClickClearContent,
     }),
   ];
 

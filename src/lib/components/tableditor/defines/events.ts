@@ -31,4 +31,4 @@ export type ColorChangeEvent = {
 
 export type CellColorChangeEvent = ColorChangeEvent & TableditorEvent;
 
-export type TableditorEventHandler<E> = (e?: E) => void;
+export type TableditorEventHandler<E = undefined> = (e?: E) => void;
