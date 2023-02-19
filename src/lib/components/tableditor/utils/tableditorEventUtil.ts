@@ -61,7 +61,6 @@ export namespace TableditorEventUtil {
           ...cell,
           focused,
           caretOffset: focused ? TableditorUtil.getCellCaretOffsetFromDirection(cell, direction) : cell.caretOffset,
-          selected: false,
         };
       });
     });
@@ -127,12 +126,7 @@ export namespace TableditorEventUtil {
     } = e;
 
     return cells.map((rows) =>
-      rows.map((originCell, columnIndex) => {
-        const cell = {
-          ...originCell,
-          selected: false,
-        };
-
+      rows.map((cell, columnIndex) => {
         if (columnIndex === column + 1) {
           return {
             ...cell,
@@ -224,25 +218,13 @@ export namespace TableditorEventUtil {
     return TableditorUtil.getNewColumnAddedCells(cells, column + 1);
   };
 
-  export const getCellMenuSelectRowEventHandledCells: GetEventHandledCells<TableditorEvent> = ({ e, cells }) => {
-    if (!e) return cells;
-
-    const {
-      rowColumn: { row },
-    } = e;
-
+  export const getCellMenuSelectRowEventHandledCells: GetEventHandledCells<number> = ({ e: row, cells }) => {
     return cells.map((cellRows, i) => {
       return cellRows.map((cell) => ({ ...cell, selected: row === i }));
     });
   };
 
-  export const getCellMenuSelectColumnEventHandledCells: GetEventHandledCells<TableditorEvent> = ({ e, cells }) => {
-    if (!e) return cells;
-
-    const {
-      rowColumn: { column },
-    } = e;
-
+  export const getCellMenuSelectColumnEventHandledCells: GetEventHandledCells<number> = ({ e: column, cells }) => {
     return cells.map((cellRows) => {
       return cellRows.map((cell, i) => ({ ...cell, selected: column === i }));
     });
@@ -258,7 +240,6 @@ export namespace TableditorEventUtil {
         if (!cell.selected) return cell;
         return {
           ...cell,
-          selected: false,
           backgroundColor: color,
         };
       });
@@ -275,7 +256,6 @@ export namespace TableditorEventUtil {
         if (!cell.selected) return cell;
         return {
           ...cell,
-          selected: false,
           font: {
             ...cell.font,
             color,
@@ -291,7 +271,6 @@ export namespace TableditorEventUtil {
         if (!cell.selected) return cell;
         return {
           ...cell,
-          selected: false,
           content: '',
         };
       });

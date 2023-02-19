@@ -14,6 +14,7 @@ import {
   TableditorEvent,
   CellColorChangeEvent,
   ColorChangeEvent,
+  OptionalRowColumn,
 } from '@components/tableditor/defines';
 import useClickOutside from '@hooks/useClickOutside';
 import { TableditorUtil } from '@components/tableditor/utils/tableditorUtil';
@@ -67,6 +68,7 @@ export function useTableditor(params: UseTableditorParams): UseTableditor {
   } = params;
 
   const [cells, setCells] = useState<RenderingCellData[][]>(TableditorUtil.cellsToInitialRenderingCells(initialCells));
+  const [selectedRowColumn, setSelectedRowColumn] = useState<OptionalRowColumn>();
 
   const [cellHoverEvent, setCellHoverEvent] = useState<CellHoverEvent>();
   const [resizeEvent, setResizeEvent] = useState<CellResizeEvent>();
@@ -94,6 +96,8 @@ export function useTableditor(params: UseTableditorParams): UseTableditor {
 
   const onCellFocus: TableditorEventHandler<CellFocusEvent> = useCallback((e) => {
     setCells((cells) => TableditorEventUtil.getCellFocusEventHandledCells({ e, cells }));
+    if (!e) return;
+    setSelectedRowColumn(undefined);
   }, []);
 
   const onContentChange: TableditorEventHandler<CellContentChangeEvent> = useCallback((e) => {
@@ -166,11 +170,19 @@ export function useTableditor(params: UseTableditorParams): UseTableditor {
   }, []);
 
   const onClickCellMenuSelectRow: TableditorEventHandler<TableditorEvent> = useCallback((e) => {
-    setCells((cells) => TableditorEventUtil.getCellMenuSelectRowEventHandledCells({ e, cells }));
+    if (!e) return;
+    setSelectedRowColumn({
+      row: e.rowColumn.row,
+      column: undefined,
+    });
   }, []);
 
   const onClickCellMenuSelectColumn: TableditorEventHandler<TableditorEvent> = useCallback((e) => {
-    setCells((cells) => TableditorEventUtil.getCellMenuSelectColumnEventHandledCells({ e, cells }));
+    if (!e) return;
+    setSelectedRowColumn({
+      row: undefined,
+      column: e.rowColumn.column,
+    });
   }, []);
 
   const onClickSelectedCellsChangeBackgroundColor: TableditorEventHandler<ColorChangeEvent> = useCallback((e) => {
@@ -262,6 +274,20 @@ export function useTableditor(params: UseTableditorParams): UseTableditor {
       visible: columnAddExtenderVisible,
     }));
   }, [cells, cellHoverEvent, resizeEvent]);
+
+  /**
+   * On selected row changed
+   */
+  useEffect(() => {
+    setCells((cells) => TableditorEventUtil.getCellMenuSelectRowEventHandledCells({ e: selectedRowColumn?.row, cells }));
+  }, [selectedRowColumn?.row]);
+
+  /**
+   * On selected column changed
+   */
+  useEffect(() => {
+    setCells((cells) => TableditorEventUtil.getCellMenuSelectColumnEventHandledCells({ e: selectedRowColumn?.column, cells }));
+  }, [selectedRowColumn?.column]);
 
   return {
     tableRef,

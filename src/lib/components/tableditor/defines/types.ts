@@ -46,6 +46,11 @@ export interface RowColumn {
   column: number;
 }
 
+export interface OptionalRowColumn {
+  row: number | undefined;
+  column: number | undefined;
+}
+
 export type GetEventHandledCells<E = unknown> = (param: { e?: E; cells: RenderingCellData[][] }) => RenderingCellData[][];
 
 export interface TableExtender {
