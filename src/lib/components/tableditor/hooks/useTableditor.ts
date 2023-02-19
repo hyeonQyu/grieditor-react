@@ -57,6 +57,8 @@ export interface UseTableditor {
   onClickSelectedCellsChangeBackgroundColor: TableditorEventHandler<ColorChangeEvent>;
   onClickSelectedCellsChangeFontColor: TableditorEventHandler<ColorChangeEvent>;
   onClickSelectedCellsClearContent: TableditorEventHandler;
+  onClickSelectedRowAddRowAbove: TableditorEventHandler;
+  onClickSelectedRowAddRowBelow: TableditorEventHandler;
 }
 
 export function useTableditor(params: UseTableditorParams): UseTableditor {
@@ -154,11 +156,11 @@ export function useTableditor(params: UseTableditorParams): UseTableditor {
   );
 
   const onClickCellMenuAddRowAbove: TableditorEventHandler<number> = useCallback((e) => {
-    setCells((cells) => TableditorEventUtil.getCellMenuAddRowAboveEventHandledCells({ e, cells }));
+    setCells((cells) => TableditorEventUtil.getAddRowAboveEventHandledCells({ e, cells }));
   }, []);
 
   const onClickCellMenuAddRowBelow: TableditorEventHandler<number> = useCallback((e) => {
-    setCells((cells) => TableditorEventUtil.getCellMenuAddRowBelowEventHandledCells({ e, cells }));
+    setCells((cells) => TableditorEventUtil.getAddRowBelowEventHandledCells({ e, cells }));
   }, []);
 
   const onClickCellMenuAddColumnLeft: TableditorEventHandler<number> = useCallback((e) => {
@@ -196,6 +198,14 @@ export function useTableditor(params: UseTableditorParams): UseTableditor {
   const onClickSelectedCellsClearContent: TableditorEventHandler = useCallback(() => {
     setCells((cells) => TableditorEventUtil.getSelectedCellsClearContentEventHandledCells({ cells }));
   }, []);
+
+  const onClickSelectedRowAddRowAbove: TableditorEventHandler = useCallback(() => {
+    setCells((cells) => TableditorEventUtil.getAddRowAboveEventHandledCells({ e: selectedRowColumn?.row, cells }));
+  }, [selectedRowColumn?.row]);
+
+  const onClickSelectedRowAddRowBelow: TableditorEventHandler = useCallback(() => {
+    setCells((cells) => TableditorEventUtil.getAddRowBelowEventHandledCells({ e: selectedRowColumn?.row, cells }));
+  }, [selectedRowColumn?.row]);
 
   const handleMouseMove: MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
@@ -323,5 +333,7 @@ export function useTableditor(params: UseTableditorParams): UseTableditor {
     onClickSelectedCellsChangeBackgroundColor,
     onClickSelectedCellsChangeFontColor,
     onClickSelectedCellsClearContent,
+    onClickSelectedRowAddRowAbove,
+    onClickSelectedRowAddRowBelow,
   };
 }

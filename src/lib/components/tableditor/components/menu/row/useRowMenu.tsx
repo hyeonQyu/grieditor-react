@@ -5,6 +5,8 @@ import { TableditorColor } from '@components/tableditor/defines';
 import { CustomEventHandler } from '@defines/types';
 import { TableditorMenuUtil } from '@components/tableditor/utils/tableditorMenuUtil';
 import { RowMenuProps } from '@components/tableditor/components/menu/row/RowMenu';
+import { MenuItemTemplate } from '@components/tableditor/components/menu/itemTemplate';
+import { ArrowIcon } from '@icons/ArrowIcon';
 
 export interface UseRowMenuParams extends RowMenuProps {
   ref: RefObject<MenuRef>;
@@ -15,7 +17,7 @@ export interface UseRowMenu {
 }
 
 export default function useRowMenu(params: UseRowMenuParams): UseRowMenu {
-  const { ref, onClickChangeBackgroundColor, onClickChangeFontColor, onClickClearContent } = params;
+  const { ref, onClickChangeBackgroundColor, onClickChangeFontColor, onClickClearContent, onClickAddRowAbove, onClickAddRowBelow } = params;
 
   const handleClickRowMenuChangeBackgroundColor: CustomEventHandler<TableditorColor> = (color) => {
     onClickChangeBackgroundColor({ color: color! });
@@ -33,6 +35,26 @@ export default function useRowMenu(params: UseRowMenuParams): UseRowMenu {
       onClickChangeFontColor: handleClickRowMenuChangeFontColor,
       onClickClearContent,
     }),
+
+    {
+      label: 'Edit table',
+      items: [
+        {
+          node: <MenuItemTemplate icon={<ArrowIcon direction={'up'} />} label={'Add row above'} />,
+          onEvent(e) {
+            onClickAddRowAbove();
+            ref.current?.close(e);
+          },
+        },
+        {
+          node: <MenuItemTemplate icon={<ArrowIcon direction={'down'} />} label={'Add row below'} />,
+          onEvent(e) {
+            onClickAddRowBelow();
+            ref.current?.close(e);
+          },
+        },
+      ],
+    },
   ];
 
   return {

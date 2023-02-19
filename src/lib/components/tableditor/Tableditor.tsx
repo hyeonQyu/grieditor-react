@@ -35,6 +35,8 @@ export function Tableditor(props: TableditorProps) {
     onClickSelectedCellsChangeBackgroundColor,
     onClickSelectedCellsChangeFontColor,
     onClickSelectedCellsClearContent,
+    onClickSelectedRowAddRowAbove,
+    onClickSelectedRowAddRowBelow,
     ...rest
   } = tableditor;
 
@@ -62,6 +64,8 @@ export function Tableditor(props: TableditorProps) {
           onClickChangeBackgroundColor={onClickSelectedCellsChangeBackgroundColor}
           onClickChangeFontColor={onClickSelectedCellsChangeFontColor}
           onClickClearContent={onClickSelectedCellsClearContent}
+          onClickAddRowAbove={onClickSelectedRowAddRowAbove}
+          onClickAddRowBelow={onClickSelectedRowAddRowBelow}
         />
         <ColumnMenu
           ref={columnMenuRef}
