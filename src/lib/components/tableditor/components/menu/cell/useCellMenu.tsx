@@ -62,28 +62,28 @@ export function useCellMenu(params: UseCellMenuParams): UseCellMenu {
         {
           node: <MenuItemTemplate icon={<ArrowIcon direction={'up'} />} label={'Add row above'} />,
           onEvent(e) {
-            onClickCellMenuAddRowAbove({ rowColumn });
+            onClickCellMenuAddRowAbove(row);
             ref.current?.close(e);
           },
         },
         {
           node: <MenuItemTemplate icon={<ArrowIcon direction={'down'} />} label={'Add row below'} />,
           onEvent(e) {
-            onClickCellMenuAddRowBelow({ rowColumn });
+            onClickCellMenuAddRowBelow(row);
             ref.current?.close(e);
           },
         },
         {
           node: <MenuItemTemplate icon={<ArrowIcon direction={'left'} />} label={'Add column to left'} />,
           onEvent(e) {
-            onClickCellMenuAddColumnLeft({ rowColumn });
+            onClickCellMenuAddColumnLeft(column);
             ref.current?.close(e);
           },
         },
         {
           node: <MenuItemTemplate icon={<ArrowIcon direction={'right'} />} label={'Add column to right'} />,
           onEvent(e) {
-            onClickCellMenuAddColumnRight({ rowColumn });
+            onClickCellMenuAddColumnRight(column);
             ref.current?.close(e);
           },
         },

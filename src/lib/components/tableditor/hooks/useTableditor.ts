@@ -48,10 +48,10 @@ export interface UseTableditor {
   onClickCellMenuChangeBackgroundColor: TableditorEventHandler<CellColorChangeEvent>;
   onClickCellMenuChangeFontColor: TableditorEventHandler<CellColorChangeEvent>;
   onClickCellMenuClearContent: TableditorEventHandler<TableditorEvent>;
-  onClickCellMenuAddRowAbove: TableditorEventHandler<TableditorEvent>;
-  onClickCellMenuAddRowBelow: TableditorEventHandler<TableditorEvent>;
-  onClickCellMenuAddColumnLeft: TableditorEventHandler<TableditorEvent>;
-  onClickCellMenuAddColumnRight: TableditorEventHandler<TableditorEvent>;
+  onClickCellMenuAddRowAbove: TableditorEventHandler<number>;
+  onClickCellMenuAddRowBelow: TableditorEventHandler<number>;
+  onClickCellMenuAddColumnLeft: TableditorEventHandler<number>;
+  onClickCellMenuAddColumnRight: TableditorEventHandler<number>;
   onClickCellMenuSelectRow: TableditorEventHandler<TableditorEvent>;
   onClickCellMenuSelectColumn: TableditorEventHandler<TableditorEvent>;
   onClickSelectedCellsChangeBackgroundColor: TableditorEventHandler<ColorChangeEvent>;
@@ -153,19 +153,19 @@ export function useTableditor(params: UseTableditorParams): UseTableditor {
     [onContentChange],
   );
 
-  const onClickCellMenuAddRowAbove: TableditorEventHandler<TableditorEvent> = useCallback((e) => {
+  const onClickCellMenuAddRowAbove: TableditorEventHandler<number> = useCallback((e) => {
     setCells((cells) => TableditorEventUtil.getCellMenuAddRowAboveEventHandledCells({ e, cells }));
   }, []);
 
-  const onClickCellMenuAddRowBelow: TableditorEventHandler<TableditorEvent> = useCallback((e) => {
+  const onClickCellMenuAddRowBelow: TableditorEventHandler<number> = useCallback((e) => {
     setCells((cells) => TableditorEventUtil.getCellMenuAddRowBelowEventHandledCells({ e, cells }));
   }, []);
 
-  const onClickCellMenuAddColumnLeft: TableditorEventHandler<TableditorEvent> = useCallback((e) => {
+  const onClickCellMenuAddColumnLeft: TableditorEventHandler<number> = useCallback((e) => {
     setCells((cells) => TableditorEventUtil.getCellMenuAddColumnLeftEventHandledCells({ e, cells }));
   }, []);
 
-  const onClickCellMenuAddColumnRight: TableditorEventHandler<TableditorEvent> = useCallback((e) => {
+  const onClickCellMenuAddColumnRight: TableditorEventHandler<number> = useCallback((e) => {
     setCells((cells) => TableditorEventUtil.getCellMenuAddColumnRightEventHandledCells({ e, cells }));
   }, []);
 
