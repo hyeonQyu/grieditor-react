@@ -8,6 +8,8 @@ export interface ColumnMenuProps extends Pick<MenuProps, 'targetRef'> {
   onClickChangeBackgroundColor: TableditorEventHandler<ColorChangeEvent>;
   onClickClearContent: TableditorEventHandler;
   onClickChangeFontColor: TableditorEventHandler<ColorChangeEvent>;
+  onClickAddColumnLeft: TableditorEventHandler;
+  onClickAddColumnRight: TableditorEventHandler;
 }
 
 export const ColumnMenu = forwardRef<MenuRef, ColumnMenuProps>((props, ref) => {

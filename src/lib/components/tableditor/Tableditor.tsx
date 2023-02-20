@@ -37,6 +37,8 @@ export function Tableditor(props: TableditorProps) {
     onClickSelectedCellsClearContent,
     onClickSelectedRowAddRowAbove,
     onClickSelectedRowAddRowBelow,
+    onClickSelectedColumnAddColumnLeft,
+    onClickSelectedColumnAddColumnRight,
     ...rest
   } = tableditor;
 
@@ -73,6 +75,8 @@ export function Tableditor(props: TableditorProps) {
           onClickChangeBackgroundColor={onClickSelectedCellsChangeBackgroundColor}
           onClickClearContent={onClickSelectedCellsClearContent}
           onClickChangeFontColor={onClickSelectedCellsChangeFontColor}
+          onClickAddColumnLeft={onClickSelectedColumnAddColumnLeft}
+          onClickAddColumnRight={onClickSelectedColumnAddColumnRight}
         />
       </Portal.Provider>
     </>

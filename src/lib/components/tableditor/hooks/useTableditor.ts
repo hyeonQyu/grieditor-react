@@ -59,6 +59,8 @@ export interface UseTableditor {
   onClickSelectedCellsClearContent: TableditorEventHandler;
   onClickSelectedRowAddRowAbove: TableditorEventHandler;
   onClickSelectedRowAddRowBelow: TableditorEventHandler;
+  onClickSelectedColumnAddColumnLeft: TableditorEventHandler;
+  onClickSelectedColumnAddColumnRight: TableditorEventHandler;
 }
 
 export function useTableditor(params: UseTableditorParams): UseTableditor {
@@ -164,11 +166,11 @@ export function useTableditor(params: UseTableditorParams): UseTableditor {
   }, []);
 
   const onClickCellMenuAddColumnLeft: TableditorEventHandler<number> = useCallback((e) => {
-    setCells((cells) => TableditorEventUtil.getCellMenuAddColumnLeftEventHandledCells({ e, cells }));
+    setCells((cells) => TableditorEventUtil.getAddColumnLeftEventHandledCells({ e, cells }));
   }, []);
 
   const onClickCellMenuAddColumnRight: TableditorEventHandler<number> = useCallback((e) => {
-    setCells((cells) => TableditorEventUtil.getCellMenuAddColumnRightEventHandledCells({ e, cells }));
+    setCells((cells) => TableditorEventUtil.getAddColumnRightEventHandledCells({ e, cells }));
   }, []);
 
   const onClickCellMenuSelectRow: TableditorEventHandler<TableditorEvent> = useCallback((e) => {
@@ -206,6 +208,14 @@ export function useTableditor(params: UseTableditorParams): UseTableditor {
   const onClickSelectedRowAddRowBelow: TableditorEventHandler = useCallback(() => {
     setCells((cells) => TableditorEventUtil.getAddRowBelowEventHandledCells({ e: selectedRowColumn?.row, cells }));
   }, [selectedRowColumn?.row]);
+
+  const onClickSelectedColumnAddColumnLeft: TableditorEventHandler = useCallback(() => {
+    setCells((cells) => TableditorEventUtil.getAddColumnLeftEventHandledCells({ e: selectedRowColumn?.column, cells }));
+  }, [selectedRowColumn?.column]);
+
+  const onClickSelectedColumnAddColumnRight: TableditorEventHandler = useCallback(() => {
+    setCells((cells) => TableditorEventUtil.getAddColumnRightEventHandledCells({ e: selectedRowColumn?.column, cells }));
+  }, [selectedRowColumn?.column]);
 
   const handleMouseMove: MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
@@ -335,5 +345,7 @@ export function useTableditor(params: UseTableditorParams): UseTableditor {
     onClickSelectedCellsClearContent,
     onClickSelectedRowAddRowAbove,
     onClickSelectedRowAddRowBelow,
+    onClickSelectedColumnAddColumnLeft,
+    onClickSelectedColumnAddColumnRight,
   };
 }

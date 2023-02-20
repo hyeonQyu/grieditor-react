@@ -196,12 +196,12 @@ export namespace TableditorEventUtil {
     return TableditorUtil.getNewRowAddedCells(cells, row + 1);
   };
 
-  export const getCellMenuAddColumnLeftEventHandledCells: GetEventHandledCells<number> = ({ e: column, cells }) => {
+  export const getAddColumnLeftEventHandledCells: GetEventHandledCells<number> = ({ e: column, cells }) => {
     if (column === undefined) return cells;
     return TableditorUtil.getNewColumnAddedCells(cells, column);
   };
 
-  export const getCellMenuAddColumnRightEventHandledCells: GetEventHandledCells<number> = ({ e: column, cells }) => {
+  export const getAddColumnRightEventHandledCells: GetEventHandledCells<number> = ({ e: column, cells }) => {
     if (column === undefined) return cells;
     return TableditorUtil.getNewColumnAddedCells(cells, column + 1);
   };
