@@ -10,6 +10,7 @@ export interface RowMenuProps extends Pick<MenuProps, 'targetRef'> {
   onClickClearContent: TableditorEventHandler;
   onClickAddRowAbove: TableditorEventHandler;
   onClickAddRowBelow: TableditorEventHandler;
+  onClickDeleteRow: TableditorEventHandler;
 }
 
 export const RowMenu = forwardRef<MenuRef, RowMenuProps>((props, ref) => {

@@ -196,6 +196,11 @@ export namespace TableditorEventUtil {
     return TableditorUtil.getNewRowAddedCells(cells, row + 1);
   };
 
+  export const getDeleteRowEventHandledCells: GetEventHandledCells<number> = ({ e: row, cells }) => {
+    if (row === undefined) return cells;
+    return [...cells.slice(0, row), ...cells.slice(row + 1)];
+  };
+
   export const getAddColumnLeftEventHandledCells: GetEventHandledCells<number> = ({ e: column, cells }) => {
     if (column === undefined) return cells;
     return TableditorUtil.getNewColumnAddedCells(cells, column);

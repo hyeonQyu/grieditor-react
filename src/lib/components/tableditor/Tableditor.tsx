@@ -37,6 +37,7 @@ export function Tableditor(props: TableditorProps) {
     onClickSelectedCellsClearContent,
     onClickSelectedRowAddRowAbove,
     onClickSelectedRowAddRowBelow,
+    onClickSelectedRowDelete,
     onClickSelectedColumnAddColumnLeft,
     onClickSelectedColumnAddColumnRight,
     ...rest
@@ -68,6 +69,7 @@ export function Tableditor(props: TableditorProps) {
           onClickClearContent={onClickSelectedCellsClearContent}
           onClickAddRowAbove={onClickSelectedRowAddRowAbove}
           onClickAddRowBelow={onClickSelectedRowAddRowBelow}
+          onClickDeleteRow={onClickSelectedRowDelete}
         />
         <ColumnMenu
           ref={columnMenuRef}

@@ -59,6 +59,7 @@ export interface UseTableditor {
   onClickSelectedCellsClearContent: TableditorEventHandler;
   onClickSelectedRowAddRowAbove: TableditorEventHandler;
   onClickSelectedRowAddRowBelow: TableditorEventHandler;
+  onClickSelectedRowDelete: TableditorEventHandler;
   onClickSelectedColumnAddColumnLeft: TableditorEventHandler;
   onClickSelectedColumnAddColumnRight: TableditorEventHandler;
 }
@@ -209,6 +210,10 @@ export function useTableditor(params: UseTableditorParams): UseTableditor {
     setCells((cells) => TableditorEventUtil.getAddRowBelowEventHandledCells({ e: selectedRowColumn?.row, cells }));
   }, [selectedRowColumn?.row]);
 
+  const onClickSelectedRowDelete: TableditorEventHandler = useCallback(() => {
+    setCells((cells) => TableditorEventUtil.getDeleteRowEventHandledCells({ e: selectedRowColumn?.row, cells }));
+  }, [selectedRowColumn?.row]);
+
   const onClickSelectedColumnAddColumnLeft: TableditorEventHandler = useCallback(() => {
     setCells((cells) => TableditorEventUtil.getAddColumnLeftEventHandledCells({ e: selectedRowColumn?.column, cells }));
   }, [selectedRowColumn?.column]);
@@ -345,6 +350,7 @@ export function useTableditor(params: UseTableditorParams): UseTableditor {
     onClickSelectedCellsClearContent,
     onClickSelectedRowAddRowAbove,
     onClickSelectedRowAddRowBelow,
+    onClickSelectedRowDelete,
     onClickSelectedColumnAddColumnLeft,
     onClickSelectedColumnAddColumnRight,
   };

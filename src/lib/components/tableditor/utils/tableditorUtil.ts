@@ -69,13 +69,20 @@ export namespace TableditorUtil {
       rowColumn: { row, column },
     } = cellHoverEvent;
 
-    const isLastRowHovered = row === cells.length - 1;
-    const isLastColumnHovered = column === cells[row].length - 1;
+    try {
+      const isLastRowHovered = row === cells.length - 1;
+      const isLastColumnHovered = column === cells[row].length - 1;
 
-    return {
-      rowAddExtenderVisible: isLastRowHovered,
-      columnAddExtenderVisible: isLastColumnHovered,
-    };
+      return {
+        rowAddExtenderVisible: isLastRowHovered,
+        columnAddExtenderVisible: isLastColumnHovered,
+      };
+    } catch (e) {
+      return {
+        rowAddExtenderVisible: false,
+        columnAddExtenderVisible: false,
+      };
+    }
   }
 
   /**
