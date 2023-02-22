@@ -6,3 +6,4 @@ export * from './PencilIcon';
 export * from './PaintBucketIcon';
 export * from './VerticalIcon';
 export * from './ChevronIcon';
+export * from './TrashIcon';
