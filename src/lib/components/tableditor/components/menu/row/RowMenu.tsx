@@ -17,5 +17,5 @@ export const RowMenu = forwardRef<MenuRef, RowMenuProps>((props, ref) => {
   const { targetRef } = props;
   const { menuSections } = useRowMenu({ ref: ref as RefObject<MenuRef>, ...props });
 
-  return <Menu ref={ref} sections={menuSections} targetRef={targetRef} />;
+  return <Menu ref={ref} relativePosition={'horizontal'} horizontalGap={6} sections={menuSections} targetRef={targetRef} />;
 });

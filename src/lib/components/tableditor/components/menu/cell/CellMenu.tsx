@@ -6,5 +6,5 @@ import { useCellMenu } from '@components/tableditor/components/menu/cell/useCell
 export const CellMenu = forwardRef<MenuRef>((_, ref) => {
   const { menuSections } = useCellMenu({ ref: ref as RefObject<MenuRef> });
 
-  return <Menu ref={ref} sections={menuSections} />;
+  return <Menu ref={ref} relativePosition={'horizontal'} horizontalGap={6} sections={menuSections} />;
 });

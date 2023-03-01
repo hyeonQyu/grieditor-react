@@ -1,13 +1,16 @@
 /** @jsxImportSource @emotion/react */
 import React, { forwardRef, MutableRefObject } from 'react';
 import { useMenu } from '@components/menu/useMenu';
-import { MenuRef } from '@components/menu/defines';
+import { MenuRef, RelativePositionType } from '@components/menu/defines';
 import { MenuSection, MenuSectionProps } from '@components/menu/components/menuSection';
 import { MenuStyle } from '@components/menu/styles';
 import { Portal } from '@components/portal';
 
 export interface MenuProps {
   sections: MenuSectionProps[];
+  relativePosition: RelativePositionType;
+  verticalGap?: number;
+  horizontalGap?: number;
   targetRef?: MutableRefObject<HTMLElement | null>;
   onOpen?: () => void;
   onClose?: () => void;

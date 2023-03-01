@@ -2,7 +2,7 @@ import { ForwardedRef, MutableRefObject, useCallback, useEffect, useImperativeHa
 import useClickOutside from '@hooks/useClickOutside';
 import useAnimationMount from '@hooks/useAnimationMount';
 import { MenuProps } from '@components/menu';
-import { MenuPosition, MenuRef } from '@components/menu/defines';
+import { MenuPosition, MenuRef, RelativePositionType } from '@components/menu/defines';
 
 export interface IUseMenuParams extends MenuProps {
   ref: ForwardedRef<MenuRef>;
@@ -18,7 +18,7 @@ export interface IUseMenu {
 }
 
 export function useMenu(params: IUseMenuParams): IUseMenu {
-  const { ref, targetRef, onOpen, onClose, onToggle } = params;
+  const { ref, targetRef, relativePosition, verticalGap = 0, horizontalGap = 0, onOpen, onClose, onToggle } = params;
 
   const appearAnimationDuration = 0.2;
   const disappearAnimationDuration = 0.2;
@@ -52,21 +52,46 @@ export function useMenu(params: IUseMenuParams): IUseMenu {
 
     if (!menuElement || !targetRect) return;
 
-    let left = targetRect.left + targetRect.width;
-    const right = left + menuElement.clientWidth;
+    const getPositionByRelativePosition: Record<RelativePositionType, () => MenuPosition> = {
+      vertical() {
+        let { left, top } = targetRect;
 
-    if (right > window.innerWidth) {
-      left = targetRect.left - menuElement.clientWidth;
-    }
+        left += horizontalGap;
+        const right = left + menuElement.clientWidth;
+        if (right > window.innerWidth) {
+          left = targetRect.left - menuElement.clientWidth - horizontalGap;
+        }
 
-    let top = targetRect.top;
-    const bottom = top + menuElement.clientHeight;
+        top += targetRect.height + verticalGap;
+        const bottom = top + menuElement.clientHeight;
+        if (bottom > window.innerHeight) {
+          top = targetRect.top - menuElement.clientHeight - verticalGap;
+        }
 
-    if (bottom > window.innerHeight) {
-      top = targetRect.top - menuElement.clientHeight + targetRect.height;
-    }
+        return { top, left };
+      },
+      horizontal() {
+        let { left, top } = targetRect;
 
-    setPosition({ top, left });
+        left += targetRect.width + horizontalGap;
+        const right = left + menuElement.clientWidth;
+
+        if (right > window.innerWidth) {
+          left = targetRect.left - menuElement.clientWidth - horizontalGap;
+        }
+
+        top += verticalGap;
+        const bottom = top + menuElement.clientHeight;
+
+        if (bottom > window.innerHeight) {
+          top = targetRect.top - menuElement.clientHeight + targetRect.height - verticalGap;
+        }
+
+        return { top, left };
+      },
+    };
+
+    setPosition(getPositionByRelativePosition[relativePosition]());
   }, [mounted]);
 
   const getTargetBoundingRect = (target: EventTarget) =>

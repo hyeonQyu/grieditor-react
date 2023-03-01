@@ -20,7 +20,9 @@ export function MenuItem(props: MenuItemProps) {
     <>
       <li onClick={handleClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} css={MenuStyle.item(childMenuOpened)}>
         <div className={'node'}>{node}</div>
-        {hasChildren && <Menu ref={childMenuRef} sections={sections!} onToggle={handleChildMenuToggle} />}
+        {hasChildren && (
+          <Menu ref={childMenuRef} relativePosition={'horizontal'} verticalGap={-60} sections={sections!} onToggle={handleChildMenuToggle} />
+        )}
       </li>
     </>
   );

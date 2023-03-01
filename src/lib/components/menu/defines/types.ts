@@ -7,6 +7,8 @@ export interface MenuRef {
   element: HTMLDivElement | null;
 }
 
+export type RelativePositionType = 'vertical' | 'horizontal';
+
 export interface MenuPosition {
   top: number;
   left: number;
