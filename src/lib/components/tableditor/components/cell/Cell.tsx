@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { RenderingCellData } from '@components/tableditor/defines';
+import { InAppCellInfo } from '@components/tableditor/defines';
 import { useCell } from '@components/tableditor/components/cell/hooks/useCell';
 import React from 'react';
 import _ from 'lodash';
@@ -33,7 +33,7 @@ export interface CellProps
     | 'onClickCellMenuSelectRow'
     | 'onClickCellMenuSelectColumn'
   > {
-  cell: RenderingCellData;
+  cell: InAppCellInfo;
   row: number;
   column: number;
 }

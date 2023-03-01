@@ -7,7 +7,7 @@ import {
   CellResizeEvent,
   CellContentChangeEvent,
   TableditorEventHandler,
-  RenderingCellData,
+  InAppCellInfo,
   TableExtender,
   defaultTableExtender,
   defaultCell,
@@ -28,7 +28,7 @@ export interface UseTableditor {
   rowMenuRef: RefObject<MenuRef>;
   columnMenuRef: RefObject<MenuRef>;
   lastClickedCellMoreOptionButtonRef: MutableRefObject<HTMLButtonElement | null>;
-  cells: RenderingCellData[][];
+  cells: InAppCellInfo[][];
   cellHoverEvent: CellHoverEvent | undefined;
   resizeEvent: CellResizeEvent | undefined;
   rowAddExtender: TableExtender;
@@ -73,7 +73,7 @@ export function useTableditor(params: UseTableditorParams): UseTableditor {
     ],
   } = params;
 
-  const [cells, setCells] = useState<RenderingCellData[][]>(TableditorUtil.cellsToInitialRenderingCells(initialCells));
+  const [cells, setCells] = useState<InAppCellInfo[][]>(TableditorUtil.cellsToInitialRenderingCells(initialCells));
   const [selectedRowColumn, setSelectedRowColumn] = useState<OptionalRowColumn>();
 
   const [cellHoverEvent, setCellHoverEvent] = useState<CellHoverEvent>();

@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
-import { CellData } from '@components/tableditor/defines';
+import { CellInfo } from '@components/tableditor/defines';
 import { useTableditor } from '@components/tableditor/hooks/useTableditor';
 import { TableditorStyle } from '@components/tableditor/styles';
 import { TableColumnAddExtender, TableRowAddExtender } from '@components/tableditor/components/tableExtender';
@@ -12,7 +12,7 @@ import { RowMenu } from '@components/tableditor/components/menu/row';
 import { ColumnMenu } from '@components/tableditor/components/menu/column';
 
 export interface TableditorProps {
-  cells?: CellData[][];
+  cells?: CellInfo[][];
 }
 
 export function Tableditor(props: TableditorProps) {

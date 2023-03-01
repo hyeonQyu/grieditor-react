@@ -1,7 +1,7 @@
 import { RefObject } from 'react';
 import { RectSize } from '@defines/types';
 
-export interface CellData {
+export interface CellInfo {
   content: string;
   width: number;
   backgroundColor: TableditorColor;
@@ -17,7 +17,7 @@ export interface CellState {
   selected: boolean;
 }
 
-export interface RenderingCellData extends CellData, CellState {}
+export interface InAppCellInfo extends CellInfo, CellState {}
 
 export interface Font {
   color: TableditorColor;
@@ -51,7 +51,7 @@ export interface OptionalRowColumn {
   column: number | undefined;
 }
 
-export type GetEventHandledCells<E = unknown> = (param: { e?: E; cells: RenderingCellData[][] }) => RenderingCellData[][];
+export type GetEventHandledCells<E = unknown> = (param: { e?: E; cells: InAppCellInfo[][] }) => InAppCellInfo[][];
 
 export interface TableExtender {
   size: RectSize;

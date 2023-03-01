@@ -1,4 +1,4 @@
-import { CellData, CellHoverEvent, defaultCell, RenderingCellData, CellResizeEvent, RowColumn } from '@components/tableditor/defines';
+import { CellInfo, CellHoverEvent, defaultCell, InAppCellInfo, CellResizeEvent, RowColumn } from '@components/tableditor/defines';
 import { Direction } from '@defines/types';
 import { createRef } from 'react';
 
@@ -7,7 +7,7 @@ export namespace TableditorUtil {
    * Return default rendering cells' data from the cells passed as prop
    * @param cells The cells passed as prop
    */
-  export function cellsToInitialRenderingCells(cells: CellData[][]): RenderingCellData[][] {
+  export function cellsToInitialRenderingCells(cells: CellInfo[][]): InAppCellInfo[][] {
     return cells.map((row) => row.map((cell) => cellToInitialRenderingCell(cell)));
   }
 
@@ -15,7 +15,7 @@ export namespace TableditorUtil {
    * Return default rendering cell data from the cell
    * @param cell
    */
-  export function cellToInitialRenderingCell(cell: CellData): RenderingCellData {
+  export function cellToInitialRenderingCell(cell: CellInfo): InAppCellInfo {
     return {
       focused: false,
       resizerHovered: false,
@@ -32,7 +32,7 @@ export namespace TableditorUtil {
    * @param cell
    * @param direction
    */
-  export function getCellCaretOffsetFromDirection(cell: RenderingCellData, direction?: Direction): number {
+  export function getCellCaretOffsetFromDirection(cell: InAppCellInfo, direction?: Direction): number {
     switch (direction) {
       case 'up':
       case 'left':
@@ -54,7 +54,7 @@ export namespace TableditorUtil {
    * @param resizeEvent
    */
   export function getTableExtenderVisible(
-    cells: CellData[][],
+    cells: CellInfo[][],
     cellHoverEvent?: CellHoverEvent,
     resizeEvent?: CellResizeEvent,
   ): { rowAddExtenderVisible: boolean; columnAddExtenderVisible: boolean } {
@@ -89,7 +89,7 @@ export namespace TableditorUtil {
    * Add last row
    * @param cells
    */
-  export function addRow(cells: RenderingCellData[][]): RenderingCellData[][] {
+  export function addRow(cells: InAppCellInfo[][]): InAppCellInfo[][] {
     return [...cells, getNewRow(cells)];
   }
 
@@ -97,7 +97,7 @@ export namespace TableditorUtil {
    * Add last column
    * @param cells
    */
-  export function addColumn(cells: RenderingCellData[][]): RenderingCellData[][] {
+  export function addColumn(cells: InAppCellInfo[][]): InAppCellInfo[][] {
     return cells.map((row) => [...row, cellToInitialRenderingCell(defaultCell)]);
   }
 
@@ -106,7 +106,7 @@ export namespace TableditorUtil {
    * @param cells Source cells
    * @param index Index at which the new row will be inserted
    */
-  export function getNewRowAddedCells(cells: RenderingCellData[][], index: number): RenderingCellData[][] {
+  export function getNewRowAddedCells(cells: InAppCellInfo[][], index: number): InAppCellInfo[][] {
     return [...cells.slice(0, index), getNewRow(cells), ...cells.slice(index)];
   }
 
@@ -115,7 +115,7 @@ export namespace TableditorUtil {
    * @param cells Source cells
    * @param index Index at which the new column will be inserted
    */
-  export function getNewColumnAddedCells(cells: RenderingCellData[][], index: number): RenderingCellData[][] {
+  export function getNewColumnAddedCells(cells: InAppCellInfo[][], index: number): InAppCellInfo[][] {
     return cells.map((row) => [...row.slice(0, index), cellToInitialRenderingCell(defaultCell), ...row.slice(index)]);
   }
 
@@ -126,9 +126,9 @@ export namespace TableditorUtil {
    * @param getChangedCell Callback that changes and returns the corresponding cell
    */
   export function getSpecificCellChangedCells(
-    cells: RenderingCellData[][],
+    cells: InAppCellInfo[][],
     rowColumn: RowColumn,
-    getChangedCell: (cell: RenderingCellData) => RenderingCellData,
+    getChangedCell: (cell: InAppCellInfo) => InAppCellInfo,
   ) {
     const { row, column } = rowColumn;
     return cells.map((rowCells, rowIndex) => {
@@ -140,7 +140,7 @@ export namespace TableditorUtil {
     });
   }
 
-  function getNewRow(cells: RenderingCellData[][]): RenderingCellData[] {
+  function getNewRow(cells: InAppCellInfo[][]): InAppCellInfo[] {
     const firstRow = cells[0];
     const columns = firstRow.length;
     return Array.from({ length: columns }, (_, i) =>
