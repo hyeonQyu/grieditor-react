@@ -7,6 +7,7 @@ import { TableditorMenuUtil } from '@components/tableditor/utils/tableditorMenuU
 import { ColumnMenuProps } from '@components/tableditor/components/menu/column/ColumnMenu';
 import { MenuItemTemplate } from '@components/tableditor/components/menu/itemTemplate';
 import { ArrowIcon } from '@icons/ArrowIcon';
+import { TrashIcon } from '@icons/TrashIcon';
 
 export interface UseColumnMenuParams extends ColumnMenuProps {
   ref: RefObject<MenuRef>;
@@ -17,7 +18,15 @@ export interface UseColumnMenu {
 }
 
 export default function useColumnMenu(params: UseColumnMenuParams): UseColumnMenu {
-  const { ref, onClickChangeBackgroundColor, onClickChangeFontColor, onClickClearContent, onClickAddColumnLeft, onClickAddColumnRight } = params;
+  const {
+    ref,
+    onClickChangeBackgroundColor,
+    onClickChangeFontColor,
+    onClickClearContent,
+    onClickAddColumnLeft,
+    onClickAddColumnRight,
+    onClickDeleteColumn,
+  } = params;
 
   const handleClickColumnMenuChangeBackgroundColor: CustomEventHandler<TableditorColor> = (color) => {
     onClickChangeBackgroundColor({ color: color! });
@@ -50,6 +59,13 @@ export default function useColumnMenu(params: UseColumnMenuParams): UseColumnMen
           node: <MenuItemTemplate icon={<ArrowIcon direction={'right'} />} label={'Add column to right'} />,
           onEvent(e) {
             onClickAddColumnRight();
+            ref.current?.close(e);
+          },
+        },
+        {
+          node: <MenuItemTemplate icon={<TrashIcon />} label={'Delete column'} />,
+          onEvent(e) {
+            onClickDeleteColumn();
             ref.current?.close(e);
           },
         },

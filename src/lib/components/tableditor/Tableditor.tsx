@@ -40,6 +40,7 @@ export function Tableditor(props: TableditorProps) {
     onClickSelectedRowDelete,
     onClickSelectedColumnAddColumnLeft,
     onClickSelectedColumnAddColumnRight,
+    onClickSelectedColumnDelete,
     ...rest
   } = tableditor;
 
@@ -79,6 +80,7 @@ export function Tableditor(props: TableditorProps) {
           onClickChangeFontColor={onClickSelectedCellsChangeFontColor}
           onClickAddColumnLeft={onClickSelectedColumnAddColumnLeft}
           onClickAddColumnRight={onClickSelectedColumnAddColumnRight}
+          onClickDeleteColumn={onClickSelectedColumnDelete}
         />
       </Portal.Provider>
     </>

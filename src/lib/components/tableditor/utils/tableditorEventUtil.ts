@@ -211,6 +211,13 @@ export namespace TableditorEventUtil {
     return TableditorUtil.getNewColumnAddedCells(cells, column + 1);
   };
 
+  export const getDeleteColumnEventHandledCells: GetEventHandledCells<number> = ({ e: column, cells }) => {
+    if (column === undefined) return cells;
+    return cells.map((cellRows) => {
+      return cellRows.filter((cell, i) => i !== column);
+    });
+  };
+
   export const getCellMenuSelectRowEventHandledCells: GetEventHandledCells<number> = ({ e: row, cells }) => {
     return cells.map((cellRows, i) => {
       return cellRows.map((cell) => ({ ...cell, selected: row === i }));

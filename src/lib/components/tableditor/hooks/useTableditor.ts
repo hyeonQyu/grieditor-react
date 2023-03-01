@@ -62,6 +62,7 @@ export interface UseTableditor {
   onClickSelectedRowDelete: TableditorEventHandler;
   onClickSelectedColumnAddColumnLeft: TableditorEventHandler;
   onClickSelectedColumnAddColumnRight: TableditorEventHandler;
+  onClickSelectedColumnDelete: TableditorEventHandler;
 }
 
 export function useTableditor(params: UseTableditorParams): UseTableditor {
@@ -222,6 +223,10 @@ export function useTableditor(params: UseTableditorParams): UseTableditor {
     setCells((cells) => TableditorEventUtil.getAddColumnRightEventHandledCells({ e: selectedRowColumn?.column, cells }));
   }, [selectedRowColumn?.column]);
 
+  const onClickSelectedColumnDelete: TableditorEventHandler = useCallback(() => {
+    setCells((cells) => TableditorEventUtil.getDeleteColumnEventHandledCells({ e: selectedRowColumn?.column, cells }));
+  }, [selectedRowColumn?.column]);
+
   const handleMouseMove: MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
       if (!resizeEvent) return;
@@ -353,5 +358,6 @@ export function useTableditor(params: UseTableditorParams): UseTableditor {
     onClickSelectedRowDelete,
     onClickSelectedColumnAddColumnLeft,
     onClickSelectedColumnAddColumnRight,
+    onClickSelectedColumnDelete,
   };
 }
