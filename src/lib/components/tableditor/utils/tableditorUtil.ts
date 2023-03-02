@@ -88,17 +88,42 @@ export namespace TableditorUtil {
   /**
    * Add last row
    * @param cells
+   * @param row
    */
-  export function addRow(cells: InAppCellInfo[][]): InAppCellInfo[][] {
+  export function addRow(cells: InAppCellInfo[][], row: CellInfo[] = []): InAppCellInfo[][] {
+    const originLength = cells[0].length;
+    const newRowLength = row.length;
+
+    if (originLength < newRowLength) {
+      cells = cells.map((cellRows) => [
+        ...cellRows,
+        ...Array.from({ length: newRowLength - originLength }, () => cellToInitialRenderingCell(defaultCell)),
+      ]);
+    }
+
     return [...cells, getNewRow(cells)];
   }
 
   /**
    * Add last column
    * @param cells
+   * @param column
    */
-  export function addColumn(cells: InAppCellInfo[][]): InAppCellInfo[][] {
-    return cells.map((row) => [...row, cellToInitialRenderingCell(defaultCell)]);
+  export function addColumn(cells: InAppCellInfo[][], column: CellInfo[] = []): InAppCellInfo[][] {
+    const originLength = cells.length;
+    const newColumnLength = column.length;
+
+    const difference = Math.abs(originLength - newColumnLength);
+
+    let inAppColumn = column.map((cell) => cellToInitialRenderingCell(cell));
+
+    if (originLength < newColumnLength) {
+      cells = [...cells, ...Array.from({ length: difference }, () => getNewRow(cells))];
+    } else if (newColumnLength < originLength) {
+      inAppColumn = [...inAppColumn, ...Array.from({ length: difference }, () => cellToInitialRenderingCell(defaultCell))];
+    }
+
+    return cells.map((row, i) => [...row, inAppColumn[i]]);
   }
 
   /**
@@ -140,14 +165,22 @@ export namespace TableditorUtil {
     });
   }
 
-  function getNewRow(cells: InAppCellInfo[][]): InAppCellInfo[] {
+  function getNewRow(cells: InAppCellInfo[][], row: CellInfo[] = []): InAppCellInfo[] {
     const firstRow = cells[0];
-    const columns = firstRow.length;
-    return Array.from({ length: columns }, (_, i) =>
-      cellToInitialRenderingCell({
-        ...defaultCell,
-        width: firstRow[i].width,
-      }),
-    );
+    const originLength = firstRow.length;
+    const newRowLength = row.length;
+
+    if (originLength > newRowLength) {
+      row = [...row, ...Array.from({ length: originLength - newRowLength }, () => defaultCell)];
+    }
+
+    return row.map((cell, i) => cellToInitialRenderingCell({ ...cell, width: firstRow[i].width }));
+  }
+
+  export function getRow(cells: InAppCellInfo[][], rowIndex: number): InAppCellInfo[] {
+    return cells[rowIndex];
+  }
+  export function getColumn(cells: InAppCellInfo[][], columnIndex: number): InAppCellInfo[] {
+    return cells.map((cellRows) => cellRows[columnIndex]);
   }
 }
