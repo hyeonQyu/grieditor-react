@@ -74,7 +74,7 @@ export function useTableditor(params: UseTableditorParams, ref: ForwardedRef<Tab
     ],
   } = params;
 
-  const [cells, setCells] = useState<InAppCellInfo[][]>(TableditorUtil.cellsToInitialRenderingCells(initialCells));
+  const [cells, setCells] = useState<InAppCellInfo[][]>(TableditorUtil.cellsToInitialInAppCells(initialCells));
   const [selectedRowColumn, setSelectedRowColumn] = useState<OptionalRowColumn>();
 
   const [cellHoverEvent, setCellHoverEvent] = useState<CellHoverEvent>();
@@ -320,23 +320,26 @@ export function useTableditor(params: UseTableditorParams, ref: ForwardedRef<Tab
     setCells((cells) => TableditorEventUtil.getCellMenuSelectColumnEventHandledCells({ e: selectedRowColumn?.column, cells }));
   }, [selectedRowColumn?.column]);
 
-  const getRow = useCallback((rowIndex: number) => TableditorUtil.getRow(cells, rowIndex), [cells]);
-  const getColumn = useCallback((columnIndex: number) => TableditorUtil.getColumn(cells, columnIndex), [cells]);
+  const getInAppRow = useCallback((rowIndex: number) => TableditorUtil.getRow(cells, rowIndex), [cells]);
+  const getRow = useCallback((rowIndex: number) => getInAppRow(rowIndex).map(TableditorUtil.inAppCellToCell), [getInAppRow]);
+
+  const getInAppColumn = useCallback((columnIndex: number) => TableditorUtil.getColumn(cells, columnIndex), [cells]);
+  const getColumn = useCallback((columnIndex: number) => getInAppColumn(columnIndex).map(TableditorUtil.inAppCellToCell), [getInAppColumn]);
 
   useImperativeHandle(
     ref,
     () => ({
-      cells,
+      cells: TableditorUtil.inAppCellsToCells(cells),
       inAppCells: cells,
       getRow,
-      getInAppRow: getRow,
+      getInAppRow,
       getColumn,
-      getInAppColumn: getColumn,
-      setCells: TableditorUtil.cellsToInitialRenderingCells,
+      getInAppColumn,
+      setCells: TableditorUtil.cellsToInitialInAppCells,
       addRow: (row) => TableditorUtil.addRow(cells, row),
       addColumn: (column) => TableditorUtil.addColumn(cells, column),
     }),
-    [cells, getRow, getColumn],
+    [cells, getRow, getInAppRow, getColumn, getInAppColumn],
   );
 
   return {
