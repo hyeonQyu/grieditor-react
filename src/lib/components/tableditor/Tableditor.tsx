@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
-import { CellInfo } from '@components/tableditor/defines';
+import React, { forwardRef } from 'react';
+import { CellInfo, TableditorHandler } from '@components/tableditor/defines';
 import { useTableditor } from '@components/tableditor/hooks/useTableditor';
 import { TableditorStyle } from '@components/tableditor/styles';
 import { TableColumnAddExtender, TableRowAddExtender } from '@components/tableditor/components/tableExtender';
@@ -15,8 +15,9 @@ export interface TableditorProps {
   cells?: CellInfo[][];
 }
 
-export function Tableditor(props: TableditorProps) {
-  const tableditor = useTableditor(props);
+export const Tableditor = forwardRef<TableditorHandler, TableditorProps>((props, ref) => {
+  const tableditor = useTableditor(props, ref);
+
   const {
     tableRef,
     rowMenuRef,
@@ -85,4 +86,4 @@ export function Tableditor(props: TableditorProps) {
       </Portal.Provider>
     </>
   );
-}
+});

@@ -1,5 +1,5 @@
 import { TableditorProps } from '@components/tableditor';
-import { MouseEventHandler, MutableRefObject, RefObject, useCallback, useEffect, useRef, useState } from 'react';
+import { ForwardedRef, MouseEventHandler, MutableRefObject, RefObject, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import {
   CellFocusEvent,
   CellHoverEvent,
@@ -15,6 +15,7 @@ import {
   CellColorChangeEvent,
   ColorChangeEvent,
   OptionalRowColumn,
+  TableditorHandler,
 } from '@components/tableditor/defines';
 import useClickOutside from '@hooks/useClickOutside';
 import { TableditorUtil } from '@components/tableditor/utils/tableditorUtil';
@@ -65,7 +66,7 @@ export interface UseTableditor {
   onClickSelectedColumnDelete: TableditorEventHandler;
 }
 
-export function useTableditor(params: UseTableditorParams): UseTableditor {
+export function useTableditor(params: UseTableditorParams, ref: ForwardedRef<TableditorHandler>): UseTableditor {
   const {
     cells: initialCells = [
       [{ ...defaultCell }, { ...defaultCell }],
@@ -318,6 +319,25 @@ export function useTableditor(params: UseTableditorParams): UseTableditor {
   useEffect(() => {
     setCells((cells) => TableditorEventUtil.getCellMenuSelectColumnEventHandledCells({ e: selectedRowColumn?.column, cells }));
   }, [selectedRowColumn?.column]);
+
+  const getRow = useCallback((rowIndex: number) => TableditorUtil.getRow(cells, rowIndex), [cells]);
+  const getColumn = useCallback((columnIndex: number) => TableditorUtil.getColumn(cells, columnIndex), [cells]);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      cells,
+      inAppCells: cells,
+      getRow,
+      getInAppRow: getRow,
+      getColumn,
+      getInAppColumn: getColumn,
+      setCells: TableditorUtil.cellsToInitialRenderingCells,
+      addRow: (row) => TableditorUtil.addRow(cells, row),
+      addColumn: (column) => TableditorUtil.addColumn(cells, column),
+    }),
+    [cells, getRow, getColumn],
+  );
 
   return {
     tableRef,

@@ -57,3 +57,15 @@ export interface TableExtender {
   size: RectSize;
   visible: boolean;
 }
+
+export interface TableditorHandler {
+  cells: CellInfo[][];
+  inAppCells: InAppCellInfo[][];
+  getRow: (rowIndex: number) => CellInfo[];
+  getInAppRow: (rowIndex: number) => InAppCellInfo[];
+  getColumn: (columnIndex: number) => CellInfo[];
+  getInAppColumn: (columnIndex: number) => InAppCellInfo[];
+  setCells: (cells: CellInfo[][]) => void;
+  addRow: (cells: CellInfo[]) => void;
+  addColumn: (cells: CellInfo[]) => void;
+}
