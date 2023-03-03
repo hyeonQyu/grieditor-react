@@ -7,7 +7,7 @@ import { TableditorUtil } from '@components/tableditor/utils/tableditorUtil';
 export interface CellContextProps extends CellProps, UseCell {}
 
 export const CellContext = React.createContext<CellContextProps>({
-  cell: TableditorUtil.cellToInitialRenderingCell(defaultCell),
+  cell: TableditorUtil.cellToInitialInAppCell(defaultCell),
   row: 0,
   column: 0,
   rowMenuRef: createRef(),

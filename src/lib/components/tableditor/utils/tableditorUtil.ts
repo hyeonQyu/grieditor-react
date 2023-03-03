@@ -4,18 +4,26 @@ import { createRef } from 'react';
 
 export namespace TableditorUtil {
   /**
-   * Return default rendering cells' data from the cells passed as prop
+   * Return default in-app cells' data from the cells passed as prop
    * @param cells The cells passed as prop
    */
-  export function cellsToInitialRenderingCells(cells: CellInfo[][]): InAppCellInfo[][] {
-    return cells.map((row) => row.map((cell) => cellToInitialRenderingCell(cell)));
+  export function cellsToInitialInAppCells(cells: CellInfo[][]): InAppCellInfo[][] {
+    return cells.map((cellRows) => cellRows.map(cellToInitialInAppCell));
   }
 
   /**
-   * Return default rendering cell data from the cell
+   * Return cell's data from the in-app cells
+   * @param cells
+   */
+  export function inAppCellsToCells(cells: InAppCellInfo[][]): CellInfo[][] {
+    return cells.map((cellRows) => cellRows.map(inAppCellToCell));
+  }
+
+  /**
+   * Return default in-app cell data from the cell
    * @param cell
    */
-  export function cellToInitialRenderingCell(cell: CellInfo): InAppCellInfo {
+  export function cellToInitialInAppCell(cell: CellInfo): InAppCellInfo {
     return {
       focused: false,
       resizerHovered: false,
@@ -25,6 +33,14 @@ export namespace TableditorUtil {
       selected: false,
       ...cell,
     };
+  }
+
+  /**
+   * Return cell from the in-app cell
+   * @param cell
+   */
+  export function inAppCellToCell({ content, width, backgroundColor, font }: InAppCellInfo): CellInfo {
+    return { content, width, backgroundColor, font };
   }
 
   /**
@@ -97,7 +113,7 @@ export namespace TableditorUtil {
     if (originLength < newRowLength) {
       cells = cells.map((cellRows) => [
         ...cellRows,
-        ...Array.from({ length: newRowLength - originLength }, () => cellToInitialRenderingCell(defaultCell)),
+        ...Array.from({ length: newRowLength - originLength }, () => cellToInitialInAppCell(defaultCell)),
       ]);
     }
 
@@ -115,12 +131,12 @@ export namespace TableditorUtil {
 
     const difference = Math.abs(originLength - newColumnLength);
 
-    let inAppColumn = column.map((cell) => cellToInitialRenderingCell(cell));
+    let inAppColumn = column.map((cell) => cellToInitialInAppCell(cell));
 
     if (originLength < newColumnLength) {
       cells = [...cells, ...Array.from({ length: difference }, () => getNewRow(cells))];
     } else if (newColumnLength < originLength) {
-      inAppColumn = [...inAppColumn, ...Array.from({ length: difference }, () => cellToInitialRenderingCell(defaultCell))];
+      inAppColumn = [...inAppColumn, ...Array.from({ length: difference }, () => cellToInitialInAppCell(defaultCell))];
     }
 
     return cells.map((row, i) => [...row, inAppColumn[i]]);
@@ -141,7 +157,7 @@ export namespace TableditorUtil {
    * @param index Index at which the new column will be inserted
    */
   export function getNewColumnAddedCells(cells: InAppCellInfo[][], index: number): InAppCellInfo[][] {
-    return cells.map((row) => [...row.slice(0, index), cellToInitialRenderingCell(defaultCell), ...row.slice(index)]);
+    return cells.map((row) => [...row.slice(0, index), cellToInitialInAppCell(defaultCell), ...row.slice(index)]);
   }
 
   /**
@@ -174,7 +190,7 @@ export namespace TableditorUtil {
       row = [...row, ...Array.from({ length: originLength - newRowLength }, () => defaultCell)];
     }
 
-    return row.map((cell, i) => cellToInitialRenderingCell({ ...cell, width: firstRow[i].width }));
+    return row.map((cell, i) => cellToInitialInAppCell({ ...cell, width: firstRow[i].width }));
   }
 
   export function getRow(cells: InAppCellInfo[][], rowIndex: number): InAppCellInfo[] {
