@@ -13,7 +13,7 @@ import { TableditorUtil } from '@components/tableditor/utils/tableditorUtil';
 
 export namespace TableditorEventUtil {
   export const getCellFocusEventHandledCells: GetEventHandledCells<CellFocusEvent> = ({ e, cells }) => {
-    if (!e) return cells;
+    if (!e) return cells.map((cellRows) => cellRows.map((cell) => ({ ...cell, focused: false })));
 
     const {
       rowColumn: { row, column },

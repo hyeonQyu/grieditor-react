@@ -59,8 +59,8 @@ export interface TableExtender {
 }
 
 export interface TableditorHandler {
-  cells: CellInfo[][];
-  inAppCells: InAppCellInfo[][];
+  getCells: () => CellInfo[][];
+  getInAppCells: () => InAppCellInfo[][];
   getRow: (rowIndex: number) => CellInfo[];
   getInAppRow: (rowIndex: number) => InAppCellInfo[];
   getColumn: (columnIndex: number) => CellInfo[];

@@ -3,6 +3,19 @@ import { Direction } from '@defines/types';
 import { createRef } from 'react';
 
 export namespace TableditorUtil {
+  export function getUpToDateInAppCells(cells: InAppCellInfo[][]): InAppCellInfo[][] {
+    return cells.map((cellRows) =>
+      cellRows.map((cell) => {
+        const { contentEditableRef } = cell;
+
+        return {
+          ...cell,
+          content: contentEditableRef.current?.innerText ?? '',
+        };
+      }),
+    );
+  }
+
   /**
    * Return default in-app cells' data from the cells passed as prop
    * @param cells The cells passed as prop

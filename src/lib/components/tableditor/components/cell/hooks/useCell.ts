@@ -57,8 +57,7 @@ export function useCell(params: UseCellParams): UseCell {
 
   useEffect(() => {
     if (!focused) {
-      onContentChange({ rowColumn: { row, column }, content: contentEditableRef.current?.innerText ?? '' });
-      return;
+      return onContentChange({ rowColumn: { row, column }, content: contentEditableRef.current?.innerText ?? '' });
     }
 
     // Move cursor position

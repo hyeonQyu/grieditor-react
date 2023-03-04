@@ -320,6 +320,9 @@ export function useTableditor(params: UseTableditorParams, ref: ForwardedRef<Tab
     setCells((cells) => TableditorEventUtil.getCellMenuSelectColumnEventHandledCells({ e: selectedRowColumn?.column, cells }));
   }, [selectedRowColumn?.column]);
 
+  const getInAppCells = useCallback(() => TableditorUtil.getUpToDateInAppCells(cells), [cells]);
+  const getCells = useCallback(() => TableditorUtil.inAppCellsToCells(getInAppCells()), [getInAppCells]);
+
   const getInAppRow = useCallback((rowIndex: number) => TableditorUtil.getRow(cells, rowIndex), [cells]);
   const getRow = useCallback((rowIndex: number) => getInAppRow(rowIndex).map(TableditorUtil.inAppCellToCell), [getInAppRow]);
 
@@ -329,8 +332,8 @@ export function useTableditor(params: UseTableditorParams, ref: ForwardedRef<Tab
   useImperativeHandle(
     ref,
     () => ({
-      cells: TableditorUtil.inAppCellsToCells(cells),
-      inAppCells: cells,
+      getCells,
+      getInAppCells,
       getRow,
       getInAppRow,
       getColumn,
