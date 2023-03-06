@@ -16,16 +16,11 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "baseUrl": "./src",
+    "baseUrl": "./",
     "paths": {
-      "@components/*": ["lib/components/*"],
-      "@contexts/*": ["lib/contexts/*"],
-      "@defines/*": ["lib/defines/*"],
-      "@hooks/*": ["lib/hooks/*"],
-      "@utils/*": ["lib/utils/*"],
-      "@icons/*": ["lib/icons/*"],
-      "@pages/*": ["pages/*"],
-      "@styles/*": ["styles/*"]
+      "@lib/*": ["lib/*"],
+      "@pages/*": ["src/pages/*"],
+      "@styles/*": ["src/styles/*"]
     },
     "outDir": "./dist",
   },

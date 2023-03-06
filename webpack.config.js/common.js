@@ -3,21 +3,16 @@ const { TsconfigPathsPlugin } = require('tsconfig-paths-webpack-plugin');
 const path = require('path');
 
 const getSrcPath = (subPath) => {
-  return path.resolve(__dirname, `../src/${subPath}`);
+  return path.resolve(__dirname, `../${subPath}`);
 };
 
 module.exports = {
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
     alias: {
-      '@components': getSrcPath('lib/components'),
-      '@contexts': getSrcPath('lib/contexts'),
-      '@defines': getSrcPath('lib/defines'),
-      '@hooks': getSrcPath('lib/hooks'),
-      '@utils': getSrcPath('lib/utils'),
-      '@icons': getSrcPath('lib/icons'),
-      '@pages': getSrcPath('pages'),
-      '@styles': getSrcPath('styles'),
+      '@lib': getSrcPath('lib'),
+      '@pages': getSrcPath('src/pages'),
+      '@styles': getSrcPath('src/styles'),
     },
   },
   module: {
